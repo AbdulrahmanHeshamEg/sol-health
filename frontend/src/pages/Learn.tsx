@@ -15,7 +15,7 @@ export function Learn() {
     <div>
       <h1 className="text-2xl">What we measure, and why</h1>
       <p className="mt-1 max-w-[70ch] text-base text-dust-dim">
-        For each indicator: whether it can be measured in space, why it matters, how spaceflight changes it, when to bring in the crew medical officer or the flight surgeon, and how to prevent trouble.
+        For each indicator: whether it can be measured in space, why it matters, how spaceflight changes it, when your flight surgeon needs to know, and how to prevent trouble.
       </p>
       <div className="mt-6 space-y-3">
         {cards.data.map((c) => (
@@ -29,7 +29,7 @@ export function Learn() {
                 ["Can it be measured in space?", c.measured_in_space],
                 ["Why measure it", c.why],
                 ["How spaceflight affects it", c.hazard_effect],
-                ["When to involve the CMO or the flight surgeon", c.escalate],
+                ["When your flight surgeon needs to know", c.escalate],
                 ["Prevention", c.prevention],
               ].map(([q, text]) => (
                 <div key={q}>

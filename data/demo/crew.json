@@ -1,7 +1,7 @@
 {
   "mission": {
     "mission_id": "SOL-1",
-    "name": "Sol-1 (fictional Mars surface mission)",
+    "name": "Sol-1 (fictional solo Mars surface mission)",
     "vehicle": "Mars surface habitat (simulated)",
     "setting": "mars_surface",
     "start": "2026-08-31",
@@ -9,7 +9,8 @@
     "current_day": 75,
     "radiation_msv_per_day_assumed": 0.49,
     "earth_comm_delay_s": 780,
-    "note": "The crew is fictional and simulated. Statistics are calibrated on real data: PMData (body), NASA OSDR EDA (cabin CO2) and NASA/JPL MSL RAD (radiation, replayed real measurements).",
+    "crew_size": 1,
+    "note": "The astronaut is fictional and simulated. Statistics are calibrated on real data: PMData (body), NASA OSDR EDA (cabin CO2) and NASA/JPL MSL RAD (radiation, replayed real measurements).",
     "radiation_replay": {
       "dataset": "MSL RAD",
       "from": "2024-03-07 00:00:00",
@@ -24,7 +25,7 @@
     {
       "astronaut_id": "UH-01",
       "name": "Nadia Farouk",
-      "role": "Commander",
+      "role": "Mission astronaut",
       "agency": "Fictional",
       "age": 46,
       "sex": "F",
@@ -35,86 +36,14 @@
       "ared_minutes_week": 380,
       "aerobic_minutes_week": 260,
       "baseline": {
-        "heart_rate": 87.9,
-        "hrv_rmssd": 40.47,
-        "spo2": 98.14,
-        "resp_rate": 16.04,
-        "systolic_bp": 120.14,
-        "diastolic_bp": 75.35,
-        "core_temp": 37.09,
-        "pvt_reaction_ms": 260.8
-      }
-    },
-    {
-      "astronaut_id": "UH-02",
-      "name": "Karim Adel",
-      "role": "Flight Engineer",
-      "agency": "Fictional",
-      "age": 39,
-      "sex": "M",
-      "mass_kg": 81.0,
-      "prior_career_dose_msv": 60.0,
-      "protein_g_per_kg": 1.2,
-      "vitamin_d_ng_ml": 33.0,
-      "ared_minutes_week": 300,
-      "aerobic_minutes_week": 220,
-      "baseline": {
-        "heart_rate": 83.7,
-        "hrv_rmssd": 53.8,
-        "spo2": 97.48,
-        "resp_rate": 14.3,
-        "systolic_bp": 120.98,
-        "diastolic_bp": 69.68,
-        "core_temp": 37.1,
-        "pvt_reaction_ms": 257.81
-      }
-    },
-    {
-      "astronaut_id": "UH-03",
-      "name": "Sofia Mendes",
-      "role": "Mission Specialist",
-      "agency": "Fictional",
-      "age": 35,
-      "sex": "F",
-      "mass_kg": 58.0,
-      "prior_career_dose_msv": 0.0,
-      "protein_g_per_kg": 1.0,
-      "vitamin_d_ng_ml": 24.0,
-      "ared_minutes_week": 210,
-      "aerobic_minutes_week": 180,
-      "baseline": {
-        "heart_rate": 74.3,
-        "hrv_rmssd": 56.83,
-        "spo2": 97.64,
-        "resp_rate": 15.79,
-        "systolic_bp": 121.19,
-        "diastolic_bp": 73.68,
-        "core_temp": 36.95,
-        "pvt_reaction_ms": 254.15
-      }
-    },
-    {
-      "astronaut_id": "UH-04",
-      "name": "Yuki Tanaka",
-      "role": "Crew Medical Officer",
-      "agency": "Fictional",
-      "age": 51,
-      "sex": "M",
-      "mass_kg": 74.0,
-      "prior_career_dose_msv": 240.0,
-      "protein_g_per_kg": 1.4,
-      "vitamin_d_ng_ml": 38.0,
-      "ared_minutes_week": 340,
-      "aerobic_minutes_week": 240,
-      "baseline": {
-        "heart_rate": 73.0,
-        "hrv_rmssd": 53.62,
-        "spo2": 96.99,
-        "resp_rate": 15.36,
-        "systolic_bp": 139.94,
-        "diastolic_bp": 78.93,
-        "core_temp": 36.97,
-        "pvt_reaction_ms": 269.94
+        "heart_rate": 87.0,
+        "hrv_rmssd": 43.5,
+        "spo2": 98.2,
+        "resp_rate": 15.54,
+        "systolic_bp": 117.86,
+        "diastolic_bp": 73.27,
+        "core_temp": 37.08,
+        "pvt_reaction_ms": 262.04
       }
     }
   ]

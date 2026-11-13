@@ -10,15 +10,15 @@ import shutil
 
 from .config import DEMO_DIR
 
-GLOBAL = {"mission": "/api/mission", "meta": "/api/meta", "crew": "/api/crew", "indicators": "/api/indicators",
+GLOBAL = {"mission": "/api/mission", "meta": "/api/meta", "crew": "/api/crew", "me": "/api/me", "indicators": "/api/indicators",
           "cases": "/api/demo/cases"}
 PER_CREW = {"profile": "/api/crew/{id}", "assessment": "/api/crew/{id}/assessment", "vitals_72h": "/api/crew/{id}/vitals?hours=72",
             "timeline_72h": "/api/crew/{id}/timeline?hours=72", "daily_30d": "/api/crew/{id}/daily?days=30",
             "forecast": "/api/crew/{id}/forecast?horizon_days=90", "radiation": "/api/crew/{id}/radiation",
-            "reminders": "/api/crew/{id}/reminders", "timeline_all": "/api/crew/{id}/timeline?hours=1800",
+            "reminders": "/api/crew/{id}/reminders", "reports": "/api/crew/{id}/reports", "timeline_all": "/api/crew/{id}/timeline?hours=1800",
             "daily_all": "/api/crew/{id}/daily?days=75"}
 TIMED = ("mission", "crew")
-TIMED_PER_CREW = ("assessment", "vitals_72h", "timeline_72h", "daily_30d", "forecast", "radiation", "reminders")
+TIMED_PER_CREW = ("assessment", "vitals_72h", "timeline_72h", "daily_30d", "forecast", "radiation", "reminders", "reports")
 
 
 def main():

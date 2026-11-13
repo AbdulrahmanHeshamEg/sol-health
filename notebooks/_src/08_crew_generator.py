@@ -9,7 +9,7 @@
 # **Outputs:** `data/demo/` (`telemetry.csv`, `daily.csv`, `crew.json`, `sources.json`) replacing the purely simulated v0 crew (kept in `data/demo_v0/`),
 # `data/demo/planted_cases.json` (ground truth, **for evaluation only**), figures `reports/figures/08_*.png`.
 #
-# **Hard rule:** the crew is fictional and **simulated**. Real data sets its statistics; only the radiation series is a replay of real measurements
+# **Hard rule:** the astronaut is fictional and **simulated**. Real data sets its statistics; only the radiation series is a replay of real measurements
 # (Curiosity's RAD on Mars, not an astronaut's dosimeter). Every signal's origin is written to `sources.json` and shown in the app.
 #
 # **Team decisions applied (confirmed in chat on 13 Nov 2026):** the 4 planted cases as proposed; cabin CO2 from a recent ISS mission (RR-23)
@@ -96,7 +96,7 @@ fig.suptitle("Generated vs real: distributions (top) and day-to-day memory (bott
 savefig("08_generated_vs_real_body");
 
 # %% [markdown]
-# ## 3. Build the demo crew and plant the 4 cases
+# ## 3. Build the demo astronaut and plant the 4 cases
 
 # %%
 demo = crew.build_demo(seed=SEED)
@@ -130,14 +130,14 @@ ax.legend(loc="upper left", fontsize=7); ax2.legend(loc="lower left", fontsize=7
 
 ax = axes[1, 0]; c = case["solar_storm"]
 ax.plot(one.timestamp, one.radiation_ugy_per_day, lw=0.8, color="#c44e52", label="dose rate E (real MSL RAD, replayed)")
-shade(ax, c, "time"); ax.set(yscale="log", title=f"Case 3 · {c['title']} (whole crew)", ylabel="µGy/day (log)"); ax.legend(fontsize=7); ax.tick_params(axis="x", rotation=25)
+shade(ax, c, "time"); ax.set(yscale="log", title=f"Case 3 · {c['title']}", ylabel="µGy/day (log)"); ax.legend(fontsize=7); ax.tick_params(axis="x", rotation=25)
 
 ax = axes[1, 1]; c = case["odd_combination"]; d = daily[daily.astronaut_id == c["astronaut_id"]]
 ax.plot(d.mission_day, d.mood, marker="o", ms=3, label="mood"); ax.plot(d.mission_day, d.stress + 0.06, marker="o", ms=3, label="stress")
 ax2 = ax.twinx(); ax2.plot(d.mission_day, d.sleep_minutes / 60, color="#55a868", lw=1, label="sleep (h)"); ax2.grid(False)
 shade(ax, c, "day"); ax.set(title=f"Case 4 · {c['title']} ({name[c['astronaut_id']]})", xlabel="mission day", ylabel="score (5 = best)", ylim=(0.8, 5.2))
 ax.legend(loc="upper left", fontsize=7); ax2.legend(loc="lower left", fontsize=7)
-fig.suptitle("The 4 planted test cases in the demo crew (orange = ground truth)")
+fig.suptitle("The 4 planted test cases, all on the one astronaut (orange = ground truth)")
 savefig("08_planted_cases");
 
 # %%
@@ -177,7 +177,7 @@ axes[1].axvline(3.0, color="red", ls="--", lw=0.8); axes[1].set(title="Cabin CO2
 mars = pd.read_parquet(PROCESSED / "msl_rad_hourly.parquet").set_index("hour").dose_e
 window = mars.loc[demo["mission"]["radiation_replay"]["from"]: demo["mission"]["radiation_replay"]["to"]]
 axes[2].plot(np.arange(len(window)) / 24 + 1, window.to_numpy(), color="k", lw=1.5, label="real MSL RAD")
-axes[2].plot(np.arange(len(one)) / 24 + 1, one.radiation_ugy_per_day.to_numpy(), color="#c44e52", lw=0.6, ls="--", label="demo crew (replay)")
+axes[2].plot(np.arange(len(one)) / 24 + 1, one.radiation_ugy_per_day.to_numpy(), color="#c44e52", lw=0.6, ls="--", label="demo astronaut (replay)")
 axes[2].set(yscale="log", title="Radiation: the demo replays the real record", xlabel="mission day", ylabel="µGy/day (log)"); axes[2].legend(fontsize=7)
 savefig("08_generated_vs_real_hourly");
 print("CO2 outside the planted case: generated mean %.2f mmHg vs real RR-23 %.2f | KS %.2f" % (quiet.mean(), real_co2.mean(), stats.ks_2samp(real_co2, quiet).statistic))
@@ -208,8 +208,9 @@ print(json.dumps(demo["sources"]["radiation_ugy_per_day"]), json.dumps(demo["sou
 # %% [markdown]
 # ## Decision
 #
-# **The demo crew** (`data/demo/`): 4 fictional crewmembers, 75 mission days on a fictional Mars surface mission, hourly telemetry in the v0 column layout
-# (so the API shape stays valid) plus a new daily table (`daily.csv`: resting HR, sleep, fatigue, mood, stress, headache, fasting glucose).
+# **The demo astronaut** (`data/demo/`): one fictional astronaut alone on a 75-day Mars surface mission (team decision of 14 Nov 2026: the app is personal,
+# so all four planted cases are on the same person, at different times). Hourly telemetry keeps the v0 column layout (so the API shape stays valid),
+# plus a daily table (`daily.csv`: resting HR, sleep, fatigue, mood, stress, headache, fasting glucose).
 #
 # **How each signal is made, and how well it matches the real data**
 #
@@ -229,10 +230,10 @@ print(json.dumps(demo["sources"]["radiation_ugy_per_day"]), json.dumps(demo["sou
 #
 # | # | case | who | mission days | what was planted | expected detector |
 # |---|---|---|---|---|---|
-# | 1 | Cabin CO2 + headache | Nadia Farouk (cabin-wide CO2) | 24–33, headaches from day 27 | the highest real 10-day CO2 stretch of RR-1 (2014) spliced in; headache reports, fatigue ≤ 2 | environmental gate |
-# | 2 | Slow drift (illness onset) | Karim Adel | 44–53 ramp, then held | resting HR +6 bpm (2.5 personal SD), sleep −60 min (1.2 SD), fatigue 1 point worse | CUSUM |
-# | 3 | Odd combination | Sofia Mendes | 62–68 | mood −1 point, stress −1 point, sleep −55 min (1.3 SD) | Isolation Forest |
-# | 4 | Solar storm | whole crew | 75, from 05:00 (under way "now") | the real May 2024 storm, unscaled | SPE alarm |
+# | 1 | Cabin CO2 + headache | Nadia Farouk (the cabin and her) | 24–33, headaches from day 27 | the highest real 10-day CO2 stretch of RR-1 (2014) spliced in; headache reports, fatigue ≤ 2 | environmental gate |
+# | 2 | Slow drift (illness onset) | Nadia Farouk | 40–49 ramp, held to 54, then resolved | resting HR +6 bpm (2.5 personal SD), sleep −60 min (1.2 SD), fatigue 1 point worse | CUSUM |
+# | 3 | Odd combination | Nadia Farouk | 62–68 | mood −1 point, stress −1 point, sleep −55 min (1.3 SD) | Isolation Forest |
+# | 4 | Solar storm | Nadia Farouk (the habitat) | 75, from 05:00 (under way "now") | the real May 2024 storm, unscaled | SPE alarm |
 #
 # The storm is placed on the last day so that the app's "now" shows the alarm that matters most; the replay slider shows the other three.
 #

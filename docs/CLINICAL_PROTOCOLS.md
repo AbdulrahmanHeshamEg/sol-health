@@ -8,17 +8,17 @@
 | Level | Meaning | Who acts |
 |---|---|---|
 | GREEN | Within personal normal; follow daily plan | Astronaut |
-| YELLOW | Something is drifting; act now, recheck soon | Astronaut, CMO informed |
-| RED | Act immediately; stop safety-critical work; contact flight surgeon | Astronaut + CMO + ground |
+| YELLOW | Something is drifting; act now, recheck soon | You; it goes in the daily report to your flight surgeon |
+| RED | Act immediately; stop safety-critical work | You; sent to your flight surgeon at once |
 
 ## Hard limits (rules always override models)
 | Signal | YELLOW | RED | Condition |
 |---|---|---|---|
 | SpO2 | < 94 % | < 90 % | hypoxia |
 | Core temperature | ≥ 38.0 °C | ≥ 39.0 °C | fever_infection |
-| Systolic BP (outside exercise hours) | — | ≥ 160 mmHg | cardiovascular_strain |
-| Systolic BP (outside exercise hours) | — | < 90 mmHg | dehydration |
-| Resting HR (activity < 0.2) | ≥ 100 bpm | ≥ 120 bpm | cardiovascular_strain |
+| Systolic BP (awake, at rest) | — | ≥ 160 mmHg | cardiovascular_strain |
+| Systolic BP (awake, at rest) | — | < 90 mmHg | dehydration |
+| Resting HR (activity < 0.2, two hours in a row) | ≥ 100 bpm | ≥ 120 bpm | cardiovascular_strain |
 | Local cabin ppCO2 | > 3 mmHg | > 6 mmHg | co2_exposure |
 | Fasting blood glucose | < 70 or ≥ 126 mg/dL | < 54 or ≥ 250 mg/dL | low_blood_sugar / high_blood_sugar |
 | Mood score (1–5, 5 = best) | ≤ 2 for 5 days in a row | — | low_mood |
@@ -51,17 +51,19 @@ links headaches to 2.8–4.5 mmHg and fatigue, poor sleep and nausea to levels a
 | Fluids | 2.5 L/day | team choice |
 
 ## Action checklists
-`who`: **self** = the astronaut, **crew** = any crewmember, **cmo** = Crew Medical Officer, **ground** = flight surgeon.
+`who`: **self** = you, the astronaut (alone on the mission); **ground** = your flight surgeon on Earth, reached with the communication delay.
+There is no crewmate or crew medical officer, so steps that needed a second person are now yours (with the medical-kit checklist) or the flight surgeon's.
+The full text of every checklist is in `ml/sol_ml/protocols.py`; the summaries below give the gist.
 For RED, the RED actions come first, then the YELLOW actions.
 
 ### Sleep deprivation / fatigue
 YELLOW: hand safety-critical tasks (EVA prep, robotics, docking) to a rested crewmate · 20–30 min nap if possible ·
 protect next sleep window (dim lights, no screens, mask, earplugs) · repeat PVT after next sleep.
-RED: stop safety-critical work, not cleared for EVA/robotics · CMO reviews sleep log and medications · notify flight surgeon.
+RED: stop safety-critical work, not cleared for EVA/robotics · sleep log and reaction-time trend sent to the flight surgeon.
 
 ### Dehydration
 YELLOW: drink 500 ml now, then ~250 ml/h · electrolyte pouch in next 1 L · postpone exercise until HR is back to baseline · recheck in 2 h.
-RED: stop and rest, oral rehydration now · CMO checks orthostatic symptoms, consider IV fluids per checklist · contact flight surgeon.
+RED: stop and rest, oral rehydration now · check for dizziness on standing, dehydration checklist · flight surgeon notified, advises on IV fluids from the kit.
 
 ### Elevated CO2 / likely environmental
 YELLOW: **increase ventilation first** (fan and scrubber check) · move to a well-ventilated module, avoid poorly ventilated sleep stations · check fan and scrubber · report headache/blurred vision.
@@ -69,11 +71,11 @@ RED: leave and isolate the module until ppCO2 < 3 mmHg · scrubber off-nominal p
 
 ### Cardiovascular strain
 YELLOW: stop exercise, rest seated 15 min · repeat BP/HR · avoid caffeine today.
-RED: stop all activity, tell CMO · 12-lead ECG, chest-pain/arrhythmia checklist · contact flight surgeon with ECG.
+RED: stop all activity and rest · 12-lead ECG with the medical kit, chest-pain checklist · ECG and vitals sent to the flight surgeon.
 
 ### Fever / possible infection
-YELLOW: rest, fluids, temperature every 2 h · mask, limit contact, clean shared surfaces · CMO logs symptoms, checks kit per checklist.
-RED: CMO examines now, fever/infection checklist · isolate in separate sleep station · contact flight surgeon.
+YELLOW: rest, fluids, temperature every 2 h · log symptoms, antipyretic from the kit per checklist · clean surfaces and equipment you used.
+RED: start the fever / infection checklist now · temperature trend and symptoms sent to the flight surgeon.
 
 ### Hypoxia
 YELLOW: re-seat oximeter and repeat · check cabin ppO2 and total pressure · rest, slow breathing, report breathlessness.
@@ -81,11 +83,11 @@ RED: oxygen mask now · check for leak / O2 fault, emergency checklist · contac
 
 ### Solar particle event
 YELLOW (elevated): stop EVA preparation, check the storm shelter · keep dosimeters on, avoid thinly shielded areas · report at next comm pass.
-RED (shelter): **whole crew to the storm shelter now** · abort EVA or rover traverse · CMO logs dosimeter readings · notify flight surgeon, stay until the rate is below the elevated level.
+RED (shelter): **go to the storm shelter now** · abort EVA or rover traverse · log your dosimeter on entering and leaving · flight surgeon notified, stay until the rate is below the elevated level.
 
 ### Slow drift / unusual reading / unusual combination / low mood / fitness trend / blood sugar
-Each has a short YELLOW checklist in `ml/sol_ml/protocols.py`: repeat or complete the measurements, protect sleep and fluids, and bring in the CMO;
-for mood and odd combinations the CMO offers a private conversation. Low blood sugar: 15 g of fast sugar, recheck in 15 minutes.
+Each has a short YELLOW checklist in `ml/sol_ml/protocols.py`: repeat or complete the measurements, protect sleep and fluids, and the flight surgeon sees it in the daily report;
+for mood and odd combinations a private conference with the flight surgeon is offered. Low blood sugar: 15 g of fast sugar, recheck in 15 minutes.
 
 ## Daily plan (shown even when GREEN)
 Generated from the last 24 h / 7 days: sleep < 7 h, fluids < 80 % of 2.5 L, ARED or aerobic minutes < 85 % of weekly

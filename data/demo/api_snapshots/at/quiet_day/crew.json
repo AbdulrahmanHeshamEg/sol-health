@@ -1,77 +1,8 @@
 [
  {
-  "astronaut_id": "UH-02",
-  "name": "Karim Adel",
-  "role": "Flight Engineer",
-  "status": "GREEN",
-  "health_score": 87,
-  "condition": "nominal",
-  "condition_label": "Nominal",
-  "top_alert": null,
-  "top_reason": null,
-  "vitals": {
-   "heart_rate": 87.2,
-   "hrv_rmssd": 50.65,
-   "spo2": 96.56,
-   "resp_rate": 13.3,
-   "systolic_bp": 132.18,
-   "diastolic_bp": 72.43,
-   "core_temp": 37.21,
-   "pvt_reaction_ms": 223.59
-  },
-  "cabin_co2_mmhg": 1.58,
-  "timestamp": "2026-09-15 12:00:00"
- },
- {
-  "astronaut_id": "UH-03",
-  "name": "Sofia Mendes",
-  "role": "Mission Specialist",
-  "status": "GREEN",
-  "health_score": 92,
-  "condition": "nominal",
-  "condition_label": "Nominal",
-  "top_alert": null,
-  "top_reason": null,
-  "vitals": {
-   "heart_rate": 76.4,
-   "hrv_rmssd": 57.62,
-   "spo2": 97.25,
-   "resp_rate": 13.01,
-   "systolic_bp": 112.85,
-   "diastolic_bp": 79.52,
-   "core_temp": 36.96,
-   "pvt_reaction_ms": 267.06
-  },
-  "cabin_co2_mmhg": 1.55,
-  "timestamp": "2026-09-15 12:00:00"
- },
- {
-  "astronaut_id": "UH-04",
-  "name": "Yuki Tanaka",
-  "role": "Crew Medical Officer",
-  "status": "GREEN",
-  "health_score": 92,
-  "condition": "nominal",
-  "condition_label": "Nominal",
-  "top_alert": null,
-  "top_reason": null,
-  "vitals": {
-   "heart_rate": 78.4,
-   "hrv_rmssd": 59.98,
-   "spo2": 97.15,
-   "resp_rate": 16.03,
-   "systolic_bp": 137.64,
-   "diastolic_bp": 82.25,
-   "core_temp": 36.98,
-   "pvt_reaction_ms": 305.58
-  },
-  "cabin_co2_mmhg": 1.47,
-  "timestamp": "2026-09-15 12:00:00"
- },
- {
   "astronaut_id": "UH-01",
   "name": "Nadia Farouk",
-  "role": "Commander",
+  "role": "Mission astronaut",
   "status": "GREEN",
   "health_score": 95,
   "condition": "nominal",
@@ -79,16 +10,16 @@
   "top_alert": null,
   "top_reason": null,
   "vitals": {
-   "heart_rate": 85.5,
-   "hrv_rmssd": 45.89,
-   "spo2": 98.73,
-   "resp_rate": 16.66,
-   "systolic_bp": 111.15,
-   "diastolic_bp": 77.27,
-   "core_temp": 37.45,
-   "pvt_reaction_ms": 315.11
+   "heart_rate": 88.2,
+   "hrv_rmssd": 46.4,
+   "spo2": 97.43,
+   "resp_rate": 17.13,
+   "systolic_bp": 126.05,
+   "diastolic_bp": 73.63,
+   "core_temp": 37.28,
+   "pvt_reaction_ms": 258.88
   },
-  "cabin_co2_mmhg": 1.46,
+  "cabin_co2_mmhg": 1.53,
   "timestamp": "2026-09-15 12:00:00"
  }
 ]

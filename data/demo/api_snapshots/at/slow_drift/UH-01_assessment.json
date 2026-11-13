@@ -1,15 +1,15 @@
 {
  "astronaut_id": "UH-01",
- "timestamp": "2026-10-19 12:00:00",
- "mission_day": 50,
- "status": "GREEN",
- "health_score": 89,
- "condition": "nominal",
- "condition_label": "Nominal",
+ "timestamp": "2026-10-16 12:00:00",
+ "mission_day": 47,
+ "status": "YELLOW",
+ "health_score": 79,
+ "condition": "physiological_drift",
+ "condition_label": "Slow drift from your normal",
  "probabilities": {
-  "nominal": 1.0,
+  "nominal": 0.3333,
   "acute_deviation": 0.0,
-  "physiological_drift": 0.0,
+  "physiological_drift": 0.6667,
   "unusual_combination": 0.0,
   "low_mood": 0.0,
   "deconditioning": 0.0,
@@ -22,33 +22,49 @@
   "low_blood_sugar": 0.0,
   "high_blood_sugar": 0.0
  },
- "anomaly_score": 0.707,
- "alerts": [],
+ "anomaly_score": 0.81,
+ "alerts": [
+  {
+   "source": "model",
+   "level": "YELLOW",
+   "condition": "physiological_drift",
+   "message": "Slow drift in resting heart rate",
+   "reason": "Resting heart rate has been above your 28-day normal for 4 days (average 2.4 robust SD); the alert has been active for 1 day.",
+   "kind": "drift",
+   "hazard": "Distance from Earth",
+   "signal": "resting_hr",
+   "z": 2.38,
+   "value": 78.9,
+   "cusum": 5.51,
+   "probability": 0.551,
+   "model": "CUSUM on personal z"
+  }
+ ],
  "drivers": [
   {
-   "signal": "stress",
-   "deviation": -1.0,
-   "unit": "points",
-   "z": 0.67
-  },
-  {
    "signal": "resting_hr",
-   "deviation": 0.05,
+   "deviation": 4.4,
    "unit": "bpm",
-   "z": 0.04
+   "z": 4.57
   },
   {
    "signal": "sleep_minutes",
-   "deviation": -2.0,
+   "deviation": -93.0,
    "unit": "min",
-   "z": 0.02
+   "z": 1.0
+  },
+  {
+   "signal": "fatigue",
+   "deviation": -1.0,
+   "unit": "points",
+   "z": 0.67
   }
  ],
  "vitals": {
   "heart_rate": {
-   "value": 95.8,
-   "baseline": 87.9,
-   "delta": 7.9,
+   "value": 110.0,
+   "baseline": 87.0,
+   "delta": 23.0,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -56,9 +72,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 47.73,
-   "baseline": 40.47,
-   "delta": 7.26,
+   "value": 47.77,
+   "baseline": 43.5,
+   "delta": 4.27,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -66,9 +82,9 @@
    }
   },
   "spo2": {
-   "value": 97.51,
-   "baseline": 98.14,
-   "delta": -0.63,
+   "value": 98.24,
+   "baseline": 98.2,
+   "delta": 0.04,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -76,9 +92,9 @@
    }
   },
   "resp_rate": {
-   "value": 13.6,
-   "baseline": 16.04,
-   "delta": -2.44,
+   "value": 16.24,
+   "baseline": 15.54,
+   "delta": 0.7,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -86,9 +102,9 @@
    }
   },
   "systolic_bp": {
-   "value": 120.61,
-   "baseline": 120.14,
-   "delta": 0.47,
+   "value": 119.72,
+   "baseline": 117.86,
+   "delta": 1.86,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -96,9 +112,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 70.11,
-   "baseline": 75.35,
-   "delta": -5.24,
+   "value": 80.48,
+   "baseline": 73.27,
+   "delta": 7.22,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -106,9 +122,9 @@
    }
   },
   "core_temp": {
-   "value": 37.04,
-   "baseline": 37.09,
-   "delta": -0.05,
+   "value": 37.06,
+   "baseline": 37.08,
+   "delta": -0.02,
    "unit": "C",
    "source": {
     "kind": "simulated",
@@ -116,9 +132,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 266.78,
-   "baseline": 260.8,
-   "delta": 5.98,
+   "value": 261.18,
+   "baseline": 262.04,
+   "delta": -0.86,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -129,12 +145,12 @@
  "indicators": {
   "resting_hr": {
    "label": "Resting heart rate",
-   "value": 73.4,
-   "baseline": 73.35,
-   "delta": 0.05,
+   "value": 78.9,
+   "baseline": 74.5,
+   "delta": 4.4,
    "unit": "bpm",
-   "z": 0.04,
-   "date": "2026-10-19",
+   "z": 4.57,
+   "date": "2026-10-16",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -142,12 +158,12 @@
   },
   "sleep_hours": {
    "label": "Sleep last night",
-   "value": 6.62,
-   "baseline": 6.65,
-   "delta": -0.03,
+   "value": 5.45,
+   "baseline": 7.0,
+   "delta": -1.55,
    "unit": "h",
-   "z": 0.02,
-   "date": "2026-10-19",
+   "z": 1.0,
+   "date": "2026-10-16",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -155,12 +171,12 @@
   },
   "fatigue": {
    "label": "Fatigue score",
-   "value": 2.0,
+   "value": 1.0,
    "baseline": 2.0,
-   "delta": 0.0,
+   "delta": -1.0,
    "unit": "1-5, 5 = fresh",
-   "z": 0.0,
-   "date": "2026-10-19",
+   "z": 0.67,
+   "date": "2026-10-16",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -168,12 +184,12 @@
   },
   "mood": {
    "label": "Mood score",
-   "value": 4.0,
+   "value": 3.0,
    "baseline": 3.0,
-   "delta": 1.0,
+   "delta": 0.0,
    "unit": "1-5, 5 = best",
-   "z": -2.0,
-   "date": "2026-10-19",
+   "z": 0.0,
+   "date": "2026-10-16",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -181,12 +197,12 @@
   },
   "stress": {
    "label": "Stress score",
-   "value": 2.0,
+   "value": 3.0,
    "baseline": 3.0,
-   "delta": -1.0,
+   "delta": 0.0,
    "unit": "1-5, 5 = relaxed",
-   "z": 0.67,
-   "date": "2026-10-19",
+   "z": 0.0,
+   "date": "2026-10-16",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -194,12 +210,12 @@
   },
   "blood_glucose_mg_dl": {
    "label": "Fasting blood glucose",
-   "value": 90.0,
-   "baseline": 83.5,
-   "delta": 6.5,
+   "value": 77.0,
+   "baseline": 86.0,
+   "delta": -9.0,
    "unit": "mg/dL",
    "z": null,
-   "date": "2026-10-19",
+   "date": "2026-10-16",
    "source": {
     "kind": "simulated",
     "calibrated_on": "published normal ranges"
@@ -211,8 +227,8 @@
    "id": "heart",
    "label": "Heart and circulation",
    "function": "Pumps blood and oxygen to every organ. In weightlessness fluid shifts toward the head and the heart works differently.",
-   "status": "GREEN",
-   "summary": "Within your normal range.",
+   "status": "YELLOW",
+   "summary": "Resting heart rate has been above your 28-day normal for 4 days (average 2.4 robust SD); the alert has been active for 1 day.",
    "indicators": [
     "heart_rate",
     "resting_hr",
@@ -220,12 +236,14 @@
     "diastolic_bp",
     "hrv_rmssd"
    ],
-   "alerts": []
+   "alerts": [
+    "Slow drift in resting heart rate"
+   ]
   },
   {
    "id": "lungs",
    "label": "Lungs and breathing",
-   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around a crewmember.",
+   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around you in still air.",
    "status": "GREEN",
    "summary": "Within your normal range.",
    "indicators": [
@@ -289,32 +307,72 @@
   }
  ],
  "context": {
-  "activity_level": 0.28,
+  "activity_level": 0.426,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 1.63,
-  "sleep_last_24h": 7.0,
-  "fluid_last_24h": 3419.2,
+  "cabin_co2_mmhg": 1.68,
+  "sleep_last_24h": 5.0,
+  "fluid_last_24h": 3393.0,
   "ared_minutes_7d": 420.0,
   "aerobic_minutes_7d": 300.0,
-  "cabin_co2_7d_mean_mmhg": 1.69,
+  "cabin_co2_7d_mean_mmhg": 1.67,
   "cabin_co2_high": false,
-  "radiation_ratio_to_7d": 0.97,
+  "radiation_ratio_to_7d": 0.99,
   "radiation_level": "GREEN"
  },
- "actions": [],
+ "actions": [
+  {
+   "who": "self",
+   "action": "Take a full set of vitals now (temperature, blood pressure, SpO2) and log any symptoms.",
+   "condition": "physiological_drift",
+   "level": "YELLOW",
+   "priority": 1
+  },
+  {
+   "who": "self",
+   "action": "Protect tonight's sleep and keep fluids up; skip the hardest exercise set today.",
+   "condition": "physiological_drift",
+   "level": "YELLOW",
+   "priority": 2
+  },
+  {
+   "who": "self",
+   "action": "Recheck tomorrow morning.",
+   "condition": "physiological_drift",
+   "level": "YELLOW",
+   "priority": 3
+  },
+  {
+   "who": "ground",
+   "action": "The trend goes to your flight surgeon in today's report: a slow rise in resting heart rate with poor sleep can come before an illness.",
+   "condition": "physiological_drift",
+   "level": "YELLOW",
+   "priority": 4
+  }
+ ],
  "daily_plan": [
   {
    "who": "self",
-   "category": "routine",
-   "action": "All routine targets met. Keep the current sleep, hydration and exercise schedule."
+   "category": "sleep",
+   "action": "Aim for 8 h sleep tonight (last 24 h: 5 h)."
   }
  ],
  "fitness_trend": {
   "alert": false,
   "shift_bpm": 0.0,
   "weeks_ago": 0,
-  "sessions": 81,
+  "sessions": 75,
   "reason": "Exercise heart rate is stable for the same exercise types."
  },
- "disclaimer": "Decision support only. The crew is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. The crew medical officer and flight surgeon make all medical decisions."
+ "escalation": {
+  "status": "daily_report",
+  "to": "Your flight surgeon",
+  "level": "YELLOW",
+  "sent_at": "2026-10-16 20:00:00",
+  "arrives_at": "2026-10-16 20:13:00",
+  "summary": "Included in your daily report to the flight surgeon at 20:00.",
+  "items": [
+   "Resting heart rate has been above your 28-day normal for 4 days (average 2.4 robust SD); the alert has been active for 1 day."
+  ]
+ },
+ "disclaimer": "Decision support only. The astronaut is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. Your flight surgeon makes all medical decisions."
 }

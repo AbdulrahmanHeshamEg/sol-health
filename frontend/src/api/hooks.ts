@@ -14,6 +14,8 @@ export const useIndicators = () => useQuery({ queryKey: ["indicators"], queryFn:
 export const useCases = () => useQuery({ queryKey: ["cases"], queryFn: api.cases, ...STATIC });
 export const useMockMarks = () => useQuery({ queryKey: ["mock-marks"], queryFn: mockMarks, ...STATIC });
 export const useProfile = (id: string) => useQuery({ queryKey: ["profile", id], queryFn: () => api.profile(id), ...STATIC });
+/** The astronaut this app belongs to. */
+export const useMe = () => useQuery({ queryKey: ["me"], queryFn: api.me, ...STATIC });
 
 export function useMission() {
   const { at } = useReplay();
@@ -51,11 +53,15 @@ export function useRadiation(id: string | undefined) {
   const { at } = useReplay();
   return useQuery({ queryKey: ["radiation", id, at], queryFn: () => api.radiation(id!, at), enabled: !!id, ...timed });
 }
+export function useReports(id: string | undefined) {
+  const { at } = useReplay();
+  return useQuery({ queryKey: ["reports", id, at], queryFn: () => api.reports(id!, at), enabled: !!id, ...timed });
+}
 export function useReminders(id: string) {
   const { at } = useReplay();
   return useQuery({ queryKey: ["reminders", id, at], queryFn: () => api.reminders(id, at), ...timed });
 }
-/** Whole-mission hourly status per crewmember: the data behind the sol strip. Not tied to `at`. */
+/** Whole-mission hourly status: the data behind the sol strip. Not tied to `at`. */
 export function useMissionTimelines(ids: string[]) {
   return useQueries({ queries: ids.map((id) => ({ queryKey: ["timeline-all", id], queryFn: () => api.timelineAll(id), ...STATIC })) });
 }

@@ -17,7 +17,7 @@ Reproduce everything: run notebooks `00` → `09` headless (`python notebooks/_s
 | **False alarms per person per month on real PMData** (body engine as shipped) | **1.00** (target ≤ 1), with 17 % of days spent in alert |
 | **Detection delay on planted cases** | HR drift: 74 % caught, median 6 days · multi-signal drift: 87 %, 5 days · odd combination: 53 %, 2 days · sleep step: 45 %, 2 days |
 | Solar storm of 20 May 2024 (real MSL RAD) | caught in its first hour; 0 unconfirmed alarms in 35 months |
-| Planted cases in the generated crew | 6 of 7 caught by the expected part (the odd combination was caught 4 days in by the low-mood rule instead) |
+| Planted cases on the generated astronaut | 4 of 4 caught by the part built for each (one example of each, so this shows the wiring, not a hit rate) |
 
 ## 1. Body: "is today abnormal for *this* person?" (notebook 02, re-tuned in 09)
 
@@ -57,7 +57,7 @@ linear mixed model (similar, harder to explain), Theil–Sen slope (quietest; th
 
 - **Dose counter (deterministic):** `mSv = Σ daily absorbed dose (mGy) × Q`, Q = 3.0 (Hassler et al. 2014), against the 600 mSv career limit.
   YELLOW at 80 %, RED at 100 %. Real rates: ISS 0.29 mGy/day (OSDR EDA), Mars surface 0.16 mGy/day (MSL RAD detector E); transit 1.84 mSv/day (Zeitlin et al. 2013).
-- **Storm (SPE) alarm:** hourly dose rate ÷ trailing 7-day median. **≥ 1.3× = radiation elevated (YELLOW), ≥ 2× = whole crew to the storm shelter (RED).**
+- **Storm (SPE) alarm:** hourly dose rate ÷ trailing 7-day median. **≥ 1.3× = radiation elevated (YELLOW), ≥ 2× = go to the storm shelter now (RED), sent to the flight surgeon at once.**
   On 35 months of real RAD data: the 20 May 2024 storm is caught in its first hour (20× normal), 6 smaller real events reach the elevated level
   (each confirmed by RAD's independent silicon detector), 0 unconfirmed alarms. 93 % of the storm's extra dose arrived after the alarm.
   Compared: robust z (works at z > 6), CUSUM (7 hours late), EWMA, change point (equal, slower). Removing the 3.4 % diurnal cycle did not help.
@@ -84,10 +84,16 @@ It is a what-if calculator for exercise adherence, labelled as simulated in the 
 ## Baseline: the v0 classifier (kept for comparison)
 
 `HistGradientBoosting` on 33 hourly features, trained and tested on labels from our own simulator (macro F1 0.94 there).
-Notebook 09: on its own simulated crew it catches 92 % of scripted abnormal hours and flags 0.3 % of normal ones; on the data-calibrated crew
-it flags **55 % of all hours as abnormal** outside every planted case, almost always as "sleep deprivation", because real hour-to-hour
+Notebook 09: on its own simulated crew it catches 92 % of scripted abnormal hours and flags 0.3 % of normal ones; on the data-calibrated astronaut
+it flags **85 % of all hours as abnormal** outside the planted cases, almost always as "sleep deprivation", because real hour-to-hour
 heart-rate variation (SD 6.9 bpm) is far larger than its simulator assumed (3 bpm). It cannot run on PMData at all (it needs eight hourly vitals no real dataset has).
 What did transfer: its fixed radiation threshold and the shared hard limits.
+
+## Escalation to the flight surgeon
+The astronaut is alone, so the engine decides what reaches Earth (`assessment.escalation`): a **RED** alert is sent at once and arrives after the
+one-way communication delay (13 minutes in the demo); **YELLOW** alerts go in the daily report at 20:00; with no alert nothing is sent.
+`/api/crew/{id}/reports` lists every episode that went to Earth. Hourly wearable limits are confirmed before they can escalate:
+blood pressure is judged awake and at rest, and a resting heart rate of 100 bpm or more must hold for two hours in a row.
 
 ## How the outputs combine
 1. Every active alert has a level; **status = the worst level**.

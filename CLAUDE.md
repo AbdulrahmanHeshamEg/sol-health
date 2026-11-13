@@ -11,11 +11,11 @@ Context for Claude Code. Read in this order:
 
 **Sol Health** is health-monitoring software for astronauts, built for the NASA Space Apps 2026 challenge
 *"Create Health Monitoring Software for Astronauts on Space Missions"* (Cairo, 14–15 Nov 2026). It **gathers health
-indicators** and lets each astronaut **evaluate and act on** their health, offline, because deep-space crews can't
-wait for Earth. For every crewmember it answers three questions:
+indicators** and lets the astronaut **evaluate and act on** their health, offline, because deep-space crews can't
+wait for Earth. The app is **personal**: one astronaut alone on the mission; problems go to their flight surgeon on Earth. It answers three questions:
 1. **How am I right now?** Every indicator compared with *my own* baseline.
 2. **Is something wrong, and why?** GREEN / YELLOW / RED with a one-sentence reason.
-3. **What do I do?** A prioritised action checklist (self / crew / crew medical officer / flight surgeon) and a daily plan.
+3. **What do I do?** A prioritised action checklist (you / your flight surgeon) and a daily plan. Act-now alerts are sent to the flight surgeon at once; watch alerts go in the daily report.
 
 ## Data and model strategy (team decision; do not change it without asking)
 
@@ -38,8 +38,8 @@ Success is measured by **false alarms per person per month on real PMData** and 
 | Engine + API | `ml/sol_ml/engine.py`, `ml/api/main.py` | **v2 done**: chosen models from `models/engine_config.json`, API shape kept and extended (`docs/API.md`) |
 | v0 baseline | `ml/sol_ml/engine_v0.py`, `data/demo_v0/` | Kept only for the comparison in notebook 09 |
 | Action protocols | `ml/sol_ml/protocols.py`, `indicators.py` | Extended (SPE shelter, likely environmental, drift, mood, glucose); indicator explainer catalogue |
-| Demo crew | `data/demo/` | Data-calibrated crew with 4 planted cases (notebook 08) + `api_snapshots/` for mock mode |
-| Frontend | `frontend/` | **Done**: React + Vite dashboard per `docs/PRD.md` (sol-strip replay, body figure, check-in, explainer cards, offline snapshot mode). Run with `npm --prefix frontend run dev` |
+| Demo astronaut | `data/demo/` | One data-calibrated astronaut carrying all 4 planted cases (notebook 08) + `api_snapshots/` for mock mode |
+| Frontend | `frontend/` | **Done**: personal React + Vite app per `docs/PRD.md` (Me, Cabin, Flight surgeon, sol-strip replay, body figure, check-in, explainer cards, offline snapshot mode). Run with `npm --prefix frontend run dev` |
 
 ## Work order
 1. **Get the data:** `python data/fetch/fetch_pmdata.py`, `python data/fetch/fetch_msl_rad.py 2024 2025 2026`, then the
@@ -88,7 +88,7 @@ docs/PROJECT_GUIDE_AR.md      Arabic guide to the whole project
 data/fetch/                   download + inspection scripts
 data/raw/                     downloaded data (git-ignored)
 data/processed/               tidy parquet tables from the notebooks
-data/demo/                    demo crew + api_snapshots for frontend mock mode
+data/demo/                    demo astronaut + api_snapshots for frontend mock mode
 notebooks/                    00–09 (sources in notebooks/_src/)
 ml/sol_ml/                    library code (loaders, detectors, engine, protocols)
 ml/api/main.py                FastAPI

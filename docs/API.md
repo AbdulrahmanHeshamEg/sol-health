@@ -2,6 +2,8 @@
 
 Base URL: `http://localhost:8000`. Interactive docs: `/docs`. All responses are JSON.
 Every `GET` under `/api/crew/{id}`, plus `/api/crew` and `/api/mission`, accepts `at=<ISO timestamp>` to replay the mission at that hour.
+
+**The app is personal (14 Nov 2026):** the mission has one astronaut. `/api/me` names them; the per-person routes keep the `/api/crew/{id}` path so the v0 contract stays valid. Actions are either the astronaut's (`self`) or the flight surgeon's (`ground`).
 Real example responses: `data/demo/api_snapshots/` (current moment) and `data/demo/api_snapshots/at/<mark>/` (replay marks).
 
 **v2 keeps the v0 response shape and only adds fields and endpoints.** New items are marked *(new)*.
@@ -13,7 +15,8 @@ Real example responses: `data/demo/api_snapshots/` (current moment) and `data/de
 | GET | `/api/meta` | Condition ids/labels, signal names, levels, `hazards`, `sources`, `citations` *(new)* |
 | GET | `/api/indicators` *(new)* | Explainer cards per indicator |
 | GET | `/api/demo/cases` *(new)* | The planted test cases (ground truth, for replay buttons and evaluation) |
-| GET | `/api/crew` | Overview cards, sorted worst-first |
+| GET | `/api/me` *(new)* | The astronaut this app belongs to, and their flight surgeon (title, where, one-way delay) |
+| GET | `/api/crew` | Status cards (one in the solo mission), sorted worst-first |
 | GET | `/api/crew/{id}` | Profile (age, role, baseline, exercise plan, prior dose) |
 | GET | `/api/crew/{id}/vitals?hours=72` | Raw hourly telemetry rows |
 | GET | `/api/crew/{id}/daily?days=30` *(new)* | Daily indicators with the body models' flags |
@@ -22,6 +25,7 @@ Real example responses: `data/demo/api_snapshots/` (current moment) and `data/de
 | GET | `/api/crew/{id}/forecast?horizon_days=90` | Bone / muscle projection, fitness trend |
 | GET | `/api/crew/{id}/radiation` | Dose vs career limit, storm level |
 | GET | `/api/crew/{id}/reminders` *(new)* | Measurements due now, check-in streak |
+| GET | `/api/crew/{id}/reports` *(new)* | Everything sent to the flight surgeon so far, newest first |
 | POST | `/api/assess` | Assess a custom series, or apply a manual check-in |
 
 Errors: `404` unknown astronaut, `422` bad `at`, fewer than 24 h of history, or an out-of-range check-in value.
@@ -77,8 +81,11 @@ interface Assessment {
              sleep_last_24h: number; fluid_last_24h: number; ared_minutes_7d: number; aerobic_minutes_7d: number;
              cabin_co2_7d_mean_mmhg: number|null; cabin_co2_high: boolean;                             // (new)
              radiation_ratio_to_7d: number; radiation_level: Level };                                  // (new)
-  actions: Array<{ who: "self"|"crew"|"cmo"|"ground"; action: string; condition: string; level: Level; priority: number }>;
+  actions: Array<{ who: "self"|"ground"; action: string; condition: string; level: Level; priority: number }>;   // ground = your flight surgeon
   daily_plan: Array<{ who: "self"; category: "sleep"|"hydration"|"exercise"|"routine"; action: string }>;
+  escalation: {                                 // (new) what reaches the flight surgeon
+    status: "sent" | "daily_report" | "none";   // RED: sent at once; YELLOW: in the daily report at 20:00
+    to: string; level: Level; sent_at: string|null; arrives_at: string|null; summary: string; items: string[] };
   fitness_trend: { alert: boolean; shift_bpm: number; weeks_ago: number; sessions: number; reason: string };   // (new)
   disclaimer: string;
 }
@@ -126,10 +133,14 @@ budget_status (Level), quality_factor (3.0), reason, action, source`.
 ## `GET /api/crew/{id}/reminders` *(new)*
 `{ now, items[]: { id, label, due_at, status: "due"|"done"|"upcoming", logged_automatically }, checkin_streak_days, due_count }`.
 
+## `GET /api/crew/{id}/reports` *(new)* → `Report[]`
+One entry per alert episode that went to Earth up to `at`, newest first. Watch-level episodes of the same day share one daily report.
+`{ started_at, level, condition_label, status: "sent"|"daily_report", sent_at, arrives_at, summary, items: string[] }`.
+
 ## `POST /api/assess`
 Two uses. Nothing is stored.
 
-**1. Manual check-in on a demo crewmember** *(new)*: every field of `checkin` is optional.
+**1. Manual check-in** *(new)*: every field of `checkin` is optional.
 ```json
 { "astronaut_id": "UH-04", "at": "2026-10-20T12:00:00",
   "checkin": { "systolic_bp": 128, "diastolic_bp": 82, "heart_rate": 64, "spo2": 97, "core_temp": 36.9,

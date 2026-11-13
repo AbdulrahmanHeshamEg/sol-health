@@ -3,7 +3,7 @@
  "timestamp": "2026-11-13 23:00:00",
  "mission_day": 75,
  "status": "RED",
- "health_score": 65,
+ "health_score": 64,
  "condition": "radiation_event",
  "condition_label": "Solar particle event",
  "probabilities": {
@@ -22,13 +22,13 @@
   "low_blood_sugar": 0.0,
   "high_blood_sugar": 0.0
  },
- "anomaly_score": 0.874,
+ "anomaly_score": 0.953,
  "alerts": [
   {
    "source": "model",
    "level": "RED",
    "condition": "radiation_event",
-   "message": "SPE in progress: whole crew to the storm shelter",
+   "message": "Solar storm in progress: go to the storm shelter now",
    "reason": "Radiation dose rate is 4.1 times the 7-day normal and has been elevated for 19 hours.",
    "kind": "spe",
    "hazard": "Radiation",
@@ -41,29 +41,29 @@
  ],
  "drivers": [
   {
-   "signal": "sleep_minutes",
-   "deviation": -12.0,
-   "unit": "min",
-   "z": 0.2
-  },
-  {
-   "signal": "mood",
-   "deviation": 0.0,
-   "unit": "points",
-   "z": 0.0
-  },
-  {
    "signal": "resting_hr",
    "deviation": -0.5,
    "unit": "bpm",
    "z": -0.23
+  },
+  {
+   "signal": "sleep_minutes",
+   "deviation": 14.0,
+   "unit": "min",
+   "z": -0.31
+  },
+  {
+   "signal": "mood",
+   "deviation": 1.0,
+   "unit": "points",
+   "z": -0.67
   }
  ],
  "vitals": {
   "heart_rate": {
-   "value": 95.4,
-   "baseline": 87.9,
-   "delta": 7.5,
+   "value": 71.9,
+   "baseline": 87.0,
+   "delta": -15.1,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -71,9 +71,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 65.04,
-   "baseline": 40.47,
-   "delta": 24.57,
+   "value": 59.43,
+   "baseline": 43.5,
+   "delta": 15.93,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -81,9 +81,9 @@
    }
   },
   "spo2": {
-   "value": 98.82,
-   "baseline": 98.14,
-   "delta": 0.68,
+   "value": 98.4,
+   "baseline": 98.2,
+   "delta": 0.2,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -91,9 +91,9 @@
    }
   },
   "resp_rate": {
-   "value": 11.33,
-   "baseline": 16.04,
-   "delta": -4.71,
+   "value": 12.76,
+   "baseline": 15.54,
+   "delta": -2.78,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -101,9 +101,9 @@
    }
   },
   "systolic_bp": {
-   "value": 111.82,
-   "baseline": 120.14,
-   "delta": -8.32,
+   "value": 111.24,
+   "baseline": 117.86,
+   "delta": -6.62,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -111,9 +111,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 70.92,
-   "baseline": 75.35,
-   "delta": -4.42,
+   "value": 61.25,
+   "baseline": 73.27,
+   "delta": -12.02,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -121,9 +121,9 @@
    }
   },
   "core_temp": {
-   "value": 36.98,
-   "baseline": 37.09,
-   "delta": -0.11,
+   "value": 37.01,
+   "baseline": 37.08,
+   "delta": -0.07,
    "unit": "C",
    "source": {
     "kind": "simulated",
@@ -131,9 +131,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 249.81,
-   "baseline": 260.8,
-   "delta": -10.99,
+   "value": 280.76,
+   "baseline": 262.04,
+   "delta": 18.72,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -158,10 +158,10 @@
   "sleep_hours": {
    "label": "Sleep last night",
    "value": 6.55,
-   "baseline": 6.75,
-   "delta": -0.2,
+   "baseline": 6.32,
+   "delta": 0.23,
    "unit": "h",
-   "z": 0.2,
+   "z": -0.31,
    "date": "2026-11-13",
    "source": {
     "kind": "simulated",
@@ -184,10 +184,10 @@
   "mood": {
    "label": "Mood score",
    "value": 4.0,
-   "baseline": 4.0,
-   "delta": 0.0,
+   "baseline": 3.0,
+   "delta": 1.0,
    "unit": "1-5, 5 = best",
-   "z": 0.0,
+   "z": -0.67,
    "date": "2026-11-13",
    "source": {
     "kind": "simulated",
@@ -197,10 +197,10 @@
   "stress": {
    "label": "Stress score",
    "value": 4.0,
-   "baseline": 2.5,
-   "delta": 1.5,
+   "baseline": 2.0,
+   "delta": 2.0,
    "unit": "1-5, 5 = relaxed",
-   "z": -2.02,
+   "z": -4.0,
    "date": "2026-11-13",
    "source": {
     "kind": "simulated",
@@ -240,7 +240,7 @@
   {
    "id": "lungs",
    "label": "Lungs and breathing",
-   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around a crewmember.",
+   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around you in still air.",
    "status": "GREEN",
    "summary": "Within your normal range.",
    "indicators": [
@@ -301,17 +301,17 @@
     "radiation_dose_rate"
    ],
    "alerts": [
-    "SPE in progress: whole crew to the storm shelter"
+    "Solar storm in progress: go to the storm shelter now"
    ]
   }
  ],
  "context": {
-  "activity_level": 0.45,
+  "activity_level": 0.129,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 2.01,
+  "cabin_co2_mmhg": 1.91,
   "sleep_last_24h": 6.0,
-  "fluid_last_24h": 3373.4,
-  "ared_minutes_7d": 420.0,
+  "fluid_last_24h": 3477.9,
+  "ared_minutes_7d": 360.0,
   "aerobic_minutes_7d": 300.0,
   "cabin_co2_7d_mean_mmhg": 1.49,
   "cabin_co2_high": false,
@@ -320,53 +320,46 @@
  },
  "actions": [
   {
-   "who": "crew",
-   "action": "SPE in progress: whole crew to the storm shelter now.",
+   "who": "self",
+   "action": "Solar storm in progress: go to the storm shelter now.",
    "condition": "radiation_event",
    "level": "RED",
    "priority": 1
   },
   {
-   "who": "crew",
+   "who": "self",
    "action": "Abort any EVA or rover traverse and return to the habitat.",
    "condition": "radiation_event",
    "level": "RED",
    "priority": 2
   },
   {
-   "who": "cmo",
-   "action": "CMO to log each crewmember's dosimeter reading on entering and leaving the shelter.",
+   "who": "self",
+   "action": "Log your dosimeter reading when you enter and when you leave the shelter.",
    "condition": "radiation_event",
    "level": "RED",
    "priority": 3
   },
   {
    "who": "ground",
-   "action": "Notify the flight surgeon; stay sheltered until the dose rate is below the elevated level.",
+   "action": "Your flight surgeon has been notified; stay sheltered until the dose rate is below the elevated level.",
    "condition": "radiation_event",
    "level": "RED",
    "priority": 4
   },
   {
-   "who": "crew",
+   "who": "self",
    "action": "Radiation is elevated: stop EVA preparation and check that the storm shelter is clear and stocked.",
    "condition": "radiation_event",
    "level": "RED",
    "priority": 5
   },
   {
-   "who": "crew",
-   "action": "Keep personal dosimeters on and stay away from thinly shielded areas until the rate is back to normal.",
+   "who": "self",
+   "action": "Keep your dosimeter on and stay away from thinly shielded areas until the rate is back to normal.",
    "condition": "radiation_event",
    "level": "RED",
    "priority": 6
-  },
-  {
-   "who": "ground",
-   "action": "Report the dose-rate rise to the flight surgeon and space weather officer at the next comm pass.",
-   "condition": "radiation_event",
-   "level": "RED",
-   "priority": 7
   }
  ],
  "daily_plan": [
@@ -378,10 +371,21 @@
  ],
  "fitness_trend": {
   "alert": false,
-  "shift_bpm": 0.0,
-  "weeks_ago": 0,
-  "sessions": 122,
+  "shift_bpm": -6.6,
+  "weeks_ago": 3,
+  "sessions": 120,
   "reason": "Exercise heart rate is stable for the same exercise types."
  },
- "disclaimer": "Decision support only. The crew is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. The crew medical officer and flight surgeon make all medical decisions."
+ "escalation": {
+  "status": "sent",
+  "to": "Your flight surgeon",
+  "level": "RED",
+  "sent_at": "2026-11-13 05:00:00",
+  "arrives_at": "2026-11-13 05:13:00",
+  "summary": "Sent at once: Solar storm in progress: go to the storm shelter now. It reaches Earth about 13 minutes after sending.",
+  "items": [
+   "Radiation dose rate is 4.1 times the 7-day normal and has been elevated for 19 hours."
+  ]
+ },
+ "disclaimer": "Decision support only. The astronaut is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. Your flight surgeon makes all medical decisions."
 }

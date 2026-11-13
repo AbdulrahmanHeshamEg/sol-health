@@ -33,7 +33,7 @@
    "kind": "environmental_gate",
    "hazard": "Hostile / closed environment",
    "signal": "cabin_co2_mmhg",
-   "value": 2.67,
+   "value": 2.7,
    "threshold": "1-h > 3 or 7-day > 2.5 mmHg, with symptoms"
   }
  ],
@@ -59,9 +59,9 @@
  ],
  "vitals": {
   "heart_rate": {
-   "value": 98.4,
-   "baseline": 87.9,
-   "delta": 10.5,
+   "value": 95.0,
+   "baseline": 87.0,
+   "delta": 8.0,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -69,9 +69,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 56.16,
-   "baseline": 40.47,
-   "delta": 15.69,
+   "value": 39.66,
+   "baseline": 43.5,
+   "delta": -3.84,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -79,9 +79,9 @@
    }
   },
   "spo2": {
-   "value": 98.78,
-   "baseline": 98.14,
-   "delta": 0.64,
+   "value": 97.57,
+   "baseline": 98.2,
+   "delta": -0.63,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -89,9 +89,9 @@
    }
   },
   "resp_rate": {
-   "value": 16.12,
-   "baseline": 16.04,
-   "delta": 0.09,
+   "value": 13.76,
+   "baseline": 15.54,
+   "delta": -1.78,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -99,9 +99,9 @@
    }
   },
   "systolic_bp": {
-   "value": 117.09,
-   "baseline": 120.14,
-   "delta": -3.05,
+   "value": 120.71,
+   "baseline": 117.86,
+   "delta": 2.85,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -109,9 +109,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 82.0,
-   "baseline": 75.35,
-   "delta": 6.65,
+   "value": 74.91,
+   "baseline": 73.27,
+   "delta": 1.64,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -119,9 +119,9 @@
    }
   },
   "core_temp": {
-   "value": 37.39,
-   "baseline": 37.09,
-   "delta": 0.3,
+   "value": 37.01,
+   "baseline": 37.08,
+   "delta": -0.07,
    "unit": "C",
    "source": {
     "kind": "simulated",
@@ -129,9 +129,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 230.53,
-   "baseline": 260.8,
-   "delta": -30.27,
+   "value": 266.27,
+   "baseline": 262.04,
+   "delta": 4.23,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -238,7 +238,7 @@
   {
    "id": "lungs",
    "label": "Lungs and breathing",
-   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around a crewmember.",
+   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around you in still air.",
    "status": "YELLOW",
    "summary": "You reported headache and fatigue while cabin CO2 7-day average is 2.83 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
    "indicators": [
@@ -304,13 +304,13 @@
   }
  ],
  "context": {
-  "activity_level": 0.322,
+  "activity_level": 0.266,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 2.67,
+  "cabin_co2_mmhg": 2.7,
   "sleep_last_24h": 7.0,
-  "fluid_last_24h": 3451.6,
-  "ared_minutes_7d": 420.0,
-  "aerobic_minutes_7d": 420.0,
+  "fluid_last_24h": 3161.7,
+  "ared_minutes_7d": 360.0,
+  "aerobic_minutes_7d": 300.0,
   "cabin_co2_7d_mean_mmhg": 2.83,
   "cabin_co2_high": true,
   "radiation_ratio_to_7d": 1.0,
@@ -318,7 +318,7 @@
  },
  "actions": [
   {
-   "who": "crew",
+   "who": "self",
    "action": "Increase ventilation first: check the cabin fan and CO2 scrubber for this module.",
    "condition": "co2_exposure",
    "level": "YELLOW",
@@ -333,7 +333,7 @@
   },
   {
    "who": "self",
-   "action": "Report headache, blurred vision or trouble concentrating to the CMO.",
+   "action": "Log any headache, blurred vision or trouble concentrating in your check-in.",
    "condition": "co2_exposure",
    "level": "YELLOW",
    "priority": 3
@@ -350,8 +350,19 @@
   "alert": false,
   "shift_bpm": 0.0,
   "weeks_ago": 0,
-  "sessions": 54,
+  "sessions": 51,
   "reason": "Not enough exercise sessions yet to judge a fitness trend."
  },
- "disclaimer": "Decision support only. The crew is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. The crew medical officer and flight surgeon make all medical decisions."
+ "escalation": {
+  "status": "daily_report",
+  "to": "Your flight surgeon",
+  "level": "YELLOW",
+  "sent_at": "2026-10-01 20:00:00",
+  "arrives_at": "2026-10-01 20:13:00",
+  "summary": "Included in your daily report to the flight surgeon at 20:00.",
+  "items": [
+   "You reported headache and fatigue while cabin CO2 7-day average is 2.83 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first."
+  ]
+ },
+ "disclaimer": "Decision support only. The astronaut is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. Your flight surgeon makes all medical decisions."
 }

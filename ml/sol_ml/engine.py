@@ -41,6 +41,8 @@ UNITS = {"heart_rate": "bpm", "hrv_rmssd": "ms", "spo2": "%", "resp_rate": "br/m
          "diastolic_bp": "mmHg", "core_temp": "C", "pvt_reaction_ms": "ms"}
 EXERCISE_ACTIVITY = 0.5           # activity level from which an hour counts as exercise
 BP_SIGNALS = ("systolic_bp", "diastolic_bp")
+DAILY_REPORT_HOUR = 20           # the daily health report leaves for Earth at 20:00 habitat time
+DEFAULT_COMM_DELAY_S = 780.0      # Mars-Earth one-way light time used when the mission does not give one
 DAILY_AVAILABLE_HOUR = 8          # a day's check-in and night summary are known from 08:00
 INDICATORS = {                    # daily indicators: label, unit, column in daily.csv, scale to display
     "resting_hr": ("Resting heart rate", "bpm", "resting_hr", 1.0),
@@ -70,7 +72,7 @@ SYMPTOM_FATIGUE_SCORE = 2
 BODY_SYSTEMS = [
     ("heart", "Heart and circulation", "Pumps blood and oxygen to every organ. In weightlessness fluid shifts toward the head and the heart works differently.",
      ["heart_rate", "resting_hr", "systolic_bp", "diastolic_bp", "hrv_rmssd"], {"cardiovascular_strain"}),
-    ("lungs", "Lungs and breathing", "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around a crewmember.",
+    ("lungs", "Lungs and breathing", "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around you in still air.",
      ["spo2", "resp_rate", "cabin_co2_mmhg"], {"hypoxia", "co2_exposure"}),
     ("brain", "Brain, sleep and mood", "Attention, mood and sleep. Isolation, confinement and a shifted day-night cycle wear them down.",
      ["mood", "stress", "fatigue", "sleep_hours", "pvt_reaction_ms"], {"unusual_combination", "low_mood", "sleep_deprivation"}),
@@ -116,8 +118,10 @@ class Prepared:
 
 
 class HealthEngine:
-    def __init__(self, config: dict, forest: dict, decon: dict | None = None, sources: dict | None = None):
+    def __init__(self, config: dict, forest: dict, decon: dict | None = None, sources: dict | None = None,
+                 comm_delay_s: float = DEFAULT_COMM_DELAY_S):
         self.config, self.forest, self.decon, self.sources = config, forest, decon, sources or {}
+        self.comm_delay_s = float(comm_delay_s)
         members = {m["kind"]: m for m in config["body"]["members"]}
         self.spike, self.combo = members["personal_z"], members["iforest"]
         # notebook 09 re-tunes the drift member for live use (bounded CUSUM); fall back to notebook 02's setting
@@ -193,9 +197,10 @@ class HealthEngine:
         h, last = prep.hourly, prep.hourly.iloc[i]
         alerts, seen = [], set()
         exercising = last.get("activity_level", 0) >= EXERCISE_ACTIVITY
+        asleep = int(last.get("is_asleep", 0)) == 1
         for sig, op, val, level, cond, msg in HARD_LIMITS:      # RED limits are listed first
-            if sig in BP_SIGNALS and exercising:                 # blood pressure rises in exercise: judge it at rest
-                continue
+            if sig in BP_SIGNALS and (exercising or asleep):     # blood pressure is judged awake and at rest:
+                continue                                         # it rises in exercise and dips in sleep
             if sig in last and OPS[op](last[sig], val) and (sig, cond) not in seen:
                 seen.add((sig, cond))
                 hours = _run_length(OPS[op](h[sig].to_numpy(float)[: i + 1], val), i)
@@ -203,13 +208,16 @@ class HealthEngine:
                 alerts.append(self._alert("rule", level, cond, msg,
                                           f"{msg}: now {float(last[sig]):.1f} {unit}, for {_plural(hours, 'hour')}.", "hard_limit",
                                           signal=sig, value=round(float(last[sig]), 2), threshold=f"{op} {val}"))
-        if last.get("activity_level", 1) < 0.2:
+        if last.get("activity_level", 1) < 0.2 and i >= 1:
+            # a wearable's hourly heart rate must stay high at rest for two hours in a row (one hour is often movement)
             hr = float(last["heart_rate"])
+            prev_rest = float(h["activity_level"].iloc[i - 1]) < 0.2
+            hr_prev = float(h["heart_rate"].iloc[i - 1]) if prev_rest else 0.0
             for limit, level in ((RESTING_HR_RED, "RED"), (RESTING_HR_YELLOW, "YELLOW")):
-                if hr >= limit:
+                if hr >= limit and hr_prev >= limit:
                     msg = f"Resting heart rate at or above {limit:.0f} bpm"
                     alerts.append(self._alert("rule", level, "cardiovascular_strain", msg,
-                                              f"{msg}: {hr:.0f} bpm at rest this hour.", "hard_limit",
+                                              f"{msg}: {hr:.0f} bpm at rest this hour and {hr_prev:.0f} bpm the hour before.", "hard_limit",
                                               signal="heart_rate", value=round(hr, 1), threshold=f">= {limit:.0f} at rest"))
                     break
         return alerts
@@ -298,7 +306,7 @@ class HealthEngine:
         if spe["level"] == "GREEN":
             return None
         shelter = spe["level"] == "RED"
-        message = "SPE in progress: whole crew to the storm shelter" if shelter else "Radiation elevated: prepare the storm shelter"
+        message = "Solar storm in progress: go to the storm shelter now" if shelter else "Radiation elevated: prepare the storm shelter"
         return self._alert("model", spe["level"], "radiation_event", message,
                            f"Radiation dose rate is {spe['ratio']:.1f} times the 7-day normal and has been elevated for "
                            f"{_plural(spe['hours'], 'hour')}.", "spe", signal="radiation_dose_rate", value=round(spe["ratio"], 2),
@@ -443,9 +451,32 @@ class HealthEngine:
             "actions": actions,
             "daily_plan": daily_plan(summary),
             "fitness_trend": fitness,
-            "disclaimer": "Decision support only. The crew is simulated; models are statistical and were tuned on real PMData, "
-                          "MSL RAD and ISS cabin data. The crew medical officer and flight surgeon make all medical decisions.",
+            "escalation": self.escalation(alerts, last["timestamp"]),
+            "disclaimer": "Decision support only. The astronaut is simulated; models are statistical and were tuned on real PMData, "
+                          "MSL RAD and ISS cabin data. Your flight surgeon makes all medical decisions.",
         }
+
+    def escalation(self, alerts: list[dict], timestamp) -> dict:
+        """What reaches the flight surgeon on Earth. A RED alert is sent at once and arrives after the communication delay;
+        YELLOW alerts go in the daily report; with no alert nothing is sent."""
+        ts = pd.Timestamp(timestamp)
+        red = [a for a in alerts if a["level"] == "RED"]
+        to = "Your flight surgeon"
+        if red:
+            arrives = ts + pd.Timedelta(seconds=self.comm_delay_s)
+            return {"status": "sent", "to": to, "level": "RED", "sent_at": str(ts), "arrives_at": str(arrives),
+                    "summary": f"Sent at once: {red[0]['message']}. It reaches Earth about {round(self.comm_delay_s / 60)} minutes after sending.",
+                    "items": [a["reason"] for a in alerts]}
+        if alerts:
+            report = ts.normalize() + pd.Timedelta(hours=DAILY_REPORT_HOUR)
+            if ts >= report:
+                report += pd.Timedelta(days=1)
+            return {"status": "daily_report", "to": to, "level": "YELLOW", "sent_at": str(report),
+                    "arrives_at": str(report + pd.Timedelta(seconds=self.comm_delay_s)),
+                    "summary": f"Included in your daily report to the flight surgeon at {report:%H:%M}.",
+                    "items": [a["reason"] for a in alerts]}
+        return {"status": "none", "to": to, "level": "GREEN", "sent_at": None, "arrives_at": None,
+                "summary": "Nothing needs your flight surgeon right now.", "items": []}
 
     @staticmethod
     def _body_systems(alerts: list[dict], fitness: dict) -> list[dict]:

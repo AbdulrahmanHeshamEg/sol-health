@@ -3,11 +3,11 @@
 #
 # **Questions**
 # 1. Running the whole engine as shipped, how many false alarms does it raise on **real people** (PMData), and how fast does it catch planted changes?
-# 2. On the **generated crew**, is each of the 4 planted cases caught, by which part, and after how long?
-# 3. How does the earlier **v0 engine** (a gradient-boosted classifier trained on simulated labels) do on the same crew?
+# 2. On the **generated astronaut**, is each of the 4 planted cases caught, by which part, and after how long?
+# 3. How does the earlier **v0 engine** (a gradient-boosted classifier trained on simulated labels) do on the same astronaut?
 # 4. What would the astronaut read?
 #
-# **Inputs:** `pmdata_daily.parquet` (real), `data/demo/` (generated crew + `planted_cases.json`), `models/engine_config.json`, `models/body_iforest.joblib`,
+# **Inputs:** `pmdata_daily.parquet` (real), `data/demo/` (generated astronaut + `planted_cases.json`), `models/engine_config.json`, `models/body_iforest.joblib`,
 # the v0 models `models/risk_classifier.joblib` / `anomaly_detector.joblib`, cached sweeps of notebooks 03 and 05.
 # **Outputs:** the final table, figures `reports/figures/09_*.png`, the `engine` block of `models/engine_config.json`.
 
@@ -132,8 +132,8 @@ ax.set(title="Body engine on real PMData: episodes vs time spent in alert"); ax.
 savefig("09_body_engine_pmdata");
 
 # %% [markdown]
-# ## 2. The whole engine on the generated crew
-# The engine is replayed hour by hour over the 75-day mission of each crewmember. For every planted case: the first alert of the expected kind after the case starts.
+# ## 2. The whole engine on the generated astronaut
+# The engine is replayed hour by hour over the astronaut's 75-day mission. For every planted case: the first alert of the expected kind after the case starts.
 
 # %%
 engine = HealthEngine.load(demo_dir=DEMO_DIR)
@@ -177,7 +177,7 @@ caught = pd.DataFrame(rows)
 caught
 
 # %%
-# False alarms on the generated crew: alert-days of the body models outside every planted window (hard limits and the storm excluded).
+# False alarms on the generated astronaut: alert-days of the body models outside every planted window (hard limits and the storm excluded).
 windows = {}
 for case in cases:
     who = [c["astronaut_id"] for c in crew["crew"]] if case["astronaut_id"] == "ALL" else [case["astronaut_id"]]
@@ -198,13 +198,14 @@ for c in crew["crew"]:
     rows.append({"who": names_by_id[aid], "days outside planted cases": len(free), "false alert days": len(days_out), "false episodes": episodes,
                  "per person-month": episodes / (len(free) / 30) if free else np.nan, "kinds": ", ".join(sorted(set(outside.kind))) or "-"})
 crew_fa = pd.DataFrame(rows).set_index("who")
-print("generated crew, pooled: %.2f false body-alert episodes per person-month; %.0f %% of days in a false alert" % (
+print("generated astronaut: %.2f false body-alert episodes per person-month; %.0f %% of days in a false alert" % (
     crew_fa["false episodes"].sum() / (crew_fa["days outside planted cases"].sum() / 30), 100 * crew_fa["false alert days"].sum() / crew_fa["days outside planted cases"].sum()))
 crew_fa.round(2)
 
 # %%
 level_num = {"GREEN": 0, "YELLOW": 1, "RED": 2}
-fig, axes = plt.subplots(len(crew["crew"]), 1, figsize=(15, 6.5), sharex=True)
+fig, axes = plt.subplots(len(crew["crew"]), 1, figsize=(15, 2.2 + 1.6 * len(crew["crew"])), sharex=True, squeeze=False)
+axes = axes.ravel()
 KIND_ROW = {"hard_limit": 0, "environmental_gate": 1, "spike": 2, "drift": 3, "combination": 4, "mood": 5, "spe": 6}
 KIND_LABEL = ["hard limit", "CO2 gate", "z spike (B)", "CUSUM drift (C)", "Isolation Forest (E)", "low-mood rule", "storm alarm"]
 for ax, c in zip(axes, crew["crew"]):
@@ -218,14 +219,14 @@ for ax, c in zip(axes, crew["crew"]):
             ax.axvspan(pd.Timestamp(case["start"]), pd.Timestamp(case["end"]), color="#4c72b0", alpha=0.12)
     ax.set_yticks(range(7)); ax.set_yticklabels(KIND_LABEL, fontsize=6); ax.set_ylim(-0.6, 6.6)
     ax.set_title(f"{c['name']} ({c['role']})", fontsize=9, loc="left")
-fig.suptitle("Engine replay on the generated crew: every alert-hour by part (blue bands = planted cases, ground truth)")
+fig.suptitle("Engine replay on the generated astronaut: every alert-hour by part (blue bands = planted cases, ground truth)")
 savefig("09_engine_replay");
 
 # %% [markdown]
-# ## 3. Baseline: the v0 engine on the same crew
+# ## 3. Baseline: the v0 engine on the same astronaut
 # v0 is a `HistGradientBoosting` classifier trained on **simulated labels** (6 scripted conditions) plus an Isolation Forest on hourly vitals.
 # It cannot run on PMData at all: it needs eight hourly vitals (HRV, SpO2, blood pressure, temperature, reaction time...) that no real dataset here has.
-# So the transfer test is the data-calibrated crew, whose hourly table has the same columns.
+# So the transfer test is the data-calibrated astronaut, whose hourly table has the same columns.
 
 # %%
 v0 = engine_v0.HealthEngine.load()
@@ -252,7 +253,7 @@ for c in crew["crew"]:
                              "first flag after": (first - pd.Timestamp(case["start"])) if pd.notna(first) else pd.NaT,
                              "v0 label": w[w.flag].condition.mode().iloc[0] if w.flag.any() else "-"})
 v0_fa = pd.DataFrame(v0_rows).set_index("who")
-print("v0 classifier on the generated crew, outside the planted cases: flagged %.1f %% of hours, on %d of %d person-days" % (
+print("v0 classifier on the generated astronaut, outside the planted cases: flagged %.1f %% of hours, on %d of %d person-days" % (
     100 * np.average(v0_fa.iloc[:, 0]), v0_fa["days with a flag"].sum(), v0_fa["of days"].sum()))
 v0_fa.round(3)
 
@@ -336,14 +337,14 @@ print(json.dumps(config["engine"], indent=2))
 # | **Storm alarm** | dose rate ÷ 7-day median: ≥ 1.3× elevated (YELLOW), ≥ 2× shelter (RED) | real MSL RAD, 35 months | 0 unconfirmed | **20 May 2024 caught in its first hour**; 93 % of the storm's dose still ahead |
 # | **Cabin gate** | 1-h > 3 mmHg or 7-day > 2.5 mmHg, with a symptom report | real ISS CO2, 468 days | CO2 high 25 % of the time overall, never on 2020–21 missions | by rule |
 #
-# **On the generated crew, the 4 planted cases:**
+# **On the generated astronaut (one person carrying all 4 planted cases, team decision of 14 Nov 2026):**
 #
 # | case | caught by the expected part? | delay | what the astronaut reads |
 # |---|---|---|---|
-# | Cabin CO2 + headache (Nadia) | yes, environmental gate | 23 hours | "You reported fatigue while cabin CO2 1-hour average is 3.02 mmHg, above the 3 mmHg limit: likely environmental, increase ventilation first." |
-# | Slow drift (Karim) | yes, CUSUM | 4 days 8 hours | "Resting heart rate has been above your 28-day normal for 7 days (average 2.0 robust SD); the alert has been active for 1 day." |
-# | Solar storm (whole crew) | yes, storm alarm, 4 of 4 | same hour | "Radiation dose rate is 20.4 times the 7-day normal and has been elevated for 1 hour." |
-# | Odd combination (Sofia) | **no**: the Isolation Forest missed it | 4 days 8 hours, by the low-mood rule | "Mood score has been 2 or lower (5 = best) for 5 days in a row." |
+# | Cabin CO2 + headache | yes, environmental gate | 3 days 7 hours (once the headaches start on day 27, the gate fires the same night) | "You reported fatigue while cabin CO2 1-hour average is 3.17 mmHg, above the 3 mmHg limit: likely environmental, increase ventilation first." |
+# | Slow drift | yes, CUSUM | 7 days 8 hours | "Resting heart rate has been above your 28-day normal for 4 days (average 2.4 robust SD); the alert has been active for 1 day." |
+# | Solar storm | yes, storm alarm, sent to the flight surgeon at once | same hour | "Radiation dose rate is 20.4 times the 7-day normal and has been elevated for 1 hour." |
+# | Odd combination | yes, Isolation Forest | 8 hours (the first morning check-in) | "Today's combination is unusual for you (mood score +5.6 SD, stress score +2.7 SD; positive = worse), for 1 day; no single signal is far out on its own." |
 #
 # **What changed from the notebooks, and why (this is the part the team should check)**
 # 1. **CUSUM became a bounded CUSUM.** With notebook 02's setting the engine met the episode target (0.98 per person-month) but kept real people in alert on **24 % of all days**,
@@ -351,12 +352,12 @@ print(json.dumps(config["engine"], indent=2))
 #    cuts time in alert to 17 %, and leaves drift detection unchanged (74 % and 87 %). The price is the sudden sleep step: 45 % caught instead of 53 %.
 # 2. **A low-mood rule was added** (mood ≤ 2 for 5 consecutive days) because mood is one of the challenge's required indicators and the Isolation Forest alone catches only half of the odd combinations.
 #    At 3 days the whole body engine rose to 1.08 false alarms per person-month, above the team's target; 5 days is the shortest rule that keeps it at 1.00.
-# 3. **The fitness alarm threshold went from 3 to 8 bpm.** At 3 bpm it met the episode target (0.49) but was in alert on a third of the generated crew's days; at 8 bpm it is 0.22 per person-month and still catches 94 % of +2 bpm/week rises.
+# 3. **The fitness alarm threshold went from 3 to 8 bpm.** At 3 bpm it met the episode target (0.49) but was in alert on a third of the generated crew's days (the earlier four-person demo); at 8 bpm it is 0.22 per person-month and still catches 94 % of +2 bpm/week rises.
 # 4. **Blood pressure limits are judged outside exercise hours**, and the planted CO2 stretch comes from RR-1 instead of RR-7 (see notebook 08).
 #
 # **Baseline: why the v0 classifier does not transfer**
 # - On its own purely simulated crew v0 looks excellent: it catches 92 % of scripted abnormal hours and flags 0.3 % of normal ones.
-# - On the data-calibrated crew it flags **55 % of all hours as abnormal** outside every planted case (172 of 174 person-days), nearly always as "sleep deprivation".
+# - On the data-calibrated astronaut it flags **85 % of all hours as abnormal** outside the planted cases (every one of those days), nearly always as "sleep deprivation".
 #   Real heart rate varies far more from hour to hour (SD 6.9 bpm) than v0's simulator assumed (3 bpm), so ordinary variation looks like illness to it.
 # - It "catches" every planted case within hours, but with the wrong label, and it does so because it is alarming more than half the time. A detector that is always on detects nothing.
 # - It cannot run on PMData at all: it needs eight hourly vitals that no real dataset here contains. Its 0.94 macro-F1 was measured against labels produced by the same simulator that trained it.
@@ -365,9 +366,9 @@ print(json.dumps(config["engine"], indent=2))
 #
 # **Limits the judges should hear**
 # - **Detection is measured on changes we planted.** PMData has no medical events, so nothing here is sensitivity to real illness.
-# - **About half of the subtle cases are missed** at the 1-false-alarm target (odd combinations 53 %, sleep steps 45 %). In the demo the odd combination was missed by the model built for it and caught 4 days later by a simple rule.
-# - **17 % of days in alert is still a lot** for healthy people, and 6 of 14 real people exceed 1 false alarm per month. In the 4-person generated crew the body models raised 1.23 false episodes per person-month (24 % of days), most of them one crewmember's drift alarms; four people are too few to read much into that.
+# - **About half of the subtle cases are missed** at the 1-false-alarm target (odd combinations 53 %, sleep steps 45 %). In the one-astronaut demo all four cases are caught by the part built for them; with only one planted example of each, that shows the wiring works, not the hit rate.
+# - **17 % of days in alert is still a lot** for healthy people, and 6 of 14 real people exceed 1 false alarm per month. On the generated astronaut the body models raised no alert outside the planted cases, but only 9 days fall outside them (the cases and their 14-day after-windows cover most of the mission), so that number says little.
 # - **One real solar storm.** The alarm's sensitivity to smaller storms comes from scaled copies of that one event.
 # - **Blood pressure, SpO2, temperature and glucose are simulated only**; their hard limits are standard clinical thresholds and were not evaluated on data.
 # - The pooled Isolation Forest shipped in `models/body_iforest.joblib` is trained on all 14 people; the numbers above come from leave-one-person-out models, so they are not inflated by that.
-# - Speed: 0.8 ms per hourly assessment once a crewmember's tables are prepared (about 0.1 s per person).
+# - Speed: about 1–2 ms per hourly assessment once the astronaut's tables are prepared.

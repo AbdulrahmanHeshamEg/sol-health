@@ -3,7 +3,8 @@
     cd ml && uvicorn api.main:app --reload --port 8000
     open http://localhost:8000/docs
 
-Serves the demo crew from data/demo/ and runs the v2 engine (models/engine_config.json).
+Serves the demo astronaut from data/demo/ and runs the v2 engine (models/engine_config.json).
+The app is personal: `/api/me` names the astronaut, and every per-person route takes that id.
 The `at` query parameter replays the mission at an earlier hour (ISO timestamp),
 which lets the frontend animate the timeline without a live data feed.
 All medical logic (status, thresholds, actions, explanations) lives here, never in the frontend.
@@ -28,7 +29,7 @@ from sol_ml.engine import HealthEngine, LEVEL_RANK, Prepared
 
 MIN_HISTORY_HOURS = 24
 # Replay buttons: the moment at which each planted case is worth looking at (the engine has had time to react).
-SHOW_AFTER_HOURS = {"cabin_co2": 8 * 24 + 12, "slow_drift": 6 * 24 + 12, "odd_combination": 4 * 24 + 12, "solar_storm": 3}
+SHOW_AFTER_HOURS = {"cabin_co2": 8 * 24 + 12, "slow_drift": 7 * 24 + 12, "odd_combination": 12, "solar_storm": 3}
 QUIET_DAY = "2026-09-15 12:00:00"
 CITATIONS = [
     "PMData: Thambawita et al., PMData: A Sports Logging Dataset, MMSys 2020, doi:10.1145/3339825.3394926",
@@ -50,7 +51,9 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 
 @lru_cache
 def engine() -> HealthEngine:
-    return HealthEngine.load(demo_dir=DEMO_DIR)
+    e = HealthEngine.load(demo_dir=DEMO_DIR)
+    e.comm_delay_s = float(demo()[0]["mission"].get("earth_comm_delay_s", e.comm_delay_s))
+    return e
 
 
 @lru_cache
@@ -126,9 +129,10 @@ def mission(at: str | None = None):
     end = pd.Timestamp(at) if at else tel["timestamp"].max()
     return {**meta["mission"], "now": str(end),
             "time_range": {"start": str(tel["timestamp"].min()), "end": str(tel["timestamp"].max())},
-            "replay_marks": [{"id": "quiet_day", "label": "A quiet day", "at": QUIET_DAY, "show_at": QUIET_DAY, "astronaut_id": "ALL"}] + [
+            "replay_marks": [{"id": "quiet_day", "label": "A quiet day", "at": QUIET_DAY, "show_at": QUIET_DAY, "astronaut_id": me()["astronaut_id"]}] + [
                 {"id": c["id"], "label": c["title"], "at": c["start"], "astronaut_id": c["astronaut_id"],
-                 "show_at": str(pd.Timestamp(c["start"]) + pd.Timedelta(hours=SHOW_AFTER_HOURS.get(c["id"], 24)))} for c in cases]}
+                 "show_at": str(pd.Timestamp(c["start"]) + pd.Timedelta(hours=SHOW_AFTER_HOURS.get(c["id"], 24)))}
+                for c in sorted(cases, key=lambda c: c["start"])]}
 
 
 @app.get("/api/meta")
@@ -166,9 +170,48 @@ def planted_cases():
     return demo()[3]
 
 
+def me() -> dict:
+    """The astronaut using the app: the first (and in the solo mission, only) profile in crew.json."""
+    return demo()[0]["crew"][0]
+
+
+@app.get("/api/me")
+def who_am_i():
+    """The astronaut this app belongs to, and the flight surgeon problems are sent to."""
+    mission_info = demo()[0]["mission"]
+    return {**me(), "flight_surgeon": {"title": "Your flight surgeon", "where": "Mission control, Earth",
+                                       "one_way_delay_s": mission_info.get("earth_comm_delay_s")}}
+
+
+@app.get("/api/crew/{aid}/reports")
+def reports(aid: str, at: str | None = None):
+    """Everything that went to the flight surgeon up to `at`, newest first: one entry per alert episode
+    (a RED episode is sent at once; a YELLOW episode goes in that day's report)."""
+    prep, idx = _at(aid, at)
+    tl = _full_timeline(aid)[: idx + 1]
+    out, prev = [], "GREEN"
+    for i, point in enumerate(tl):
+        level = point["status"]
+        worse = LEVEL_RANK[level] > LEVEL_RANK[prev]
+        if level != "GREEN" and (worse or prev == "GREEN"):
+            a = engine().assess_at(prep, i)
+            esc = a["escalation"]
+            same_report = out and esc["status"] == "daily_report" and out[-1]["status"] == "daily_report" \
+                and out[-1]["sent_at"] == esc["sent_at"]
+            if same_report:                  # several watch-level episodes in one day travel in the same daily report
+                out[-1]["items"] += [x for x in esc["items"] if x not in out[-1]["items"]]
+                prev = level
+                continue
+            out.append({"started_at": point["timestamp"], "level": level, "condition_label": a["condition_label"],
+                        "status": esc["status"], "sent_at": esc["sent_at"], "arrives_at": esc["arrives_at"],
+                        "summary": esc["summary"], "items": esc["items"]})
+        prev = level
+    return out[::-1]
+
+
 @app.get("/api/crew")
 def crew(at: str | None = None):
-    """Crew overview: one card per astronaut with current status."""
+    """Status card per astronaut (one in the solo mission). Kept for compatibility with v0 clients."""
     cards = []
     for p in demo()[0]["crew"]:
         prep, idx = _at(p["astronaut_id"], at)
@@ -218,7 +261,16 @@ def daily_rows(aid: str, days: int = Query(30, ge=1, le=1000), at: str | None = 
 def assessment(aid: str, at: str | None = None):
     """Current status with a one-sentence reason per alert, what to do now, daily plan, body systems."""
     prep, idx = _at(aid, at)
-    return engine().assess_at(prep, idx)
+    result = engine().assess_at(prep, idx)
+    esc = result["escalation"]
+    if esc["status"] == "sent":                  # the message left when this act-now episode began, not this hour
+        tl, start = _full_timeline(aid), idx
+        while start > 0 and tl[start - 1]["status"] == "RED":
+            start -= 1
+        sent = pd.Timestamp(tl[start]["timestamp"])
+        esc["sent_at"] = str(sent)
+        esc["arrives_at"] = str(sent + pd.Timedelta(seconds=engine().comm_delay_s))
+    return result
 
 
 @app.get("/api/crew/{aid}/timeline")

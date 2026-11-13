@@ -5,7 +5,7 @@ import { parseTs, useReplay } from "../state/replay";
 
 export const LEVEL_WORD: Record<Level, string> = { GREEN: "Clear", YELLOW: "Watch", RED: "Act now" };
 export const LEVEL_COLOR: Record<Level, string> = { GREEN: "var(--color-clear)", YELLOW: "var(--color-watch)", RED: "var(--color-act)" };
-export const WHO_LABEL = { self: "You", crew: "Crew", cmo: "Crew medical officer", ground: "Flight surgeon (ground)" } as const;
+export const WHO_LABEL = { self: "You", ground: "Your flight surgeon on Earth" } as const;
 
 /** Status is never colour alone: each level has its own shape and word. */
 export function StatusIcon({ level, size = 20 }: { level: Level; size?: number }) {

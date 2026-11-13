@@ -1,0 +1,42 @@
+[
+ {
+  "started_at": "2026-09-28 06:00:00",
+  "level": "YELLOW",
+  "condition_label": "Elevated CO2 / likely environmental",
+  "status": "daily_report",
+  "sent_at": "2026-09-28 20:00:00",
+  "arrives_at": "2026-09-28 20:13:00",
+  "summary": "Included in your daily report to the flight surgeon at 20:00.",
+  "items": [
+   "Local ppCO2 above 3 mmHg (NASA-STD-3001 1-h limit): now 3.1 mmHg, for 1 hour.",
+   "You reported headache and fatigue while cabin CO2 1-hour average is 3.11 mmHg, above the 3 mmHg limit: likely environmental, increase ventilation first.",
+   "You reported headache and fatigue while cabin CO2 7-day average is 2.50 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first."
+  ]
+ },
+ {
+  "started_at": "2026-09-27 04:00:00",
+  "level": "YELLOW",
+  "condition_label": "Elevated CO2 / likely environmental",
+  "status": "daily_report",
+  "sent_at": "2026-09-27 20:00:00",
+  "arrives_at": "2026-09-27 20:13:00",
+  "summary": "Included in your daily report to the flight surgeon at 20:00.",
+  "items": [
+   "Local ppCO2 above 3 mmHg (NASA-STD-3001 1-h limit): now 3.0 mmHg, for 1 hour.",
+   "You reported headache and fatigue while cabin CO2 1-hour average is 3.01 mmHg, above the 3 mmHg limit: likely environmental, increase ventilation first."
+  ]
+ },
+ {
+  "started_at": "2026-09-26 07:00:00",
+  "level": "YELLOW",
+  "condition_label": "Elevated CO2 / likely environmental",
+  "status": "daily_report",
+  "sent_at": "2026-09-26 20:00:00",
+  "arrives_at": "2026-09-26 20:13:00",
+  "summary": "Included in your daily report to the flight surgeon at 20:00.",
+  "items": [
+   "Local ppCO2 above 3 mmHg (NASA-STD-3001 1-h limit): now 3.2 mmHg, for 1 hour.",
+   "You reported fatigue while cabin CO2 1-hour average is 3.17 mmHg, above the 3 mmHg limit: likely environmental, increase ventilation first."
+  ]
+ }
+]

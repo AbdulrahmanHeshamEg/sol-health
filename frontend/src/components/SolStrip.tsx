@@ -1,4 +1,4 @@
-// The sol strip: the whole mission at a glance, one column per sol and one row per crewmember,
+// The sol strip: your whole mission at a glance, one column per sol,
 // coloured by the worst status the engine gave that sol. It is also the replay control: pick a sol to go there.
 import { useMemo } from "react";
 import type { CrewCard, Level, Mission, ReplayMark, TimelinePoint } from "../api/types";
@@ -60,10 +60,10 @@ export function SolStrip({ mission, crew }: { mission: Mission; crew: CrewCard[]
         )}
       </div>
 
-      <div className="mt-3 overflow-x-auto" role="group" aria-label="Mission timeline by sol. Each row is a crewmember, each column a sol.">
+      <div className="mt-3 overflow-x-auto" role="group" aria-label="Your mission by sol. Each column is a sol.">
         <div style={{ minWidth: 640 }}>
           {rows.map((row, r) => (
-            <div key={ids[r]} className="flex items-center gap-2" style={{ height: 15 }}>
+            <div key={ids[r]} className="flex items-center gap-2" style={{ height: rows.length === 1 ? 26 : 15 }}>
               <span className="w-24 shrink-0 truncate text-xs text-dust-dim" title={names[ids[r]]}>{names[ids[r]]?.split(" ")[0]}</span>
               <div className="flex flex-1 gap-px">
                 {row.map((level, i) => {
@@ -71,7 +71,7 @@ export function SolStrip({ mission, crew }: { mission: Mission; crew: CrewCard[]
                   return (
                     <div key={i} className={stormNow ? "storm-pulse" : undefined}
                       title={`Sol ${i + 1}: ${names[ids[r]]} ${level ? LEVEL_WORD[level].toLowerCase() : "no assessment yet"}`}
-                      style={{ flex: 1, height: 11, background: level ? LEVEL_COLOR[level] : "var(--color-hab-raised)", opacity: level === "GREEN" ? 0.42 : 1,
+                      style={{ flex: 1, height: rows.length === 1 ? 22 : 11, background: level ? LEVEL_COLOR[level] : "var(--color-hab-raised)", opacity: level === "GREEN" ? 0.42 : 1,
                         outline: i === currentSol ? "2px solid var(--color-dust)" : "none", outlineOffset: 1 }} />
                   );
                 })}

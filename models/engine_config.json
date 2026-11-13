@@ -187,8 +187,8 @@
       }
     },
     "generated_crew": {
-      "planted_cases_caught_by_expected_part": "6 of 7",
-      "false_body_alert_episodes_per_person_month": 1.228
+      "planted_cases_caught_by_expected_part": "4 of 4",
+      "false_body_alert_episodes_per_person_month": 0.0
     }
   }
 }

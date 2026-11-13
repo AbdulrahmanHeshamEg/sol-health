@@ -1,94 +1,25 @@
 [
  {
-  "astronaut_id": "UH-03",
-  "name": "Sofia Mendes",
-  "role": "Mission Specialist",
+  "astronaut_id": "UH-01",
+  "name": "Nadia Farouk",
+  "role": "Mission astronaut",
   "status": "YELLOW",
-  "health_score": 59,
-  "condition": "acute_deviation",
-  "condition_label": "Unusual reading for you",
-  "top_alert": "Unusual resting heart rate for you",
-  "top_reason": "Resting heart rate is 7.9 robust SD above your 14-day normal, for 2 days.",
-  "vitals": {
-   "heart_rate": 94.2,
-   "hrv_rmssd": 52.84,
-   "spo2": 97.37,
-   "resp_rate": 15.87,
-   "systolic_bp": 116.97,
-   "diastolic_bp": 83.46,
-   "core_temp": 37.1,
-   "pvt_reaction_ms": 218.5
-  },
-  "cabin_co2_mmhg": 1.72,
-  "timestamp": "2026-10-19 12:00:00"
- },
- {
-  "astronaut_id": "UH-02",
-  "name": "Karim Adel",
-  "role": "Flight Engineer",
-  "status": "YELLOW",
-  "health_score": 80,
+  "health_score": 79,
   "condition": "physiological_drift",
   "condition_label": "Slow drift from your normal",
   "top_alert": "Slow drift in resting heart rate",
-  "top_reason": "Resting heart rate has been above your 28-day normal for 9 days (average 2.1 robust SD); the alert has been active for 3 days.",
+  "top_reason": "Resting heart rate has been above your 28-day normal for 4 days (average 2.4 robust SD); the alert has been active for 1 day.",
   "vitals": {
-   "heart_rate": 90.9,
-   "hrv_rmssd": 56.12,
-   "spo2": 96.53,
-   "resp_rate": 12.91,
-   "systolic_bp": 120.26,
-   "diastolic_bp": 70.11,
-   "core_temp": 37.0,
-   "pvt_reaction_ms": 237.12
+   "heart_rate": 110.0,
+   "hrv_rmssd": 47.77,
+   "spo2": 98.24,
+   "resp_rate": 16.24,
+   "systolic_bp": 119.72,
+   "diastolic_bp": 80.48,
+   "core_temp": 37.06,
+   "pvt_reaction_ms": 261.18
   },
-  "cabin_co2_mmhg": 1.62,
-  "timestamp": "2026-10-19 12:00:00"
- },
- {
-  "astronaut_id": "UH-01",
-  "name": "Nadia Farouk",
-  "role": "Commander",
-  "status": "GREEN",
-  "health_score": 89,
-  "condition": "nominal",
-  "condition_label": "Nominal",
-  "top_alert": null,
-  "top_reason": null,
-  "vitals": {
-   "heart_rate": 95.8,
-   "hrv_rmssd": 47.73,
-   "spo2": 97.51,
-   "resp_rate": 13.6,
-   "systolic_bp": 120.61,
-   "diastolic_bp": 70.11,
-   "core_temp": 37.04,
-   "pvt_reaction_ms": 266.78
-  },
-  "cabin_co2_mmhg": 1.63,
-  "timestamp": "2026-10-19 12:00:00"
- },
- {
-  "astronaut_id": "UH-04",
-  "name": "Yuki Tanaka",
-  "role": "Crew Medical Officer",
-  "status": "GREEN",
-  "health_score": 99,
-  "condition": "nominal",
-  "condition_label": "Nominal",
-  "top_alert": null,
-  "top_reason": null,
-  "vitals": {
-   "heart_rate": 83.3,
-   "hrv_rmssd": 54.52,
-   "spo2": 95.25,
-   "resp_rate": 15.35,
-   "systolic_bp": 145.13,
-   "diastolic_bp": 77.57,
-   "core_temp": 36.87,
-   "pvt_reaction_ms": 256.66
-  },
-  "cabin_co2_mmhg": 1.6,
-  "timestamp": "2026-10-19 12:00:00"
+  "cabin_co2_mmhg": 1.68,
+  "timestamp": "2026-10-16 12:00:00"
  }
 ]

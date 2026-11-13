@@ -18,7 +18,7 @@ const SCORES: Array<{ key: "mood" | "stress" | "fatigue"; label: string; low: st
   { key: "fatigue", label: "Energy", low: "exhausted", high: "fresh" },
 ];
 
-export function CheckIn({ astronautId, name }: { astronautId: string; name: string }) {
+export function CheckIn({ astronautId }: { astronautId: string }) {
   const { at } = useReplay();
   const [values, setValues] = useState<CheckInValues>({});
   const [busy, setBusy] = useState(false);
@@ -44,7 +44,7 @@ export function CheckIn({ astronautId, name }: { astronautId: string; name: stri
   return (
     <form onSubmit={submit}>
       <p className="max-w-[64ch] text-sm text-dust-dim">
-        Enter what you measured. Leave the rest empty. The engine reads your entry on top of {name.split(" ")[0]}'s latest data and answers below; nothing is saved.
+        Enter what you measured. Leave the rest empty. The engine reads your entry on top of your latest data and answers below; nothing is saved.
       </p>
       <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {NUMBERS.map((f) => (

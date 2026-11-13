@@ -12,16 +12,16 @@
  {
   "id": "slow_drift",
   "label": "Slow drift (illness onset)",
-  "at": "2026-10-19 12:00:00"
+  "at": "2026-10-16 12:00:00"
+ },
+ {
+  "id": "odd_combination",
+  "label": "Odd combination (behavioural health)",
+  "at": "2026-10-31 12:00:00"
  },
  {
   "id": "solar_storm",
   "label": "Solar storm (SPE)",
   "at": "2026-11-13 08:00:00"
- },
- {
-  "id": "odd_combination",
-  "label": "Odd combination (behavioural health)",
-  "at": "2026-11-04 12:00:00"
  }
 ]

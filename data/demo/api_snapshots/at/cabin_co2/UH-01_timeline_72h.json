@@ -122,14 +122,14 @@
   "timestamp": "2026-09-29 06:00:00",
   "status": "YELLOW",
   "condition": "co2_exposure",
-  "p_abnormal": 0.667,
+  "p_abnormal": 0.8,
   "anomaly_score": 0.551
  },
  {
   "timestamp": "2026-09-29 07:00:00",
   "status": "YELLOW",
   "condition": "co2_exposure",
-  "p_abnormal": 0.667,
+  "p_abnormal": 0.8,
   "anomaly_score": 0.551
  },
  {
@@ -444,7 +444,7 @@
   "timestamp": "2026-10-01 04:00:00",
   "status": "YELLOW",
   "condition": "co2_exposure",
-  "p_abnormal": 0.8,
+  "p_abnormal": 0.667,
   "anomaly_score": 0.091
  },
  {

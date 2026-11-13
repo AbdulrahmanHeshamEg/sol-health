@@ -15,7 +15,7 @@
   "measured_in_space": "Yes. Chest strap or wrist sensor, continuously; resting value taken during sleep.",
   "why": "The earliest general sign that the body is under load: infection, dehydration, poor sleep and stress all raise resting heart rate.",
   "hazard_effect": "Without gravity, body fluid shifts toward the head and blood volume falls, so the heart adapts and deconditions. The same exercise slowly costs more heartbeats.",
-  "escalate": "Tell the CMO if resting heart rate stays above your own normal for several days, or reaches 100 bpm at rest. 120 bpm at rest: flight surgeon now.",
+  "escalate": "Above your own normal for several days, or 100 bpm at rest: it goes to your flight surgeon in the daily report. 120 bpm at rest: flight surgeon now.",
   "prevention": "Daily aerobic and resistive exercise, enough fluid and salt, protected sleep.",
   "hazard_names": [
    "Altered gravity fields",
@@ -47,7 +47,7 @@
   "measured_in_space": "Yes. Automatic arm cuff, taken seated and at rest.",
   "why": "Shows how hard the heart and vessels work and whether the body has enough circulating fluid.",
   "hazard_effect": "Fluid shift and a smaller blood volume change pressure regulation; after landing, standing up can cause fainting.",
-  "escalate": "Systolic 160 mmHg or more at rest, or below 90 mmHg: stop activity and contact the CMO and flight surgeon.",
+  "escalate": "Systolic 160 mmHg or more at rest, or below 90 mmHg: stop activity; your flight surgeon is notified.",
   "prevention": "Exercise, hydration, salt and fluid loading before return to gravity.",
   "hazard_names": [
    "Altered gravity fields"
@@ -102,8 +102,8 @@
   ],
   "measured_in_space": "Yes. From the chest strap.",
   "why": "Rises early with fever, low oxygen or high CO2.",
-  "hazard_effect": "CO2 can pool around a crewmember in still air because warm air does not rise without gravity.",
-  "escalate": "A sustained rise with headache or breathlessness: check cabin CO2 and tell the CMO.",
+  "hazard_effect": "CO2 can pool around you in still air because warm air does not rise without gravity.",
+  "escalate": "A sustained rise with headache or breathlessness: check cabin CO2 first; it goes to your flight surgeon if it lasts.",
   "prevention": "Good airflow in every module, especially sleep stations.",
   "hazard_names": [
    "Hostile / closed environments"
@@ -130,8 +130,8 @@
   "measured_in_space": "Yes. Ear or forehead thermometer; skin patch for continuous reading.",
   "why": "Fever is the clearest sign of infection.",
   "hazard_effect": "The immune system is weakened by stress, radiation and poor sleep, and a closed cabin spreads germs easily. Dormant viruses can reactivate.",
-  "escalate": "38.0 C or more: rest, fluids, recheck every 2 hours and inform the CMO. 39.0 C or more: flight surgeon now.",
-  "prevention": "Hygiene, clean shared surfaces, sleep, nutrition, pre-flight quarantine.",
+  "escalate": "38.0 C or more: rest, fluids, recheck every 2 hours. 39.0 C or more: flight surgeon now.",
+  "prevention": "Hygiene, clean surfaces, sleep, nutrition, pre-flight quarantine.",
   "hazard_names": [
    "Hostile / closed environments",
    "Space radiation"
@@ -158,7 +158,7 @@
   "measured_in_space": "Yes. Finger-prick meter, in the morning before eating. In this demo the values are simulated from published ranges.",
   "why": "Shows how the body handles energy. Both low and high values impair thinking and performance.",
   "hazard_effect": "Less muscle and less activity reduce insulin sensitivity; irregular meals and limited food on long missions add to it.",
-  "escalate": "Below 70 mg/dL: take fast sugar and recheck. Below 54 mg/dL or 250 mg/dL and above: flight surgeon now. 126 mg/dL or more on two mornings: CMO review.",
+  "escalate": "Below 70 mg/dL: take fast sugar and recheck. Below 54 mg/dL or 250 mg/dL and above: flight surgeon now. 126 mg/dL or more on two mornings: flight surgeon review.",
   "prevention": "Regular meals, exercise, enough protein, logging what you eat.",
   "hazard_names": [
    "Distance from Earth",
@@ -186,7 +186,7 @@
   "measured_in_space": "Yes. Wrist sensor plus a morning check-in.",
   "why": "Sleep protects attention, mood and the immune system. Short sleep is a leading cause of errors.",
   "hazard_effect": "No natural day and night, noise, workload and, on Mars, a 24 h 40 min day shift the body clock.",
-  "escalate": "Under 6 hours for several nights, or with slow reaction time: move safety-critical tasks and inform the CMO.",
+  "escalate": "Under 6 hours for several nights, or with slow reaction time: postpone safety-critical tasks; it goes to your flight surgeon in the daily report.",
   "prevention": "Fixed sleep schedule, dim light before sleep, bright light after waking, quiet dark sleep station.",
   "hazard_names": [
    "Isolation and confinement",
@@ -215,9 +215,9 @@
   ],
   "measured_in_space": "Yes. A 20-second self-report each morning: the same 1-5 scales as the real PMData study.",
   "why": "Behavioural health problems build slowly and people under-report them. A daily score makes a slow change visible.",
-  "hazard_effect": "Months in a small space with the same few people, far from family, with delayed communication.",
-  "escalate": "Mood 2 or lower for three days, or mood, stress and sleep worsening together: talk to the CMO; a private medical conference can be arranged.",
-  "prevention": "Exercise, family contact, meaningful work, shared meals, private time.",
+  "hazard_effect": "Months alone in a small habitat, far from family, with every conversation delayed by minutes.",
+  "escalate": "Mood 2 or lower for five days, or mood, stress and sleep worsening together: your flight surgeon is told and a private medical conference can be arranged.",
+  "prevention": "Exercise, family contact, meaningful work, a fixed daily rhythm.",
   "hazard_names": [
    "Isolation and confinement",
    "Distance from Earth"
@@ -278,8 +278,8 @@
   "measured_in_space": "Yes. Area monitors and personal dosimeters. The demo replays real measurements from Curiosity's RAD instrument on Mars (NASA/JPL).",
   "why": "Dose adds up over a career and raises cancer risk; a solar storm can deliver a large dose within hours.",
   "hazard_effect": "Beyond Earth's magnetic field, galactic cosmic rays are constant and solar particle events arrive with little warning.",
-  "escalate": "Dose rate at twice the normal level or more: whole crew to the storm shelter. Career dose near 600 mSv: mission planning with the flight surgeon.",
-  "prevention": "Shielded shelter, limiting EVA during solar activity, tracking every crewmember's dose.",
+  "escalate": "Dose rate at twice the normal level or more: go to the storm shelter now. Career dose near 600 mSv: mission planning with the flight surgeon.",
+  "prevention": "Shielded shelter, limiting EVA during solar activity, tracking your dose every day.",
   "hazard_names": [
    "Space radiation"
   ],
@@ -310,7 +310,7 @@
   "measured_in_space": "Partly. Exercise minutes and exercise heart rate daily; bone density by scan before and after flight; ultrasound in flight.",
   "why": "Without loading, hip bone density falls about 1-1.5 % per month and muscles shrink, which raises fracture risk on landing.",
   "hazard_effect": "Weightlessness removes the daily load that keeps bone and muscle.",
-  "escalate": "Exercise below target for a week, or exercise heart rate drifting up: review the prescription with the CMO.",
+  "escalate": "Exercise below target for a week, or exercise heart rate drifting up: your flight surgeon reviews the prescription.",
   "prevention": "Resistive exercise six days a week, aerobic exercise, protein and vitamin D.",
   "hazard_names": [
    "Altered gravity fields"
@@ -332,7 +332,7 @@
   "measured_in_space": "Yes. A 3-minute tablet test.",
   "why": "An objective check of alertness before safety-critical work.",
   "hazard_effect": "Sleep loss, high CO2 and workload slow reactions before a person notices.",
-  "escalate": "Much slower than your own normal: hand over EVA, robotics or docking tasks.",
+  "escalate": "Much slower than your own normal: postpone EVA, robotics or docking tasks.",
   "prevention": "Sleep, breaks, strategic naps.",
   "hazard_names": [
    "Isolation and confinement",

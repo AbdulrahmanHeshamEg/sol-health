@@ -16,7 +16,7 @@
  "budget_status": "GREEN",
  "quality_factor": 3.0,
  "reason": "Radiation dose rate is 4.1 times the 7-day normal and has been elevated for 19 hours.",
- "action": "SPE in progress: whole crew to the storm shelter",
+ "action": "Solar storm in progress: go to the storm shelter now",
  "source": {
   "kind": "real",
   "dataset": "NASA/JPL MSL RAD (Curiosity), replayed"

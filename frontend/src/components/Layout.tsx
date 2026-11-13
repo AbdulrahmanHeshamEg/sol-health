@@ -6,7 +6,7 @@ import { useLinkWithAt, useReplay } from "../state/replay";
 import { SolStrip } from "./SolStrip";
 import { ErrorNote, Skeleton } from "./ui";
 
-const NAV = [["/", "Crew"], ["/alerts", "Alerts"], ["/learn", "What we measure"], ["/about", "Data and sources"]] as const;
+const NAV = [["/", "Me"], ["/cabin", "Cabin"], ["/reports", "Flight surgeon"], ["/learn", "What we measure"], ["/about", "Data and sources"]] as const;
 
 export function Layout() {
   const mission = useMission();
@@ -30,7 +30,7 @@ export function Layout() {
           <div>
             <p className="display text-2xl">Sol Health</p>
             <p className="text-sm text-dust-dim">
-              {m ? `${m.name}. Sol ${m.current_day} of ${m.planned_duration_days}. A message to Earth takes about ${delayMin} minutes each way, so the crew decides here.` : "Loading the mission"}
+              {m ? `${m.name}. Sol ${m.current_day} of ${m.planned_duration_days}. A message to Earth takes about ${delayMin} minutes each way, so you act first and your flight surgeon is kept informed.` : "Loading the mission"}
             </p>
           </div>
           <p className="text-sm" title={mode === "live" ? "Answers come from the engine running in the API" : "The API is not reachable. Showing saved engine answers."}>
@@ -56,9 +56,9 @@ export function Layout() {
       <main id="main" className="flex-1 py-6"><Outlet /></main>
       <footer className="border-t border-line pt-4 text-sm text-dust-dim">
         <p className="max-w-[78ch]">
-          Decision support, not a medical device. The crew is fictional and simulated; its statistics come from real data
+          Decision support, not a medical device. The astronaut is fictional and simulated; the statistics come from real data
           (PMData, NASA OSDR EDA, NASA/JPL MSL RAD), and every value is marked real or simulated.
-          The crew medical officer and the flight surgeon make all medical decisions.
+          Your flight surgeon makes all medical decisions.
         </p>
       </footer>
     </div>

@@ -2,8 +2,9 @@
 
 **Onboard AI medical copilot for astronauts.** NASA Space Apps 2026 — *Create Health Monitoring Software for Astronauts* — Cairo.
 
-For every crewmember, Sol Health shows **all vitals against their own baseline**, says **whether something is wrong and why**,
-and tells them **what to do now** — offline, because deep-space crews cannot wait for Earth.
+A personal health app for an astronaut alone on a deep-space mission. It shows **every indicator against your own baseline**,
+says **whether something is wrong and why**, tells you **what to do now**, and sends what matters to **your flight surgeon** on Earth,
+who is minutes away, so you act first.
 
 ## What's inside
 - **Explainable engine**, tuned on real data (no deep learning; every alert gives a one-sentence reason):
@@ -12,10 +13,10 @@ and tells them **what to do now** — offline, because deep-space crews cannot w
   - Cabin CO2 environmental gate from NASA limits, replayed on 468 days of real ISS data
   - Radiation dose counter, bone and muscle projection, fitness trend
   - Hard clinical limits for SpO2, temperature, blood pressure, glucose
-- **Action protocols:** prioritised checklists for the astronaut, crew, CMO and flight surgeon
+- **Action protocols:** prioritised checklists: what you do, and what goes to your flight surgeon (act-now alerts at once, watch alerts in the daily report)
 - **FastAPI** service with mission replay (`?at=`), a measurement check-in, indicator explainer cards and reminders
 - **Notebooks 00–09:** data exploration, model comparison with a shared protocol, and a Decision cell each (`notebooks/`, figures in `reports/figures/`)
-- **Demo mission:** 4 fictional crew on a Mars surface mission, 75 days, with 4 planted test cases; statistics calibrated on real data
+- **Demo mission:** one fictional astronaut alone on a Mars surface mission, 75 days, carrying all 4 planted test cases; statistics calibrated on real data
 - **Docs** for judges and for Claude Code (`CLAUDE.md`, `docs/`)
 
 ## Data (real + simulated)

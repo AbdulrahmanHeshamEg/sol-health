@@ -1,16 +1,16 @@
 {
  "astronaut_id": "UH-01",
- "timestamp": "2026-11-04 12:00:00",
- "mission_day": 66,
- "status": "GREEN",
- "health_score": 91,
- "condition": "nominal",
- "condition_label": "Nominal",
+ "timestamp": "2026-10-31 12:00:00",
+ "mission_day": 62,
+ "status": "YELLOW",
+ "health_score": 67,
+ "condition": "acute_deviation",
+ "condition_label": "Unusual reading for you",
  "probabilities": {
-  "nominal": 1.0,
-  "acute_deviation": 0.0,
+  "nominal": 0.2,
+  "acute_deviation": 0.4,
   "physiological_drift": 0.0,
-  "unusual_combination": 0.0,
+  "unusual_combination": 0.4,
   "low_mood": 0.0,
   "deconditioning": 0.0,
   "co2_exposure": 0.0,
@@ -22,33 +22,61 @@
   "low_blood_sugar": 0.0,
   "high_blood_sugar": 0.0
  },
- "anomaly_score": 0.608,
- "alerts": [],
+ "anomaly_score": 0.985,
+ "alerts": [
+  {
+   "source": "model",
+   "level": "YELLOW",
+   "condition": "acute_deviation",
+   "message": "Unusual mood score for you",
+   "reason": "Mood score is 5.6 robust SD worse than your 14-day normal, for 1 day.",
+   "kind": "spike",
+   "hazard": "Distance from Earth",
+   "signal": "mood",
+   "z": 5.59,
+   "value": 1.0,
+   "probability": 0.559,
+   "model": "personal robust z"
+  },
+  {
+   "source": "model",
+   "level": "YELLOW",
+   "condition": "unusual_combination",
+   "message": "Unusual combination of signals",
+   "reason": "Today's combination is unusual for you (mood score +5.6 SD, stress score +2.7 SD; positive = worse), for 1 day; no single signal is far out on its own.",
+   "kind": "combination",
+   "hazard": "Isolation and confinement",
+   "signal": "mood",
+   "z": 5.59,
+   "probability": 0.985,
+   "model": "Isolation Forest on the daily z-vector"
+  }
+ ],
  "drivers": [
   {
-   "signal": "sleep_minutes",
-   "deviation": -24.5,
-   "unit": "min",
-   "z": 0.48
+   "signal": "mood",
+   "deviation": -3.0,
+   "unit": "points",
+   "z": 5.59
   },
   {
    "signal": "stress",
-   "deviation": 0.0,
+   "deviation": -2.0,
    "unit": "points",
-   "z": 0.0
+   "z": 2.7
   },
   {
-   "signal": "fatigue",
-   "deviation": 1.0,
-   "unit": "points",
-   "z": -0.67
+   "signal": "resting_hr",
+   "deviation": -2.45,
+   "unit": "bpm",
+   "z": -0.59
   }
  ],
  "vitals": {
   "heart_rate": {
-   "value": 88.3,
-   "baseline": 87.9,
-   "delta": 0.4,
+   "value": 101.6,
+   "baseline": 87.0,
+   "delta": 14.6,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -56,9 +84,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 43.65,
-   "baseline": 40.47,
-   "delta": 3.18,
+   "value": 38.73,
+   "baseline": 43.5,
+   "delta": -4.77,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -66,9 +94,9 @@
    }
   },
   "spo2": {
-   "value": 97.97,
-   "baseline": 98.14,
-   "delta": -0.17,
+   "value": 98.57,
+   "baseline": 98.2,
+   "delta": 0.37,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -76,9 +104,9 @@
    }
   },
   "resp_rate": {
-   "value": 16.02,
-   "baseline": 16.04,
-   "delta": -0.02,
+   "value": 15.88,
+   "baseline": 15.54,
+   "delta": 0.34,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -86,9 +114,9 @@
    }
   },
   "systolic_bp": {
-   "value": 120.35,
-   "baseline": 120.14,
-   "delta": 0.21,
+   "value": 120.47,
+   "baseline": 117.86,
+   "delta": 2.61,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -96,9 +124,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 80.84,
-   "baseline": 75.35,
-   "delta": 5.49,
+   "value": 72.03,
+   "baseline": 73.27,
+   "delta": -1.24,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -106,9 +134,9 @@
    }
   },
   "core_temp": {
-   "value": 37.08,
-   "baseline": 37.09,
-   "delta": -0.01,
+   "value": 37.06,
+   "baseline": 37.08,
+   "delta": -0.02,
    "unit": "C",
    "source": {
     "kind": "simulated",
@@ -116,9 +144,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 255.94,
-   "baseline": 260.8,
-   "delta": -4.86,
+   "value": 256.59,
+   "baseline": 262.04,
+   "delta": -5.45,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -129,12 +157,12 @@
  "indicators": {
   "resting_hr": {
    "label": "Resting heart rate",
-   "value": 69.0,
-   "baseline": 72.55,
-   "delta": -3.55,
+   "value": 73.6,
+   "baseline": 76.05,
+   "delta": -2.45,
    "unit": "bpm",
-   "z": -2.39,
-   "date": "2026-11-04",
+   "z": -0.59,
+   "date": "2026-10-31",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -142,12 +170,12 @@
   },
   "sleep_hours": {
    "label": "Sleep last night",
-   "value": 6.23,
-   "baseline": 6.64,
-   "delta": -0.41,
+   "value": 6.6,
+   "baseline": 5.97,
+   "delta": 0.63,
    "unit": "h",
-   "z": 0.48,
-   "date": "2026-11-04",
+   "z": -0.67,
+   "date": "2026-10-31",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -159,8 +187,8 @@
    "baseline": 2.0,
    "delta": 1.0,
    "unit": "1-5, 5 = fresh",
-   "z": -0.67,
-   "date": "2026-11-04",
+   "z": -1.35,
+   "date": "2026-10-31",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -168,12 +196,12 @@
   },
   "mood": {
    "label": "Mood score",
-   "value": 4.0,
-   "baseline": 3.5,
-   "delta": 0.5,
+   "value": 1.0,
+   "baseline": 4.0,
+   "delta": -3.0,
    "unit": "1-5, 5 = best",
-   "z": -0.67,
-   "date": "2026-11-04",
+   "z": 5.59,
+   "date": "2026-10-31",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -181,12 +209,12 @@
   },
   "stress": {
    "label": "Stress score",
-   "value": 3.0,
+   "value": 1.0,
    "baseline": 3.0,
-   "delta": 0.0,
+   "delta": -2.0,
    "unit": "1-5, 5 = relaxed",
-   "z": 0.0,
-   "date": "2026-11-04",
+   "z": 2.7,
+   "date": "2026-10-31",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -194,12 +222,12 @@
   },
   "blood_glucose_mg_dl": {
    "label": "Fasting blood glucose",
-   "value": 88.0,
-   "baseline": 85.5,
-   "delta": 2.5,
+   "value": 84.0,
+   "baseline": 84.5,
+   "delta": -0.5,
    "unit": "mg/dL",
    "z": null,
-   "date": "2026-11-04",
+   "date": "2026-10-31",
    "source": {
     "kind": "simulated",
     "calibrated_on": "published normal ranges"
@@ -225,7 +253,7 @@
   {
    "id": "lungs",
    "label": "Lungs and breathing",
-   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around a crewmember.",
+   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around you in still air.",
    "status": "GREEN",
    "summary": "Within your normal range.",
    "indicators": [
@@ -239,8 +267,8 @@
    "id": "brain",
    "label": "Brain, sleep and mood",
    "function": "Attention, mood and sleep. Isolation, confinement and a shifted day-night cycle wear them down.",
-   "status": "GREEN",
-   "summary": "Within your normal range.",
+   "status": "YELLOW",
+   "summary": "Mood score is 5.6 robust SD worse than your 14-day normal, for 1 day.",
    "indicators": [
     "mood",
     "stress",
@@ -248,7 +276,10 @@
     "sleep_hours",
     "pvt_reaction_ms"
    ],
-   "alerts": []
+   "alerts": [
+    "Unusual mood score for you",
+    "Unusual combination of signals"
+   ]
   },
   {
    "id": "bones_muscles",
@@ -289,37 +320,94 @@
   }
  ],
  "context": {
-  "activity_level": 0.229,
+  "activity_level": 0.374,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 1.49,
-  "sleep_last_24h": 6.0,
-  "fluid_last_24h": 3253.3,
+  "cabin_co2_mmhg": 1.59,
+  "sleep_last_24h": 7.0,
+  "fluid_last_24h": 3323.9,
   "ared_minutes_7d": 420.0,
-  "aerobic_minutes_7d": 180.0,
-  "cabin_co2_7d_mean_mmhg": 1.67,
+  "aerobic_minutes_7d": 120.0,
+  "cabin_co2_7d_mean_mmhg": 1.7,
   "cabin_co2_high": false,
-  "radiation_ratio_to_7d": 1.0,
+  "radiation_ratio_to_7d": 0.99,
   "radiation_level": "GREEN"
  },
- "actions": [],
- "daily_plan": [
+ "actions": [
   {
    "who": "self",
-   "category": "sleep",
-   "action": "Aim for 8 h sleep tonight (last 24 h: 6 h)."
+   "action": "Repeat the measurement to rule out a sensor or logging error.",
+   "condition": "acute_deviation",
+   "level": "YELLOW",
+   "priority": 1
   },
   {
    "who": "self",
+   "action": "Check in with yourself: mood, stress and sleep have shifted together, each only a little.",
+   "condition": "unusual_combination",
+   "level": "YELLOW",
+   "priority": 2
+  },
+  {
+   "who": "self",
+   "action": "Note anything unusual in the last 24 h (workload, sleep, meals, medication).",
+   "condition": "acute_deviation",
+   "level": "YELLOW",
+   "priority": 3
+  },
+  {
+   "who": "self",
+   "action": "Use tonight's wind-down routine and schedule a family or friend call at the next comm pass.",
+   "condition": "unusual_combination",
+   "level": "YELLOW",
+   "priority": 4
+  },
+  {
+   "who": "ground",
+   "action": "If it is still far from your normal tomorrow, it goes to your flight surgeon in the daily report.",
+   "condition": "acute_deviation",
+   "level": "YELLOW",
+   "priority": 5
+  },
+  {
+   "who": "self",
+   "action": "Keep a fixed day: meals, exercise and work blocks at the same times.",
+   "condition": "unusual_combination",
+   "level": "YELLOW",
+   "priority": 6
+  },
+  {
+   "who": "ground",
+   "action": "Your flight surgeon sees this in today's report and can offer a private conference.",
+   "condition": "unusual_combination",
+   "level": "YELLOW",
+   "priority": 7
+  }
+ ],
+ "daily_plan": [
+  {
+   "who": "self",
    "category": "exercise",
-   "action": "Add 60 min of aerobic exercise (treadmill/cycle) this week."
+   "action": "Add 120 min of aerobic exercise (treadmill/cycle) this week."
   }
  ],
  "fitness_trend": {
   "alert": false,
-  "shift_bpm": 0.0,
-  "weeks_ago": 0,
-  "sessions": 106,
+  "shift_bpm": -5.7,
+  "weeks_ago": 2,
+  "sessions": 98,
   "reason": "Exercise heart rate is stable for the same exercise types."
  },
- "disclaimer": "Decision support only. The crew is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. The crew medical officer and flight surgeon make all medical decisions."
+ "escalation": {
+  "status": "daily_report",
+  "to": "Your flight surgeon",
+  "level": "YELLOW",
+  "sent_at": "2026-10-31 20:00:00",
+  "arrives_at": "2026-10-31 20:13:00",
+  "summary": "Included in your daily report to the flight surgeon at 20:00.",
+  "items": [
+   "Mood score is 5.6 robust SD worse than your 14-day normal, for 1 day.",
+   "Today's combination is unusual for you (mood score +5.6 SD, stress score +2.7 SD; positive = worse), for 1 day; no single signal is far out on its own."
+  ]
+ },
+ "disclaimer": "Decision support only. The astronaut is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. Your flight surgeon makes all medical decisions."
 }

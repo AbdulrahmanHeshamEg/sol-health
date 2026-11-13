@@ -1,6 +1,6 @@
 # Data Dictionary
 
-The demo crew is **fictional and simulated**. Real datasets set its statistics (`docs/DATASETS.md`, notebook 08), and the radiation
+The demo astronaut is **fictional and simulated**. Real datasets set its statistics (`docs/DATASETS.md`, notebook 08), and the radiation
 series is a replay of real measurements. `data/demo/sources.json` records the origin of every signal and the API returns it with each value.
 
 | Source tag | Meaning | Signals |
@@ -13,13 +13,13 @@ series is a replay of real measurements. `data/demo/sources.json` records the or
 ## Files
 | File | Content |
 |---|---|
-| `data/demo/crew.json` | `mission` object + `crew[]` profiles (4 fictional astronauts) |
-| `data/demo/telemetry.csv` | 7,200 hourly rows = 4 astronauts × 75 days × 24 h |
-| `data/demo/daily.csv` | 300 daily rows = 4 astronauts × 75 days |
+| `data/demo/crew.json` | `mission` object + `crew[]` with the one fictional astronaut |
+| `data/demo/telemetry.csv` | 1,800 hourly rows = 75 days × 24 h |
+| `data/demo/daily.csv` | 75 daily rows |
 | `data/demo/planted_cases.json` | ground truth of the 4 planted cases (evaluation and replay only; the engine never reads it) |
 | `data/demo/sources.json` | origin of every signal |
 | `data/demo/api_snapshots/` | saved API responses for frontend mock mode (`at/<mark>/` for replay) |
-| `data/demo_v0/` | the earlier purely simulated crew, kept for the baseline comparison |
+| `data/demo_v0/` | the earlier purely simulated four-person crew, kept for the baseline comparison |
 | `data/processed/*.parquet` | tidy tables from the real datasets (git-ignored; rebuilt by notebooks 01, 04, 06) |
 
 ## Hourly telemetry (`telemetry.csv`)
@@ -53,14 +53,15 @@ A day's row counts as known to the engine from 08:00 of that day.
 ared_minutes_week, aerobic_minutes_week, baseline{8 vitals + simulator params}`.
 `baseline` vital values = median of awake, resting hours on mission days 1–3.
 
-## Demo crew and planted cases
-| ID | Name | Role | Planted case | Mission days |
-|---|---|---|---|---|
-| UH-01 | Nadia Farouk | Commander | cabin CO2 (whole cabin) with her headache reports | 24–33, headaches from day 27 |
-| UH-02 | Karim Adel | Flight Engineer | slow drift: resting HR +6 bpm, sleep −60 min, fatigue 1 point worse | 44–53 ramp, then held |
-| UH-03 | Sofia Mendes | Mission Specialist | odd combination: mood −1, stress −1, sleep −55 min | 62–68 |
-| all | whole crew | | solar storm: the real 20 May 2024 storm, unscaled | day 75 from 05:00 (under way "now") |
-| UH-04 | Yuki Tanaka | Crew Medical Officer | none (control) | — |
+## Demo astronaut and planted cases
+One fictional astronaut, **UH-01 Nadia Farouk**, alone on the mission, carries all four planted cases at different times:
+
+| Case | Mission days | What was planted |
+|---|---|---|
+| Cabin CO2 with headache reports | 24–33, headaches from day 27 | the highest real 10-day CO2 stretch of ISS mission RR-1; headache reports, fatigue ≤ 2 |
+| Slow drift (illness onset) | 40–49 ramp, held to 54, then resolved | resting HR +6 bpm, sleep −60 min, fatigue one point worse |
+| Odd combination | 62–68 | mood −1, stress −1, sleep −55 min |
+| Solar storm | day 75 from 05:00 (under way "now") | the real 20 May 2024 storm, unscaled |
 
 ## Real-data tables (`data/processed/`)
 | File | Rows | Columns |

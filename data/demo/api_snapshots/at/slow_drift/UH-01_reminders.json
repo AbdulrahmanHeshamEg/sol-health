@@ -1,42 +1,42 @@
 {
- "now": "2026-10-19 12:00:00",
+ "now": "2026-10-16 12:00:00",
  "items": [
   {
    "id": "morning_checkin",
    "label": "Morning check-in: mood, stress, fatigue, sleep, headache",
-   "due_at": "2026-10-19 08:00:00",
+   "due_at": "2026-10-16 08:00:00",
    "status": "done",
    "logged_automatically": true
   },
   {
    "id": "fasting_glucose",
    "label": "Fasting blood sugar (before breakfast)",
-   "due_at": "2026-10-19 07:00:00",
+   "due_at": "2026-10-16 07:00:00",
    "status": "done",
    "logged_automatically": true
   },
   {
    "id": "blood_pressure",
    "label": "Blood pressure, seated at rest",
-   "due_at": "2026-10-19 09:00:00",
+   "due_at": "2026-10-16 09:00:00",
    "status": "due",
    "logged_automatically": false
   },
   {
    "id": "temperature",
    "label": "Body temperature",
-   "due_at": "2026-10-19 09:00:00",
+   "due_at": "2026-10-16 09:00:00",
    "status": "due",
    "logged_automatically": false
   },
   {
    "id": "reaction_test",
    "label": "3-minute reaction-time test",
-   "due_at": "2026-10-19 20:00:00",
+   "due_at": "2026-10-16 20:00:00",
    "status": "upcoming",
    "logged_automatically": false
   }
  ],
- "checkin_streak_days": 50,
+ "checkin_streak_days": 47,
  "due_count": 2
 }

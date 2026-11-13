@@ -28,7 +28,7 @@ export function About() {
       <div>
         <h1 className="text-2xl">Data and sources</h1>
         <p className="mt-1 max-w-[72ch] text-base text-dust-dim">
-          NASA publishes no daily vitals for astronauts. So real data sets the statistics, a generator builds a fictional crew with those statistics, and the engine runs on that crew.
+          NASA publishes no daily vitals for astronauts. So real data sets the statistics, a generator builds a fictional astronaut with those statistics, and the engine runs on that astronaut.
           Nothing simulated is shown as real: every value carries one of these two badges.
         </p>
       </div>

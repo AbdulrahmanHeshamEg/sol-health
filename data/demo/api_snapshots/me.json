@@ -1,0 +1,29 @@
+{
+ "astronaut_id": "UH-01",
+ "name": "Nadia Farouk",
+ "role": "Mission astronaut",
+ "agency": "Fictional",
+ "age": 46,
+ "sex": "F",
+ "mass_kg": 63.0,
+ "prior_career_dose_msv": 180.0,
+ "protein_g_per_kg": 1.5,
+ "vitamin_d_ng_ml": 42.0,
+ "ared_minutes_week": 380,
+ "aerobic_minutes_week": 260,
+ "baseline": {
+  "heart_rate": 87.0,
+  "hrv_rmssd": 43.5,
+  "spo2": 98.2,
+  "resp_rate": 15.54,
+  "systolic_bp": 117.86,
+  "diastolic_bp": 73.27,
+  "core_temp": 37.08,
+  "pvt_reaction_ms": 262.04
+ },
+ "flight_surgeon": {
+  "title": "Your flight surgeon",
+  "where": "Mission control, Earth",
+  "one_way_delay_s": 780
+ }
+}

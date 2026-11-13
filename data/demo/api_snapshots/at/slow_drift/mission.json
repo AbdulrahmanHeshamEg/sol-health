@@ -1,6 +1,6 @@
 {
  "mission_id": "SOL-1",
- "name": "Sol-1 (fictional Mars surface mission)",
+ "name": "Sol-1 (fictional solo Mars surface mission)",
  "vehicle": "Mars surface habitat (simulated)",
  "setting": "mars_surface",
  "start": "2026-08-31",
@@ -8,7 +8,8 @@
  "current_day": 75,
  "radiation_msv_per_day_assumed": 0.49,
  "earth_comm_delay_s": 780,
- "note": "The crew is fictional and simulated. Statistics are calibrated on real data: PMData (body), NASA OSDR EDA (cabin CO2) and NASA/JPL MSL RAD (radiation, replayed real measurements).",
+ "crew_size": 1,
+ "note": "The astronaut is fictional and simulated. Statistics are calibrated on real data: PMData (body), NASA OSDR EDA (cabin CO2) and NASA/JPL MSL RAD (radiation, replayed real measurements).",
  "radiation_replay": {
   "dataset": "MSL RAD",
   "from": "2024-03-07 00:00:00",
@@ -18,7 +19,7 @@
   "base": "RR-23 (2020)",
   "planted_high": "RR-1 (2014)"
  },
- "now": "2026-10-19 12:00:00",
+ "now": "2026-10-16 12:00:00",
  "time_range": {
   "start": "2026-08-31 00:00:00",
   "end": "2026-11-13 23:00:00"
@@ -29,7 +30,7 @@
    "label": "A quiet day",
    "at": "2026-09-15 12:00:00",
    "show_at": "2026-09-15 12:00:00",
-   "astronaut_id": "ALL"
+   "astronaut_id": "UH-01"
   },
   {
    "id": "cabin_co2",
@@ -41,23 +42,23 @@
   {
    "id": "slow_drift",
    "label": "Slow drift (illness onset)",
-   "at": "2026-10-13 00:00:00",
-   "astronaut_id": "UH-02",
-   "show_at": "2026-10-19 12:00:00"
-  },
-  {
-   "id": "solar_storm",
-   "label": "Solar storm (SPE)",
-   "at": "2026-11-13 05:00:00",
-   "astronaut_id": "ALL",
-   "show_at": "2026-11-13 08:00:00"
+   "at": "2026-10-09 00:00:00",
+   "astronaut_id": "UH-01",
+   "show_at": "2026-10-16 12:00:00"
   },
   {
    "id": "odd_combination",
    "label": "Odd combination (behavioural health)",
    "at": "2026-10-31 00:00:00",
-   "astronaut_id": "UH-03",
-   "show_at": "2026-11-04 12:00:00"
+   "astronaut_id": "UH-01",
+   "show_at": "2026-10-31 12:00:00"
+  },
+  {
+   "id": "solar_storm",
+   "label": "Solar storm (SPE)",
+   "at": "2026-11-13 05:00:00",
+   "astronaut_id": "UH-01",
+   "show_at": "2026-11-13 08:00:00"
   }
  ]
 }

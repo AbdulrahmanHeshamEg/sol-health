@@ -1,4 +1,7 @@
-"""Data-calibrated demo crew (notebook 08): real datasets set the statistics, the crew itself is SIMULATED.
+"""Data-calibrated demo astronaut (notebook 08): real datasets set the statistics, the astronaut is SIMULATED.
+
+One astronaut on a solo mission carries all four planted test cases, at different times, so a single personal
+app shows every case. (The module is still called `crew` and the files `crew.json` for continuity with v0.)
 
     from sol_ml.sim import crew
     demo = crew.build_demo(seed=42)      # dict: mission, crew, telemetry, daily, planted_cases, sources
@@ -31,11 +34,15 @@ LEVELS = np.arange(1, 6)
 WAKE_HOUR = 6
 STORM_ONSET = pd.Timestamp("2024-05-20 05:00:00")
 BASE_CO2_MISSION, HIGH_CO2_MISSION = "RR-23", "RR-1"   # recent quiet cabin; an early mission that sat just over the 7-day limit
+# The one astronaut of the solo mission (fictional). Exercise plan and nutrition follow the v0 profile format.
+SOLO_ASTRONAUT = dict(astronaut_id="UH-01", name="Nadia Farouk", role="Mission astronaut", agency="Fictional",
+                      age=46, sex="F", mass_kg=63.0, prior_career_dose_msv=180.0, protein_g_per_kg=1.5,
+                      vitamin_d_ng_ml=42.0, ared_minutes_week=380, aerobic_minutes_week=260)
 EXCLUDED_PEOPLE = ("p12", "p13")                  # almost no Fitbit data (notebook 01)
 
 MISSION = {
     "mission_id": "SOL-1",
-    "name": "Sol-1 (fictional Mars surface mission)",
+    "name": "Sol-1 (fictional solo Mars surface mission)",
     "vehicle": "Mars surface habitat (simulated)",
     "setting": "mars_surface",
     "start": "2026-08-31",
@@ -43,7 +50,8 @@ MISSION = {
     "current_day": 75,
     "radiation_msv_per_day_assumed": 0.49,
     "earth_comm_delay_s": 780,
-    "note": "The crew is fictional and simulated. Statistics are calibrated on real data: PMData (body), "
+    "crew_size": 1,
+    "note": "The astronaut is fictional and simulated. Statistics are calibrated on real data: PMData (body), "
             "NASA OSDR EDA (cabin CO2) and NASA/JPL MSL RAD (radiation, replayed real measurements).",
 }
 
@@ -153,10 +161,13 @@ def gen_daily(params: dict, days: int, rng: np.random.Generator) -> pd.DataFrame
 
 # --------------------------------------------------------------------------- planted cases
 def plant_slow_drift(daily: pd.DataFrame, start_day: int, days: int = 10, hr_bpm: float = 6.0,
-                     sleep_min: float = 60.0, fatigue_points: float = 1.0, rng=None) -> pd.DataFrame:
-    """Case 1 (illness onset): resting HR up, sleep down and fatigue worse, ramping over `days`, then held."""
+                     sleep_min: float = 60.0, fatigue_points: float = 1.0, rng=None, until_day: int | None = None) -> pd.DataFrame:
+    """Case 1 (illness onset): resting HR up, sleep down and fatigue worse, ramping over `days`, then held
+    until `until_day` (the illness resolves the next day; None = held to the end)."""
     out = daily.copy()
     sel = out["mission_day"] >= start_day
+    if until_day is not None:
+        sel &= out["mission_day"] <= until_day
     ramp = np.minimum((out.loc[sel, "mission_day"] - start_day + 1) / days, 1.0)
     out.loc[sel, "resting_hr"] = (out.loc[sel, "resting_hr"] + hr_bpm * ramp).round(1)
     out.loc[sel, "sleep_minutes"] = (out.loc[sel, "sleep_minutes"] - sleep_min * ramp).clip(lower=180).round(0)
@@ -270,8 +281,10 @@ def build_demo(seed: int = 42, processed: Path = PROCESSED) -> dict:
     days = MISSION["current_day"]
     n = days * 24
     start = pd.Timestamp(MISSION["start"])
-    plan = {"co2": dict(start_day=24, days=10, who="UH-01"), "drift": dict(start_day=44, days=10, who="UH-02"),
-            "combo": dict(start_day=62, days=7, who="UH-03"), "storm": dict(day=days)}       # the storm is under way "now"
+    me = SOLO_ASTRONAUT["astronaut_id"]
+    # all four cases on the one astronaut, never overlapping; the storm is under way "now"
+    plan = {"co2": dict(start_day=24, days=10, who=me), "drift": dict(start_day=40, days=10, until=54, who=me),
+            "combo": dict(start_day=62, days=7, who=me), "storm": dict(day=days)}
 
     base_real = cabin.loc[cabin["mission"] == BASE_CO2_MISSION, "co2_mmhg"].to_numpy()
     high_real = cabin.loc[cabin["mission"] == HIGH_CO2_MISSION, "co2_mmhg"].to_numpy()
@@ -281,7 +294,7 @@ def build_demo(seed: int = 42, processed: Path = PROCESSED) -> dict:
     replay = radiation_replay(rad, n, storm_hour)
 
     frames, dailies, crew = [], [], []
-    for c in v0.DEMO_CREW:
+    for c in [SOLO_ASTRONAUT]:
         profile = v0.random_profile(c["astronaut_id"], rng)
         for k, v in c.items():
             setattr(profile, k, v)
@@ -289,7 +302,7 @@ def build_demo(seed: int = 42, processed: Path = PROCESSED) -> dict:
         if c["astronaut_id"] == plan["co2"]["who"]:
             daily = plant_symptoms(daily, plan["co2"]["start_day"] + 3, plan["co2"]["days"] - 3)
         if c["astronaut_id"] == plan["drift"]["who"]:
-            daily = plant_slow_drift(daily, plan["drift"]["start_day"], plan["drift"]["days"], rng=rng)
+            daily = plant_slow_drift(daily, plan["drift"]["start_day"], plan["drift"]["days"], rng=rng, until_day=plan["drift"]["until"])
         if c["astronaut_id"] == plan["combo"]["who"]:
             daily = plant_odd_combination(daily, plan["combo"]["start_day"], plan["combo"]["days"])
         hourly = build_hourly(profile, daily, co2, replay.to_numpy(), params, rng)
@@ -307,20 +320,21 @@ def build_demo(seed: int = 42, processed: Path = PROCESSED) -> dict:
 
     p = plan
     cases = [
-        {"id": "cabin_co2", "title": "Cabin CO2 with headache reports", "astronaut_id": p["co2"]["who"], "affects": "cabin (whole crew)",
+        {"id": "cabin_co2", "title": "Cabin CO2 with headache reports", "astronaut_id": p["co2"]["who"], "affects": "the habitat cabin and you",
          "start": ts(p["co2"]["start_day"]), "end": ts(p["co2"]["start_day"] + p["co2"]["days"]),
          "planted": "the highest real 10-day CO2 stretch of ISS mission %s spliced into the cabin series; daily headache reports and fatigue <= 2 from day %d"
                     % (HIGH_CO2_MISSION, p["co2"]["start_day"] + 3),
          "expected": "environmental gate: 7-day CO2 mean above 2.5 mmHg with symptoms -> 'likely environmental', ventilation first"},
-        {"id": "slow_drift", "title": "Slow drift (illness onset)", "astronaut_id": p["drift"]["who"], "affects": "one crewmember",
-         "start": ts(p["drift"]["start_day"]), "end": ts(days, 23),
-         "planted": "resting HR +6 bpm, sleep -60 min and fatigue one point worse, ramping over 10 days and then held",
+        {"id": "slow_drift", "title": "Slow drift (illness onset)", "astronaut_id": p["drift"]["who"], "affects": "you",
+         "start": ts(p["drift"]["start_day"]), "end": ts(p["drift"]["until"], 23),
+         "planted": "resting HR +6 bpm, sleep -60 min and fatigue one point worse, ramping over 10 days, held until day %d, then resolved"
+                    % p["drift"]["until"],
          "expected": "CUSUM on the personal z-score of resting HR / sleep / fatigue"},
-        {"id": "solar_storm", "title": "Solar storm (SPE)", "astronaut_id": "ALL", "affects": "whole crew",
+        {"id": "solar_storm", "title": "Solar storm (SPE)", "astronaut_id": me, "affects": "the habitat and you",
          "start": ts(p["storm"]["day"], STORM_ONSET.hour), "end": ts(days, 23),
          "planted": "replay of the real 20 May 2024 storm measured by MSL RAD (nothing was scaled)",
-         "expected": "SPE alarm in the first hour: radiation elevated (>= 1.3x) then whole crew to the storm shelter (>= 2x)"},
-        {"id": "odd_combination", "title": "Odd combination (behavioural health)", "astronaut_id": p["combo"]["who"], "affects": "one crewmember",
+         "expected": "SPE alarm in the first hour: radiation elevated (>= 1.3x) then go to the storm shelter (>= 2x); flight surgeon notified"},
+        {"id": "odd_combination", "title": "Odd combination (behavioural health)", "astronaut_id": p["combo"]["who"], "affects": "you",
          "start": ts(p["combo"]["start_day"]), "end": ts(p["combo"]["start_day"] + p["combo"]["days"]),
          "planted": "mood and stress one point worse and sleep 55 min shorter for 7 days; each within the normal range alone",
          "expected": "multivariate model (Isolation Forest on the daily z-vector)"},

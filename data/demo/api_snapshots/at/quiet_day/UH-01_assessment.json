@@ -46,9 +46,9 @@
  ],
  "vitals": {
   "heart_rate": {
-   "value": 85.5,
-   "baseline": 87.9,
-   "delta": -2.4,
+   "value": 88.2,
+   "baseline": 87.0,
+   "delta": 1.2,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -56,9 +56,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 45.89,
-   "baseline": 40.47,
-   "delta": 5.42,
+   "value": 46.4,
+   "baseline": 43.5,
+   "delta": 2.9,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -66,9 +66,9 @@
    }
   },
   "spo2": {
-   "value": 98.73,
-   "baseline": 98.14,
-   "delta": 0.59,
+   "value": 97.43,
+   "baseline": 98.2,
+   "delta": -0.77,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -76,9 +76,9 @@
    }
   },
   "resp_rate": {
-   "value": 16.66,
-   "baseline": 16.04,
-   "delta": 0.62,
+   "value": 17.13,
+   "baseline": 15.54,
+   "delta": 1.59,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -86,9 +86,9 @@
    }
   },
   "systolic_bp": {
-   "value": 111.15,
-   "baseline": 120.14,
-   "delta": -8.99,
+   "value": 126.05,
+   "baseline": 117.86,
+   "delta": 8.19,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -96,9 +96,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 77.27,
-   "baseline": 75.35,
-   "delta": 1.92,
+   "value": 73.63,
+   "baseline": 73.27,
+   "delta": 0.36,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -106,9 +106,9 @@
    }
   },
   "core_temp": {
-   "value": 37.45,
-   "baseline": 37.09,
-   "delta": 0.36,
+   "value": 37.28,
+   "baseline": 37.08,
+   "delta": 0.2,
    "unit": "C",
    "source": {
     "kind": "simulated",
@@ -116,9 +116,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 315.11,
-   "baseline": 260.8,
-   "delta": 54.31,
+   "value": 258.88,
+   "baseline": 262.04,
+   "delta": -3.16,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -225,7 +225,7 @@
   {
    "id": "lungs",
    "label": "Lungs and breathing",
-   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around a crewmember.",
+   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around you in still air.",
    "status": "GREEN",
    "summary": "Within your normal range.",
    "indicators": [
@@ -289,13 +289,13 @@
   }
  ],
  "context": {
-  "activity_level": 0.078,
+  "activity_level": 0.125,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 1.46,
+  "cabin_co2_mmhg": 1.53,
   "sleep_last_24h": 7.0,
-  "fluid_last_24h": 3355.3,
-  "ared_minutes_7d": 360.0,
-  "aerobic_minutes_7d": 240.0,
+  "fluid_last_24h": 3475.3,
+  "ared_minutes_7d": 300.0,
+  "aerobic_minutes_7d": 300.0,
   "cabin_co2_7d_mean_mmhg": 1.69,
   "cabin_co2_high": false,
   "radiation_ratio_to_7d": 1.0,
@@ -305,8 +305,8 @@
  "daily_plan": [
   {
    "who": "self",
-   "category": "routine",
-   "action": "All routine targets met. Keep the current sleep, hydration and exercise schedule."
+   "category": "exercise",
+   "action": "Add 60 min of resistive (ARED) exercise this week to protect bone and muscle."
   }
  ],
  "fitness_trend": {
@@ -316,5 +316,14 @@
   "sessions": 23,
   "reason": "Not enough exercise sessions yet to judge a fitness trend."
  },
- "disclaimer": "Decision support only. The crew is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. The crew medical officer and flight surgeon make all medical decisions."
+ "escalation": {
+  "status": "none",
+  "to": "Your flight surgeon",
+  "level": "GREEN",
+  "sent_at": null,
+  "arrives_at": null,
+  "summary": "Nothing needs your flight surgeon right now.",
+  "items": []
+ },
+ "disclaimer": "Decision support only. The astronaut is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. Your flight surgeon makes all medical decisions."
 }

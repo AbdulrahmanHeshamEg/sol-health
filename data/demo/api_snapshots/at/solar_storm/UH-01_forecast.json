@@ -36,9 +36,9 @@
  },
  "fitness_trend": {
   "alert": false,
-  "shift_bpm": 0.0,
-  "weeks_ago": 0,
-  "sessions": 120,
+  "shift_bpm": -6.7,
+  "weeks_ago": 3,
+  "sessions": 119,
   "reason": "Exercise heart rate is stable for the same exercise types."
  },
  "source": {

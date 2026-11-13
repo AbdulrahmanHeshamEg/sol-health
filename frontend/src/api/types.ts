@@ -3,7 +3,7 @@
 export type Level = "GREEN" | "YELLOW" | "RED";
 export type VitalName =
   | "heart_rate" | "hrv_rmssd" | "spo2" | "resp_rate" | "systolic_bp" | "diastolic_bp" | "core_temp" | "pvt_reaction_ms";
-export type Who = "self" | "crew" | "cmo" | "ground";
+export type Who = "self" | "ground";
 
 export interface Source { kind: "real" | "simulated"; dataset?: string; calibrated_on?: string }
 
@@ -60,6 +60,19 @@ export interface BodySystem {
   label: string; function: string; status: Level; summary: string; indicators: string[]; alerts: string[];
 }
 export interface Action { who: Who; action: string; condition: string; level: Level; priority: number }
+
+/** What reaches the flight surgeon on Earth: RED is sent at once, YELLOW goes in the daily report. */
+export interface Escalation {
+  status: "sent" | "daily_report" | "none"; to: string; level: Level;
+  sent_at: string | null; arrives_at: string | null; summary: string; items: string[];
+}
+export interface Report {
+  started_at: string; level: Level; condition_label: string; status: "sent" | "daily_report";
+  sent_at: string; arrives_at: string; summary: string; items: string[];
+}
+export interface Me extends Profile {
+  flight_surgeon: { title: string; where: string; one_way_delay_s: number };
+}
 export interface PlanItem { who: "self"; category: "sleep" | "hydration" | "exercise" | "routine"; action: string }
 export interface FitnessTrend { alert: boolean; shift_bpm: number; weeks_ago: number; sessions: number; reason: string }
 
@@ -76,7 +89,7 @@ export interface Assessment {
     ared_minutes_7d: number; aerobic_minutes_7d: number; cabin_co2_7d_mean_mmhg: number | null; cabin_co2_high: boolean;
     radiation_ratio_to_7d: number; radiation_level: Level;
   };
-  actions: Action[]; daily_plan: PlanItem[]; fitness_trend: FitnessTrend; disclaimer: string;
+  actions: Action[]; daily_plan: PlanItem[]; fitness_trend: FitnessTrend; escalation: Escalation; disclaimer: string;
   checkin_applied?: Record<string, number | boolean>;
 }
 

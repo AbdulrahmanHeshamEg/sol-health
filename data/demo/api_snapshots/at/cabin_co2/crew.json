@@ -2,7 +2,7 @@
  {
   "astronaut_id": "UH-01",
   "name": "Nadia Farouk",
-  "role": "Commander",
+  "role": "Mission astronaut",
   "status": "YELLOW",
   "health_score": 83,
   "condition": "co2_exposure",
@@ -10,85 +10,16 @@
   "top_alert": "Likely environmental: cabin CO2 is high",
   "top_reason": "You reported headache and fatigue while cabin CO2 7-day average is 2.83 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
   "vitals": {
-   "heart_rate": 98.4,
-   "hrv_rmssd": 56.16,
-   "spo2": 98.78,
-   "resp_rate": 16.12,
-   "systolic_bp": 117.09,
-   "diastolic_bp": 82.0,
-   "core_temp": 37.39,
-   "pvt_reaction_ms": 230.53
+   "heart_rate": 95.0,
+   "hrv_rmssd": 39.66,
+   "spo2": 97.57,
+   "resp_rate": 13.76,
+   "systolic_bp": 120.71,
+   "diastolic_bp": 74.91,
+   "core_temp": 37.01,
+   "pvt_reaction_ms": 266.27
   },
-  "cabin_co2_mmhg": 2.67,
-  "timestamp": "2026-10-01 12:00:00"
- },
- {
-  "astronaut_id": "UH-03",
-  "name": "Sofia Mendes",
-  "role": "Mission Specialist",
-  "status": "GREEN",
-  "health_score": 87,
-  "condition": "nominal",
-  "condition_label": "Nominal",
-  "top_alert": null,
-  "top_reason": null,
-  "vitals": {
-   "heart_rate": 78.3,
-   "hrv_rmssd": 54.91,
-   "spo2": 98.48,
-   "resp_rate": 16.81,
-   "systolic_bp": 115.89,
-   "diastolic_bp": 69.31,
-   "core_temp": 36.97,
-   "pvt_reaction_ms": 234.54
-  },
-  "cabin_co2_mmhg": 2.63,
-  "timestamp": "2026-10-01 12:00:00"
- },
- {
-  "astronaut_id": "UH-02",
-  "name": "Karim Adel",
-  "role": "Flight Engineer",
-  "status": "GREEN",
-  "health_score": 90,
-  "condition": "nominal",
-  "condition_label": "Nominal",
-  "top_alert": null,
-  "top_reason": null,
-  "vitals": {
-   "heart_rate": 75.8,
-   "hrv_rmssd": 57.8,
-   "spo2": 96.11,
-   "resp_rate": 13.97,
-   "systolic_bp": 120.33,
-   "diastolic_bp": 74.58,
-   "core_temp": 37.24,
-   "pvt_reaction_ms": 227.6
-  },
-  "cabin_co2_mmhg": 2.6,
-  "timestamp": "2026-10-01 12:00:00"
- },
- {
-  "astronaut_id": "UH-04",
-  "name": "Yuki Tanaka",
-  "role": "Crew Medical Officer",
-  "status": "GREEN",
-  "health_score": 92,
-  "condition": "nominal",
-  "condition_label": "Nominal",
-  "top_alert": null,
-  "top_reason": null,
-  "vitals": {
-   "heart_rate": 75.5,
-   "hrv_rmssd": 63.02,
-   "spo2": 97.34,
-   "resp_rate": 14.77,
-   "systolic_bp": 135.19,
-   "diastolic_bp": 79.39,
-   "core_temp": 37.2,
-   "pvt_reaction_ms": 254.33
-  },
-  "cabin_co2_mmhg": 2.71,
+  "cabin_co2_mmhg": 2.7,
   "timestamp": "2026-10-01 12:00:00"
  }
 ]
