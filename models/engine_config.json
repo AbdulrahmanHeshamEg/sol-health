@@ -53,5 +53,28 @@
         "miss_rate": 0.465
       }
     }
+  },
+  "deconditioning": {
+    "source_notebook": "03_deconditioning",
+    "model": "D change point (PELT)",
+    "params": {
+      "penalty": 2.0,
+      "thr": 3.0
+    },
+    "false_alarms_per_person_month_pmdata": 0.485,
+    "detection": {
+      "+1_bpm_per_week": {
+        "caught": 0.82,
+        "median_weeks": 4.0
+      },
+      "+2_bpm_per_week": {
+        "caught": 0.985,
+        "median_weeks": 3.0
+      },
+      "+3_bpm_per_week": {
+        "caught": 0.99,
+        "median_weeks": 3.0
+      }
+    }
   }
 }

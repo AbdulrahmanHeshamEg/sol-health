@@ -254,4 +254,34 @@ config_path.write_text(json.dumps(config, indent=2))
 print(json.dumps(config["deconditioning"], indent=2))
 
 # %% [markdown]
-# DECISION_PLACEHOLDER
+# ## Decision
+#
+# **Chosen: D, change-point detection (PELT) on the weekly type-centred heart rate**, penalty = 2 noise variances, alert when the latest
+# change point is an upward shift of at least **3 bpm** that began within the last 4 weeks. Written to `models/engine_config.json`.
+# The alert sentence comes straight from the model: *"Heart rate in the same exercise types has been N bpm higher for the last K weeks."*
+#
+# **Numbers** (real PMData sessions, 16 people, 49 person-months; planted rises on real sessions, missed if not caught in 8 weeks):
+#
+# | model | false trend alarms / person-month | +1 bpm/week | +2 bpm/week | +3 bpm/week |
+# |---|---|---|---|---|
+# | **D change point (chosen)** | 0.49 | 82 % caught, median 4 weeks | 98 %, 3 weeks | 99 %, 3 weeks |
+# | C mixed model (slope ≥ 0.5) | 0.38 | 75 %, 5 weeks | 97 %, 4 weeks | 100 %, 3 weeks |
+# | A Theil–Sen slope (≥ 0.25, 8 weeks) | 0.12 | 50 %, 5 weeks | 94 %, 5 weeks | 99 %, 4 weeks |
+# | B efficiency index (runs only) | 0.06 | 31 % | 38 % | 40 % |
+#
+# **Why D:** the protocol asks for the fastest setting under 1 false alarm per person-month, and D is the fastest at every rate while staying at half the target.
+#
+# **Rejected, and why**
+# - **A, weekly median + Theil–Sen (the team's first idea):** the quietest model, and the easiest to explain, but it needs 5 weeks and misses half of the +1 bpm/week rises.
+#   When D is tightened to A's detection level (50 % and 94 %) it still raises more false alarms than A (0.22 vs 0.12), so D's lead comes from spending more of the false-alarm budget, not from being smarter.
+#   **A is the fallback** if the team prefers fewer trend alarms over an earlier warning.
+# - **C, linear mixed model:** nearly as good as D, but it has to refit a model on the whole crew every week, a single person's slope is hard to explain in one sentence,
+#   and it was evaluated on 60 planted rises instead of 200 because of its cost.
+# - **B, efficiency index:** only usable for sessions with a distance. Just 8 of 16 people have 20 or more such sessions, so it cannot be the crew-wide model.
+#
+# **Honest limits of this data (it is sparse)**
+# - 2,389 usable sessions, but **57 % are auto-detected walks**; walking is the best-covered activity for 13 of 16 people. A walk is a weak fitness probe.
+# - Session heart rate varies by **9.4 bpm** (median SD within one person and activity type), against planted rises of 1–3 bpm per week. That is why detection takes 3–5 weeks.
+# - Only **70 (person, start week) pairs in 11 people** have enough exercise in the following 8 weeks, so the 200 planted rises reuse them; the percentages are less certain than they look.
+# - PMData people are not deconditioning, so "false alarms" here are real week-to-week training changes. In flight the direction is known (fitness falls), which should help.
+# - On a mission the exercise is prescribed (same ARED and treadmill protocol several times a week), which gives far better like-for-like sessions than this data. These numbers are a lower bound.
