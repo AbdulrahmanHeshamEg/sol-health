@@ -1,6 +1,7 @@
 # OSDR Environmental Data App (EDA): manual download
 
-The EDA has no simple file URL, so this one is downloaded by hand (about 5 minutes).
+**Preferred:** `python data/fetch/fetch_osdr_eda.py` downloads the same tables through the public EDA API.
+The manual steps below are the fallback if the API is down.
 
 1. Open https://visualization.osdr.nasa.gov/eda/
 2. On the **Mission Dashboard**, pick a Rodent Research (RR) mission. Start with one long mission, then add 2–3 more so the notebooks can compare missions.

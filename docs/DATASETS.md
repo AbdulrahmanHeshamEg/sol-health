@@ -54,19 +54,26 @@ Download everything with `data/fetch/` (see the README section "Get the data"). 
 - Converting Gy to Sv needs a quality factor. Use Q ≈ 3.0 from Hassler 2014 and say so in the UI.
 
 ## 3. OSDR EDA: cabin air on the ISS
-- **Get:** manual download, see `data/fetch/OSDR_EDA_DOWNLOAD.md` (EDA → Mission Dashboard → pick an RR mission → Data Tables). Save to `data/raw/osdr_eda/`.
+- **Get:** `python data/fetch/fetch_osdr_eda.py` downloads every RR mission through the public EDA API (`https://visualization.osdr.nasa.gov/eda/api/missions/`) into `data/raw/osdr_eda/` as `RR-<n>_telemetry.csv` and `RR-<n>_radiation.csv`. The manual route in `data/fetch/OSDR_EDA_DOWNLOAD.md` gives the same tables.
 - This is real ISS telemetry and **the dataset that sets Sol Health apart** from other entries.
 
 | Feature | Frequency | Use |
 |---|---|---|
-| CO2 | each time point (sampling rate not documented) | Environmental gate for headache / fatigue |
+| CO2 (ppm) | every 1 or 5 minutes | Environmental gate for headache / fatigue |
 | Temperature | each time point | Context for sleep and body temperature |
 | Relative humidity | each time point | Context only |
 | GCR dose (excluding SAA) | daily | ISS-mode radiation |
 | SAA dose | daily | ISS-mode radiation |
 | Total and accumulated dose | daily | Cumulative dose counter |
 
-**Not confirmed yet:** the sampling rate and the CO2 unit (mmHg or %). If %, convert at 0.5 % = 3.8 mmHg. Record both here after inspection.
+**Confirmed from the files (13 Nov 2026):**
+- **Columns.** Telemetry: `time` (UTC), `temperature_iss`, `temperature_ground` (°C), `humidity_iss`, `humidity_ground` (%), `co2_iss`, `co2_ground`, `milestones`. Radiation: `time`, `gcr`, `saa`, `total`, `milestones`.
+- **CO2 unit is ppm**, not mmHg or %. Convert with `mmHg = ppm × 760 / 1e6` (1 atm cabin), so 3 mmHg ≈ 3,947 ppm and 2.5 mmHg ≈ 3,289 ppm.
+- **Sampling interval:** 5 minutes for the older missions (RR-1, 3, 5, 6, 9, 12, 19), 1 minute for the newer ones (RR-18, 20, 23, 25, 28); RR-7 and RR-10 are irregular. Radiation is daily, in **mGy/day**. There is no accumulated-dose column: compute it as the running sum of `total`.
+- **Coverage.** 14 RR missions have telemetry, 2014–2024. Longest: RR-18 (243 days), RR-20 (172), RR-7 (82), RR-5 (68), RR-25 (65), RR-6 (62).
+- ⚠️ **RR-18, RR-20, RR-25 and RR-28 have no ISS CO2** (temperature and humidity only). The longest missions with CO2 are RR-7 (82 days, CO2 on about half the rows), RR-5 (68) and RR-6 (62).
+- ⚠️ **Radiation is missing for RR-5, 10, 18, 20, 25 and 28.** RR-4, 8 and 17 have radiation but no telemetry. RR-22 is empty.
+- ⚠️ **Median ISS CO2 is close to the limits**: 2,100–3,600 ppm per mission (1.6–2.8 mmHg), so the 2.5 mmHg 7-day rule will be exceeded for long stretches of the real series. Notebook 07 must report how often.
 **Credit:** "Data and visualizations are courtesy of the Environmental Data Application (EDA) (https://visualization.osdr.nasa.gov/eda/)."
 
 ## 4. Published figures (generator only)
