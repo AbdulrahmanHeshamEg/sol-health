@@ -59,7 +59,9 @@ Download everything with `data/fetch/` (see the README section "Get the data"). 
 **Reference values for sanity checks**
 - Surface, quiet Sun (Hassler et al. 2014, *Science*): tissue ≈ 0.21 mGy/day, silicon ≈ 0.16 mGy/day, dose equivalent ≈ 0.64 mSv/day, quality factor ≈ 3.0.
 - Earth→Mars cruise (Zeitlin et al. 2013): ≈ 1.84 mSv/day. This is a fixed constant for the "in transit" setting, not from the CDF files.
-- **Known event for validation:** 20 May 2024, the biggest surge RAD has measured since landing, about 8,100 µGy. The SPE detector **must** flag it, so download 2024.
+- **Known event for validation:** 20 May 2024, the biggest surge RAD has measured since landing. In the files the dose **rate** in detector E peaks at 8,378 µGy/day (56× the quiet level) at 06:15 UTC; the storm added about 1,700 µGy of dose over 32 hours (notebook 04). The SPE detector **must** flag it, so download 2024.
+- **Downloaded:** 2024, 2025 and 2026 (1,046 days, no missing day). 2025 was added so the three years connect.
+- The diurnal cycle only shows in **Mars local solar time** (`sol_ml.data.msl_rad.mars_local_hour`); it is 3.4 % peak to trough.
 - RAD shows a **daily (diurnal) cycle** on the surface, and the rover's RTG adds a constant background. Account for both in baselines.
 - Converting Gy to Sv needs a quality factor. Use Q ≈ 3.0 from Hassler 2014 and say so in the UI.
 

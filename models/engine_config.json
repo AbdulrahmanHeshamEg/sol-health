@@ -76,5 +76,70 @@
         "median_weeks": 3.0
       }
     }
+  },
+  "radiation": {
+    "source_notebook": "05_radiation_models",
+    "dose_counter": {
+      "quality_factor": 3.0,
+      "budget_msv": 600.0,
+      "yellow_share": 0.8,
+      "red_share": 1.0,
+      "msv_per_day": {
+        "iss": 0.875,
+        "mars_transit": 1.84,
+        "mars_surface": 0.492
+      }
+    },
+    "spe_detector": {
+      "method": "ratio",
+      "signal": "dose_e hourly mean (uGy/day)",
+      "baseline_window_hours": 168,
+      "deseasonalize": false,
+      "threshold": 1.3,
+      "hold_hours": 1,
+      "may2024_delay_hours": 0.0,
+      "other_alarm_events_in_record": 6,
+      "of_which_confirmed_by_detector_b": 6,
+      "false_alarms_in_record": 0,
+      "record_months": 34.7,
+      "caught_by_peak_size": {
+        "1.5x": 1.0,
+        "2x": 1.0,
+        "3x": 1.0,
+        "5x": 1.0
+      }
+    },
+    "action": "SPE in progress: whole crew to the storm shelter"
+  },
+  "cabin": {
+    "source_notebook": "07_cabin_models",
+    "gate": {
+      "limit_1h_mmhg": 3.0,
+      "limit_7d_mmhg": 2.5,
+      "symptoms": [
+        "headache",
+        "fatigue"
+      ],
+      "rule": "co2_high = mean_1h > limit_1h OR mean_7d > limit_7d; likely_environmental = co2_high AND symptom reported",
+      "first_action": "increase ventilation",
+      "source": "NASA OCHMO-TB-004"
+    },
+    "co2_unit_conversion": "mmHg = ppm * 760 / 1e6",
+    "real_iss_replay": {
+      "time_1h_above_3": 0.0677,
+      "time_7d_above_2.5": 0.2633,
+      "time_co2_high": 0.254
+    },
+    "co2_generator": {
+      "chosen": "block_bootstrap",
+      "scores": {
+        "ks": 0.094,
+        "acf_rmse": 0.2358,
+        "diurnal_rmse": 0.0228,
+        "exceed_error": 0.0184
+      },
+      "fitted_on": "real hourly ISS CO2 (OSDR EDA)",
+      "output_is": "simulated"
+    }
   }
 }
