@@ -8,7 +8,7 @@
   "condition": "co2_exposure",
   "condition_label": "Elevated CO2 / likely environmental",
   "top_alert": "Likely environmental: cabin CO2 is high",
-  "top_reason": "You reported headache and fatigue while cabin CO2 7-day average is 2.8 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
+  "top_reason": "You reported headache and fatigue while cabin CO2 7-day average is 2.83 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
   "vitals": {
    "heart_rate": 98.4,
    "hrv_rmssd": 56.16,

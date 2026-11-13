@@ -1,57 +1,68 @@
 # Architecture
 
 ```
- Sensors / wearables (simulated)            Ground (delayed link)
-   HR, HRV, SpO2, BP, resp, temp,                 flight surgeon
-   PVT test, activity, sleep,                          ^
-   fluids, cabin CO2, dosimeter                        | summaries at comm pass
-            |                                          |
-            v                                          |
- +-----------------------------------------------------------------+
- |  Onboard Sol Health (runs fully offline)                     |
- |                                                                  |
- |  telemetry (hourly rows)                                         |
- |        |                                                         |
- |        v                                                         |
- |  features.py  personal baseline (days 1-3) -> deltas,            |
- |               6 h rolling means, sleep/fluid/CO2 context         |
- |        |                                                         |
- |        +--> 1. Hard clinical limits (config.HARD_LIMITS)  ---+   |
- |        +--> 2. Risk classifier (7 conditions)            ----+   |
- |        +--> 3. Anomaly detector (personal "unusualness") ----+   |
- |                                                              v   |
- |                                engine.assess(): level, score,    |
- |                                condition, alerts, drivers        |
- |                                              |                   |
- |                                protocols.py: actions + daily plan|
- |                                                                  |
- |  4. Deconditioning forecaster (bone, muscle)  engine.forecast_*  |
- |  5. Radiation accounting (deterministic)      engine.radiation_* |
- |                                                                  |
- |  FastAPI (ml/api/main.py)  --JSON-->  React dashboard (frontend/) |
- +-----------------------------------------------------------------+
+ REAL DATA (calibration and evaluation)                     GENERATED CREW (what the app shows)
+   PMData      16 people: resting HR, sleep, self-reports ─┐
+   OSDR EDA    ISS cabin CO2, ISS radiation               ─┼─> notebooks 00-09 ──> models/engine_config.json
+   MSL RAD     Mars surface dose rate, May 2024 storm     ─┘         │                models/body_iforest.joblib
+                                                                     v
+                                               sol_ml/sim/crew.py ──> data/demo/ (telemetry.csv hourly, daily.csv,
+                                               (statistics from real data;      crew.json, sources.json, planted_cases.json)
+                                                radiation = real RAD replay)
+                                                                     │
+ +-------------------------------------------------------------------v-----------------------------+
+ |  Onboard Sol Health (runs fully offline)                                                         |
+ |                                                                                                  |
+ |  engine.prepare(hourly, profile, daily)   causal tables, computed once per crewmember            |
+ |     body       personal robust z · bounded CUSUM · pooled Isolation Forest      (daily)          |
+ |     cabin      1-hour and 7-day CO2 means                                        (hourly)        |
+ |     radiation  dose-rate ratio to the trailing 7-day median                      (hourly)        |
+ |                                                                                                  |
+ |  engine.assess_at(prepared, hour)                                                                |
+ |     hard clinical limits  ─┐                                                                     |
+ |     body alerts            ├─> status = worst level · one-sentence reason per alert              |
+ |     environmental gate     │   body systems (figure) · indicators with source tags               |
+ |     storm alarm           ─┘   actions (protocols.py) · daily plan                               |
+ |                                                                                                  |
+ |  forecast: bone/muscle projection + fitness trend     radiation: dose counter + storm level      |
+ |                                                                                                  |
+ |  FastAPI (ml/api/main.py)  ──JSON──>  React dashboard (frontend/)                                |
+ +--------------------------------------------------------------------------------------------------+
 ```
 
-## Data flow per request
-1. API loads the astronaut's hourly history up to `at` (or latest).
-2. `build_features()` computes deviations from the astronaut's personal baseline (stored in `crew.json`, calibrated on mission days 1–3, awake resting hours).
-3. The engine combines rules and models (below) and attaches protocol actions.
-4. The frontend renders. It never decides status itself.
+## Code map
+| Path | Role |
+|---|---|
+| `ml/sol_ml/data/` | loaders for the real datasets (`pmdata`, `msl_rad`, `osdr_eda`) |
+| `ml/sol_ml/detectors/` | `baseline` (personal z), `univariate`, `bounded`, `multivariate`, `body`, `evaluation` (shared protocol), `deconditioning`, `radiation`, `cabin` |
+| `ml/sol_ml/sim/` | `crew` (data-calibrated demo crew), `co2` (cabin CO2 generators) |
+| `ml/sol_ml/engine.py` | the v2 engine; reads `models/engine_config.json` |
+| `ml/sol_ml/protocols.py`, `indicators.py` | action checklists; indicator explainer catalogue and measurement schedule |
+| `ml/sol_ml/engine_v0.py`, `train.py`, `simulate.py`, `features.py` | the v0 baseline and its simulator (the simulator still supplies vitals that exist in no real dataset) |
+| `notebooks/_src/*.py` → `notebooks/*.ipynb` | notebook sources and the executed notebooks (`make.py` builds and runs them) |
 
-## How the outputs combine (decision logic)
-1. **Rules first.** Any hard limit in `config.HARD_LIMITS` (e.g. SpO2 < 90 %, core temp ≥ 39 °C, ppCO2 > 6 mmHg) raises its level directly. Rules always win over models.
-2. **Risk classifier.** Probabilities are averaged over the last 3 hours to avoid flicker. If a non-nominal condition has p ≥ 0.5 → YELLOW.
-3. **Escalation by model alone to RED** only if the same condition has p ≥ 0.9 **and** the anomaly score ≥ 0.9 for **3 consecutive hours**.
-4. **Final status** = worst of rule level and model level.
-5. **Primary condition** = condition of the first RED rule, else the model's condition (if it raised a level), else the first YELLOW rule's condition, else `nominal`.
-6. **Health score** = `100 − 40·P(abnormal) − 25·anomaly − 20·(#RED rules) − 8·(#YELLOW rules)`, clipped to 0–100.
-7. **Drivers** = the 3 vitals whose 6 h mean deviation from baseline is largest in noise units (simple, explainable).
+## Data flow per request
+1. The API holds one `Prepared` object per crewmember: every table in it is **causal** (row *t* uses only data up to *t*).
+2. `at=<timestamp>` picks the hourly row; a day's check-in and night summary count as known from 08:00.
+3. `assess_at` collects alerts from the rules, the body models, the gate and the storm alarm, and attaches actions.
+4. The frontend renders. It never decides status, thresholds or actions itself.
+
+Because the tables are causal, replaying any earlier moment costs about 1 ms and gives exactly what the engine would have said then.
+
+## Decision logic
+1. **Hard limits first** (`config.HARD_LIMITS`, glucose limits, low-mood rule). Rules always win over models.
+2. **Body models** (spike, drift, combination) and the **fitness trend** raise YELLOW only.
+3. **Environmental gate:** CO2 high + headache or fatigue report → YELLOW "likely environmental", ventilation first. A fatigue-driven body alert during high CO2 gets the same note.
+4. **Storm alarm:** dose rate ≥ 1.3× normal → YELLOW; ≥ 2× → RED "whole crew to the storm shelter".
+5. **Status** = worst level. **Primary condition** = the condition of the most severe alert.
+6. Every alert has `reason` (one sentence: signal, how far, how long), `kind`, `hazard` (NASA's five hazards) and, for models, the model name.
 
 ## Why this design
-- **Personal baselines:** resting HR of 52 vs 68 bpm are both normal; deviations from *your* normal are what matter.
-- **Rules + ML:** rules give guaranteed, auditable behaviour for clear emergencies; ML catches multi-signal patterns (e.g. mild dehydration: HR up, BP down, fluids low) before any single limit breaks.
-- **Two ML views:** the classifier names *known* conditions; the anomaly detector flags *unknown* "this isn't normal for you" states.
-- **Offline-first:** small scikit-learn models (< 7 MB total), no cloud calls, CPU inference in milliseconds.
+- **Personal baselines:** 91 % of the variance of resting HR is between people (notebook 01). A population threshold measures who you are, not how you are.
+- **Rules + statistics:** rules give auditable behaviour for clear emergencies; the statistical models watch for slow or combined changes.
+- **Each model does one job** and can say why in a sentence. Nothing is a black box, and nothing was trained on invented labels.
+- **Real data sets the numbers:** thresholds were tuned against false alarms on real people, not against a simulator.
+- **Offline-first:** numpy, pandas and one small scikit-learn forest (0.3 MB). No cloud calls.
 
 ## Tech
-Python 3.11+, scikit-learn 1.9, pandas, FastAPI. Frontend: React + Vite + TypeScript + Tailwind + Recharts.
+Python 3.13, numpy, pandas, scikit-learn 1.9, scipy, statsmodels, ruptures, FastAPI. Frontend: React + Vite + TypeScript + Tailwind + Recharts.

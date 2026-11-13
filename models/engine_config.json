@@ -147,6 +147,7 @@
     }
   },
   "engine": {
+    "source_notebook": "09_engine_evaluation",
     "drift": {
       "kind": "bounded_cusum",
       "window": 28,
@@ -158,6 +159,36 @@
     "fitness": {
       "penalty": 2.0,
       "thr": 8.0
+    },
+    "rules": {
+      "low_mood_score": 2,
+      "low_mood_days": 5
+    },
+    "pmdata": {
+      "false_alarms_per_person_month": 0.998,
+      "alert_days_share": 0.172,
+      "detection": {
+        "drift_hr": {
+          "caught": 0.74,
+          "median_delay_days": 5.5
+        },
+        "drift_multi": {
+          "caught": 0.87,
+          "median_delay_days": 5.0
+        },
+        "combo_odd": {
+          "caught": 0.535,
+          "median_delay_days": 2.0
+        },
+        "step_sleep": {
+          "caught": 0.45,
+          "median_delay_days": 2.0
+        }
+      }
+    },
+    "generated_crew": {
+      "planted_cases_caught_by_expected_part": "6 of 7",
+      "false_body_alert_episodes_per_person_month": 1.228
     }
   }
 }

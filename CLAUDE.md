@@ -33,12 +33,13 @@ Success is measured by **false alarms per person per month on real PMData** and 
 
 | Part | Where | Status |
 |---|---|---|
-| Download scripts | `data/fetch/` | Ready. PMData + MSL RAD are scripted; OSDR EDA is a manual download (see `OSDR_EDA_DOWNLOAD.md`) |
-| Notebooks | `notebooks/` | **To build, your first job** (`docs/NOTEBOOKS.md`) |
-| v0 engine + API | `ml/sol_ml/`, `ml/api/main.py` | Works and is tested, but was trained on **purely simulated** data with a supervised classifier. It is the *baseline to beat*. It gets refactored after the notebooks |
-| Action protocols | `ml/sol_ml/protocols.py` | Keep; extend for new alert types (SPE shelter, "likely environmental") |
-| Demo crew | `data/demo/` | v0 simulated crew; notebook 08 replaces it with the data-calibrated crew |
-| Frontend | `frontend/` | To build after the engine is final (`docs/PRD.md`) |
+| Download scripts | `data/fetch/` | Ready. PMData, MSL RAD and OSDR EDA are all scripted (`fetch_osdr_eda.py` uses the public EDA API) |
+| Notebooks | `notebooks/` (sources in `notebooks/_src/`, build with `make.py`) | **Done, 00–09**, each with a Decision cell |
+| Engine + API | `ml/sol_ml/engine.py`, `ml/api/main.py` | **v2 done**: chosen models from `models/engine_config.json`, API shape kept and extended (`docs/API.md`) |
+| v0 baseline | `ml/sol_ml/engine_v0.py`, `data/demo_v0/` | Kept only for the comparison in notebook 09 |
+| Action protocols | `ml/sol_ml/protocols.py`, `indicators.py` | Extended (SPE shelter, likely environmental, drift, mood, glucose); indicator explainer catalogue |
+| Demo crew | `data/demo/` | Data-calibrated crew with 4 planted cases (notebook 08) + `api_snapshots/` for mock mode |
+| Frontend | `frontend/` | To build (`docs/PRD.md`) |
 
 ## Work order
 1. **Get the data:** `python data/fetch/fetch_pmdata.py`, `python data/fetch/fetch_msl_rad.py 2024 2026`, then ask the human to do the

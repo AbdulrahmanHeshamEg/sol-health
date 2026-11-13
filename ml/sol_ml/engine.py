@@ -127,6 +127,8 @@ class HealthEngine:
         self.spe_yellow, self.spe_red, self.spe_window = levels["yellow"], levels["red"], spe["baseline_window_hours"]
         self.quality_factor = config["radiation"]["dose_counter"]["quality_factor"]
         self.fitness = {**config["deconditioning"]["params"], **config.get("engine", {}).get("fitness", {})}
+        rules = config.get("engine", {}).get("rules", {})
+        self.low_mood_score, self.low_mood_days = rules.get("low_mood_score", LOW_MOOD_SCORE), rules.get("low_mood_days", LOW_MOOD_DAYS)
 
     @classmethod
     def load(cls, models_dir=MODELS_DIR, demo_dir=None) -> "HealthEngine":
@@ -222,12 +224,13 @@ class HealthEngine:
                                               "hard_limit", signal="blood_glucose_mg_dl", value=float(glucose), threshold=f"{op} {val:.0f}"))
                     break
         if "mood" in daily:
-            low = (daily["mood"].to_numpy(float)[: d + 1] <= LOW_MOOD_SCORE)
+            low = (daily["mood"].to_numpy(float)[: d + 1] <= self.low_mood_score)
             days = _run_length(low, d)
-            if days >= LOW_MOOD_DAYS:
+            if days >= self.low_mood_days:
                 alerts.append(self._alert("rule", "YELLOW", "low_mood", "Low mood for several days",
-                                          f"Mood score has been {LOW_MOOD_SCORE} or lower (5 = best) for {_plural(days, 'day')} in a row.",
-                                          "mood", signal="mood", value=float(daily['mood'].iloc[d]), threshold=f"<= {LOW_MOOD_SCORE} for {LOW_MOOD_DAYS} days"))
+                                          f"Mood score has been {self.low_mood_score} or lower (5 = best) for {_plural(days, 'day')} in a row.",
+                                          "mood", signal="mood", value=float(daily['mood'].iloc[d]),
+                                          threshold=f"<= {self.low_mood_score} for {self.low_mood_days} days"))
         return alerts
 
     def _body_alerts(self, prep: Prepared, d: int) -> list[dict]:

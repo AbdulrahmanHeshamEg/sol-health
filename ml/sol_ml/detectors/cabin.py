@@ -33,7 +33,7 @@ def likely_environmental(one_hour: np.ndarray, seven_day: np.ndarray, symptoms: 
 def reason(one_hour: float, seven_day: float) -> str:
     """One sentence naming the rule that fired, the value and the limit."""
     if one_hour > LIMIT_1H_MMHG:
-        return (f"Cabin CO2 1-hour average is {one_hour:.1f} mmHg, above the {LIMIT_1H_MMHG:g} mmHg limit: "
+        return (f"Cabin CO2 1-hour average is {one_hour:.2f} mmHg, above the {LIMIT_1H_MMHG:g} mmHg limit: "
                 f"likely environmental, increase ventilation first.")
-    return (f"Cabin CO2 7-day average is {seven_day:.1f} mmHg, above the {LIMIT_7D_MMHG:g} mmHg limit: "
+    return (f"Cabin CO2 7-day average is {seven_day:.2f} mmHg, above the {LIMIT_7D_MMHG:g} mmHg limit: "
             f"likely environmental, increase ventilation first.")

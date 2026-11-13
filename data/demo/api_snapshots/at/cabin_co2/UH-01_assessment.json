@@ -29,7 +29,7 @@
    "level": "YELLOW",
    "condition": "co2_exposure",
    "message": "Likely environmental: cabin CO2 is high",
-   "reason": "You reported headache and fatigue while cabin CO2 7-day average is 2.8 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
+   "reason": "You reported headache and fatigue while cabin CO2 7-day average is 2.83 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
    "kind": "environmental_gate",
    "hazard": "Hostile / closed environment",
    "signal": "cabin_co2_mmhg",
@@ -240,7 +240,7 @@
    "label": "Lungs and breathing",
    "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around a crewmember.",
    "status": "YELLOW",
-   "summary": "You reported headache and fatigue while cabin CO2 7-day average is 2.8 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
+   "summary": "You reported headache and fatigue while cabin CO2 7-day average is 2.83 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
    "indicators": [
     "spo2",
     "resp_rate",

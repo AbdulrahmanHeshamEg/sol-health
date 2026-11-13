@@ -2,16 +2,16 @@
  "astronaut_id": "UH-03",
  "timestamp": "2026-11-03 12:00:00",
  "mission_day": 65,
- "status": "YELLOW",
- "health_score": 78,
- "condition": "low_mood",
- "condition_label": "Low mood for several days",
+ "status": "GREEN",
+ "health_score": 87,
+ "condition": "nominal",
+ "condition_label": "Nominal",
  "probabilities": {
-  "nominal": 0.3333,
+  "nominal": 1.0,
   "acute_deviation": 0.0,
   "physiological_drift": 0.0,
   "unusual_combination": 0.0,
-  "low_mood": 0.6667,
+  "low_mood": 0.0,
   "deconditioning": 0.0,
   "co2_exposure": 0.0,
   "radiation_event": 0.0,
@@ -23,20 +23,7 @@
   "high_blood_sugar": 0.0
  },
  "anomaly_score": 0.895,
- "alerts": [
-  {
-   "source": "rule",
-   "level": "YELLOW",
-   "condition": "low_mood",
-   "message": "Low mood for several days",
-   "reason": "Mood score has been 2 or lower (5 = best) for 4 days in a row.",
-   "kind": "mood",
-   "hazard": "Isolation and confinement",
-   "signal": "mood",
-   "value": 2.0,
-   "threshold": "<= 2 for 3 days"
-  }
- ],
+ "alerts": [],
  "drivers": [
   {
    "signal": "sleep_minutes",
@@ -252,8 +239,8 @@
    "id": "brain",
    "label": "Brain, sleep and mood",
    "function": "Attention, mood and sleep. Isolation, confinement and a shifted day-night cycle wear them down.",
-   "status": "YELLOW",
-   "summary": "Mood score has been 2 or lower (5 = best) for 4 days in a row.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
    "indicators": [
     "mood",
     "stress",
@@ -261,9 +248,7 @@
     "sleep_hours",
     "pvt_reaction_ms"
    ],
-   "alerts": [
-    "Low mood for several days"
-   ]
+   "alerts": []
   },
   {
    "id": "bones_muscles",
@@ -316,29 +301,7 @@
   "radiation_ratio_to_7d": 0.99,
   "radiation_level": "GREEN"
  },
- "actions": [
-  {
-   "who": "self",
-   "action": "Tell the CMO how you have been feeling; several low days in a row are worth a conversation.",
-   "condition": "low_mood",
-   "level": "YELLOW",
-   "priority": 1
-  },
-  {
-   "who": "self",
-   "action": "Keep exercise, daylight-spectrum lighting and regular meals: all three support mood.",
-   "condition": "low_mood",
-   "level": "YELLOW",
-   "priority": 2
-  },
-  {
-   "who": "cmo",
-   "action": "CMO to schedule a private conference with the behavioural-health team on the ground.",
-   "condition": "low_mood",
-   "level": "YELLOW",
-   "priority": 3
-  }
- ],
+ "actions": [],
  "daily_plan": [
   {
    "who": "self",

@@ -6,14 +6,16 @@ For every crewmember, Sol Health shows **all vitals against their own baseline**
 and tells them **what to do now** — offline, because deep-space crews cannot wait for Earth.
 
 ## What's inside
-- **v0 engine** (simulated data, being replaced by the notebook-selected models), with a rules engine
-  - Risk classifier (7 conditions: sleep debt, dehydration, CO2 exposure, cardiovascular strain, fever, hypoxia, nominal) — macro F1 0.94 on held-out simulated astronauts
-  - Personal anomaly detector (Isolation Forest) — "unusual for *you*"
-  - Bone & muscle deconditioning forecaster with uncertainty band and an exercise what-if
-  - Radiation dose tracking vs NASA's 600 mSv career limit
+- **Explainable engine**, tuned on real data (no deep learning; every alert gives a one-sentence reason):
+  - Body: personal robust baseline + bounded CUSUM (slow drifts) + Isolation Forest (odd combinations), **1.00 false alarm per person-month on real PMData**
+  - Solar-storm alarm: caught the real 20 May 2024 storm (Curiosity's RAD) in its first hour, with no unconfirmed alarm in 35 months
+  - Cabin CO2 environmental gate from NASA limits, replayed on 468 days of real ISS data
+  - Radiation dose counter, bone and muscle projection, fitness trend
+  - Hard clinical limits for SpO2, temperature, blood pressure, glucose
 - **Action protocols:** prioritised checklists for the astronaut, crew, CMO and flight surgeon
-- **FastAPI** service with mission replay (`?at=`)
-- **Demo mission:** 4 fictional crew, 75 days of hourly synthetic telemetry, scripted episodes
+- **FastAPI** service with mission replay (`?at=`), a measurement check-in, indicator explainer cards and reminders
+- **Notebooks 00–09:** data exploration, model comparison with a shared protocol, and a Decision cell each (`notebooks/`, figures in `reports/figures/`)
+- **Demo mission:** 4 fictional crew on a Mars surface mission, 75 days, with 4 planted test cases; statistics calibrated on real data
 - **Docs** for judges and for Claude Code (`CLAUDE.md`, `docs/`)
 
 ## Data (real + simulated)
@@ -28,8 +30,8 @@ Details, licenses and citations: [docs/DATASETS.md](docs/DATASETS.md). Get it:
 ```bash
 pip install -r ml/requirements.txt
 python data/fetch/fetch_pmdata.py
-python data/fetch/fetch_msl_rad.py 2024 2026
-# OSDR EDA: manual, see data/fetch/OSDR_EDA_DOWNLOAD.md
+python data/fetch/fetch_msl_rad.py 2024 2025 2026
+python data/fetch/fetch_osdr_eda.py
 python data/fetch/inspect_sources.py
 ```
 
@@ -37,10 +39,12 @@ python data/fetch/inspect_sources.py
 ```bash
 cd ml
 pip install -r requirements.txt
-python -m pytest -q                       # 4 tests
+python -m pytest -q                       # 114 tests
 uvicorn api.main:app --reload --port 8000 # http://localhost:8000/docs
-# optional: retrain everything + regenerate demo data (~30 s)
-python -m sol_ml.train
+# optional: rebuild from the real data
+python ../notebooks/_src/make.py 00 01 02 03 04 05 06 07 08 09   # notebooks (02 takes ~25 min the first time)
+python -m sol_ml.train_body               # pooled Isolation Forest
+python -m sol_ml.snapshots                # API snapshots for frontend mock mode
 ```
 Then open Claude Code in the repo root and follow `docs/BUILD_PLAN.md` to build the dashboard.
 
@@ -62,5 +66,11 @@ Then open Claude Code in the repo root and follow `docs/BUILD_PLAN.md` to build 
 ## Team
 Abdulrahman Hesham (lead), Adhm Ehab, Ahmed Galala, Ammar Yasser, Moamen Abdelrazek, Mohammed Elhendawy.
 
+## Data credits
+- **PMData:** Thambawita et al., *PMData: A Sports Logging Dataset*, MMSys 2020, doi:10.1145/3339825.3394926.
+- **NASA OSDR EDA:** Data and visualizations are courtesy of the Environmental Data Application (EDA) (https://visualization.osdr.nasa.gov/eda/).
+- **MSL RAD:** NASA/JPL, Hassler et al. (Curiosity Radiation Assessment Detector), level-2 data from NASA CDAWeb.
+
 ## Disclaimer
-All astronauts and data are **synthetic and fictional**. Sol Health is a decision-support prototype, not a medical device.
+The astronauts are **fictional and simulated**; real datasets set their statistics, and each value in the app is tagged as real or simulated.
+Sol Health is a decision-support prototype, not a medical device.

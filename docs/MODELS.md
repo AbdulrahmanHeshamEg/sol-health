@@ -1,99 +1,97 @@
 # Model Cards
 
-> **Status: v0 baseline.** These cards describe the first prototype, which was trained only on simulated data with a
-> supervised classifier. The team's agreed approach (`docs/DATASETS.md`, `docs/NOTEBOOKS.md`) uses real data and
-> explainable detectors. Notebook 09 compares the two, and this file is rewritten with the final models and numbers.
+> **Status: v2, the models chosen in notebooks 02–09.** Every model is statistical and explainable; there is no deep learning.
+> Parameters live in `models/engine_config.json` (written by the notebooks) and the engine reads them from there.
+> The v0 prototype (a classifier trained on simulated labels) is kept as a baseline in `ml/sol_ml/engine_v0.py`; see the last section.
 
-Three trained models plus one deterministic calculator. Train everything with
-`cd ml && python -m sol_ml.train` (≈ 30 s on a laptop CPU, seed 42). Metrics are written to
-`models/metrics.json`; the numbers below come from that file.
+Reproduce everything: run notebooks `00` → `09` headless (`python notebooks/_src/make.py 00 01 ... 09`), then
+`cd ml && python -m sol_ml.train_body` (fits the pooled Isolation Forest, about 1 s).
 
-> **Important limitation.** All models are trained and tested on *synthetic* data from our own simulator.
-> High scores show the pipeline works and the signatures are learnable — they are **not** evidence of
-> real-world clinical accuracy. Real deployment would need validation on analog/flight data
-> (e.g. NASA Lifetime Surveillance of Astronaut Health, bed-rest and Antarctic analog studies).
+> **What the numbers mean.** False alarms are counted on **real people** (PMData: healthy athletes on Earth, no medical events,
+> so every alert is false). Detection is measured on **changes we planted** into real series. Nothing here is sensitivity to real illness.
 
----
+## The two success numbers
 
-## 1. Risk classifier — "what is probably wrong?"
-| | |
+| | Result |
 |---|---|
-| File | `models/risk_classifier.joblib` → `{model, features, classes}` |
-| Algorithm | scikit-learn `HistGradientBoostingClassifier` (300 iterations, lr 0.08, 31 leaves, L2 1.0), balanced sample weights |
-| Input | 33 features for one astronaut-hour (`features.py`): 8 raw vitals, 8 deviations from personal baseline, 8 six-hour rolling deviations, HR excess beyond activity, sleep in last 24 h, fluids last 6/24 h, CO2 now and 6 h mean, activity, asleep flag |
-| Output | probabilities for 7 classes: nominal, sleep_deprivation, dehydration, co2_exposure, cardiovascular_strain, fever_infection, hypoxia. The engine averages the last 3 hours. |
-| Training data | 30 simulated astronauts × 120 days hourly (86,400 rows), random episodes |
-| Test data | 8 **different** simulated astronauts × 120 days (23,040 rows) — astronaut-level split, so no person appears in both |
+| **False alarms per person per month on real PMData** (body engine as shipped) | **1.00** (target ≤ 1), with 17 % of days spent in alert |
+| **Detection delay on planted cases** | HR drift: 74 % caught, median 6 days · multi-signal drift: 87 %, 5 days · odd combination: 53 %, 2 days · sleep step: 45 %, 2 days |
+| Solar storm of 20 May 2024 (real MSL RAD) | caught in its first hour; 0 unconfirmed alarms in 35 months |
+| Planted cases in the generated crew | 6 of 7 caught by the expected part (the odd combination was caught 4 days in by the low-mood rule instead) |
 
-**Held-out results**
-| Metric | Value |
-|---|---|
-| Macro F1 | 0.940 |
-| Weighted F1 | 0.979 |
-| AUROC, abnormal vs nominal (1 − P(nominal)) | 0.994 |
+## 1. Body: "is today abnormal for *this* person?" (notebook 02, re-tuned in 09)
 
-| Condition | Precision | Recall | F1 | Support (hours) |
-|---|---|---|---|---|
-| nominal | 0.993 | 0.983 | 0.988 | 19491 |
-| sleep_deprivation | 0.879 | 0.950 | 0.913 | 482 |
-| dehydration | 0.824 | 0.910 | 0.865 | 693 |
-| co2_exposure | 0.993 | 0.993 | 0.993 | 575 |
-| cardiovascular_strain | 0.853 | 0.940 | 0.895 | 587 |
-| fever_infection | 0.956 | 0.969 | 0.962 | 699 |
-| hypoxia | 0.951 | 0.973 | 0.962 | 513 |
+Daily signals: resting HR, sleep minutes, fatigue, mood, stress. All are turned into **badness** units (positive = worse; PMSys self-reports are 5 = best).
+Each day is compared with the person's own previous days: `z = (x − median) / (1.4826·MAD)`. For the 1–5 self-reports the MAD is usually 0,
+so their scale is `1.2533 × mean absolute deviation` with a floor of half a scale point.
 
-Most errors are at the start and end of episodes (the 3 h ramps) and between mild dehydration and
-cardiovascular strain, which share "HR up" — the classic clinical ambiguity. CO2 is near-perfect because the
-cabin CO2 sensor is an input; in reality CO2 symptoms also overlap with microgravity fluid-shift headaches.
+| Member | What it catches | Setting |
+|---|---|---|
+| **B. Personal robust z** | a single extreme day | 14-day window, alert at z > 5 in the unhealthy direction |
+| **C. Bounded CUSUM** on z of resting HR, sleep, fatigue | slow drifts | 28-day window, k = 1, h = 5; each day's z clipped to ±4, sum capped at 8 |
+| **E. Isolation Forest** on the 5-signal z-vector | odd combinations | pooled across people in z-space, flags the most isolated 5 % of training days, only when the day is on the unhealthy side |
+| Low-mood rule | several low days in a row | mood ≤ 2 for 5 consecutive days |
 
-## 2. Anomaly detector — "is this unusual for *this* person?"
-| | |
-|---|---|
-| File | `models/anomaly_detector.joblib` → `{model, features, scale}` |
-| Algorithm | `IsolationForest` (300 trees), trained on **nominal hours only** (73,006 rows) |
-| Input | 20 deviation features (deltas, rolling deltas, HR excess, activity, asleep) — no context signals |
-| Output | 0–1 score: raw isolation score rescaled so 0 = median nominal hour, 1 = 99.5th percentile of nominal |
-| Why | Catches conditions the classifier never saw (unknown unknowns) |
+Compared and rejected (notebook 02): population z-score (catches 0 of 200 personal HR drifts), EWMA (best single model, slower in combination),
+robust Mahalanobis and LOF (weaker than the forest on odd combinations), per-person rolling multivariate models (no better, 20× slower).
 
-| Metric (held-out astronauts) | Value |
-|---|---|
-| AUROC abnormal vs nominal | 0.903 |
-| Flag rate at score ≥ 0.5 — nominal hours | 6.5 % |
-| Flag rate at score ≥ 0.5 — abnormal hours | 68.5 % |
+Why the limits are not the textbook ones: personal z-scores have heavy tails on real data (4.1 % of real resting-HR days exceed z = 3; a normal
+distribution gives 0.13 %), and resting HR is strongly autocorrelated (0.83 day to day). "Alert at |z| > 3" alone gives 1.6–3.0 false alarms per person-month.
 
-The engine uses it for escalation (RED needs anomaly ≥ 0.9 for 3 h) and in the health score, never as a stand-alone alarm.
+File: `models/body_iforest.joblib` (forest, threshold, sorted training scores; trained on 1,425 real person-days). `anomaly_score` in the API
+is the share of real training days that were *less* isolated than today.
 
-## 3. Deconditioning forecaster — "how much bone and muscle will I lose?"
-| | |
-|---|---|
-| File | `models/deconditioning.joblib` → `{features, targets: {bmd_loss_pct_month, muscle_loss_pct_month} × {median, q10, q90}}` |
-| Algorithm | `GradientBoostingRegressor` × 6 (squared error for median; quantile loss α = 0.1 and 0.9 for the band) |
-| Input | mission month, age, sex, ARED min/week, aerobic min/week, protein g/kg/day, vitamin D ng/ml |
-| Output | monthly loss rate (%), projected cumulative loss at `mission_day + horizon`, and a what-if with ARED at the 360 min/week target |
-| Data | 1,500 simulated missions, monthly rows; split by mission (5,475 train / 1,368 test) |
+**Limits.** Half of the subtle planted cases are missed at the 1-false-alarm target. 6 of 14 real people exceed 1 false alarm per month.
+A CUSUM alarm, once on, lasts for days.
 
-| Target | MAE (%/month) | MAE of "predict the mean" baseline | q10–q90 coverage (ideal 0.80) |
-|---|---|---|---|
-| Hip BMD loss | 0.098 | 0.215 | 0.79 |
-| Thigh muscle loss | 0.152 | 0.331 | 0.75 |
+## 2. Fitness: "is the same exercise costing more heartbeats?" (notebook 03)
 
-Projection assumes a constant monthly rate (linear). Real bone loss may slow over very long missions.
+Weekly median heart rate per exercise type, centred on that type's own median, then **PELT change-point detection**; alert when the latest
+change point is an upward shift of **≥ 8 bpm** that began within 4 weeks. On real PMData sessions: 0.22 false alarms per person-month;
+catches 94 % of planted +2 bpm/week rises (median 5 weeks) and 50 % of +1 bpm/week. Rejected: efficiency index (only 8 of 16 people have paced sessions),
+linear mixed model (similar, harder to explain), Theil–Sen slope (quietest; the fallback).
 
-## 4. Radiation accounting (deterministic, no ML)
-`engine.radiation_status()` sums hourly dosimeter readings, adds prior career dose, projects to mission end with the
-7-day average rate, and compares with the NASA career limit of 600 mSv and the 250 mSv per-SPE limit.
-YELLOW at ≥ 80 % projected, RED at ≥ 100 % or during a solar particle event (last-24 h dose > 3× the assumed daily rate).
+**Limits.** 57 % of PMData sessions are auto-detected walks; session HR varies by 9.4 bpm within a person and type. Sparse data.
+
+## 3. Radiation (notebooks 04–05)
+
+- **Dose counter (deterministic):** `mSv = Σ daily absorbed dose (mGy) × Q`, Q = 3.0 (Hassler et al. 2014), against the 600 mSv career limit.
+  YELLOW at 80 %, RED at 100 %. Real rates: ISS 0.29 mGy/day (OSDR EDA), Mars surface 0.16 mGy/day (MSL RAD detector E); transit 1.84 mSv/day (Zeitlin et al. 2013).
+- **Storm (SPE) alarm:** hourly dose rate ÷ trailing 7-day median. **≥ 1.3× = radiation elevated (YELLOW), ≥ 2× = whole crew to the storm shelter (RED).**
+  On 35 months of real RAD data: the 20 May 2024 storm is caught in its first hour (20× normal), 6 smaller real events reach the elevated level
+  (each confirmed by RAD's independent silicon detector), 0 unconfirmed alarms. 93 % of the storm's extra dose arrived after the alarm.
+  Compared: robust z (works at z > 6), CUSUM (7 hours late), EWMA, change point (equal, slower). Removing the 3.4 % diurnal cycle did not help.
+
+**Limits.** One large storm in the record. Q = 3.0 was measured on Mars and overstates ISS dose equivalent.
+
+## 4. Cabin air (notebooks 06–07)
+
+Rule-based **environmental gate** (NASA OCHMO-TB-004): CO2 is high when the 1-hour mean is above 3 mmHg or the 7-day mean is above 2.5 mmHg.
+A headache or fatigue report while CO2 is high is labelled **"likely environmental"**, and the first action is ventilation.
+Replayed on 468 days of real ISS CO2: high 25 % of the time overall, up to 73 % on a 2016 mission, never on the 2020–21 missions.
+The 1-hour limit also remains a hard rule on its own; the 7-day rule alone is shown as context, not as an alarm.
+
+## 5. Hard clinical limits (rules win over models)
+
+SpO2, core temperature, blood pressure (outside exercise), resting heart rate, cabin CO2, fasting glucose: see `docs/CLINICAL_PROTOCOLS.md`.
+These are standard thresholds; BP, SpO2, temperature and glucose exist in no real dataset here, so they were not evaluated on data.
+
+## 6. Bone and muscle projection (unchanged from v0)
+
+Quantile gradient boosting trained on a **simulated** cohort built from published loss rates (hip BMD ≈ 1–1.5 %/month without countermeasures).
+It is a what-if calculator for exercise adherence, labelled as simulated in the API.
+
+## Baseline: the v0 classifier (kept for comparison)
+
+`HistGradientBoosting` on 33 hourly features, trained and tested on labels from our own simulator (macro F1 0.94 there).
+Notebook 09: on its own simulated crew it catches 92 % of scripted abnormal hours and flags 0.3 % of normal ones; on the data-calibrated crew
+it flags **55 % of all hours as abnormal** outside every planted case, almost always as "sleep deprivation", because real hour-to-hour
+heart-rate variation (SD 6.9 bpm) is far larger than its simulator assumed (3 bpm). It cannot run on PMData at all (it needs eight hourly vitals no real dataset has).
+What did transfer: its fixed radiation threshold and the shared hard limits.
 
 ## How the outputs combine
-See `ARCHITECTURE.md` → "How the outputs combine". In short: hard limits win; models raise YELLOW; models reach RED
-only when highly confident and highly anomalous for 3 consecutive hours.
-
-## Reproducibility
-- Seed 42 for training, seed 7 for the demo crew. Same code + seed → same files.
-- `ml/requirements.txt` pins scikit-learn 1.9.1 (joblib files must be loaded with the same major version).
-- Tests: `cd ml && python -m pytest -q` checks demo scenarios, rule override, all endpoints and replay.
-
-## Ideas for after the hackathon
-Sequence models (temporal CNN / transformer) on raw minute-level signals; per-astronaut online calibration;
-conformal prediction for calibrated uncertainty; validation on public analog datasets; an onboard LLM that
-explains the assessment in natural language (the engine already provides the structured facts it would need).
+1. Every active alert has a level; **status = the worst level**.
+2. **Models alone raise YELLOW.** RED comes from hard limits and from a storm at or above the shelter level.
+3. Each alert carries a one-sentence `reason` (signal, how far from normal, for how long), its `kind`, and the NASA hazard behind it.
+4. `health_score = 100 − 22·(RED alerts) − 9·(YELLOW alerts) − 15·anomaly_score`, clipped to 0–100.
+5. `probabilities` are relative evidence weights per condition (they sum to 1); they are not calibrated probabilities.

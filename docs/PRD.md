@@ -36,11 +36,15 @@ when the link to Earth is slow or down.
 Data: `/assessment`, `/vitals?hours=72`, `/timeline?hours=72`.
 - **Status banner:** status, `condition_label`, health score gauge, anomaly score, timestamp, disclaimer.
 - **What to do now:** `actions[]` as a checklist, RED first, grouped by `who` (You / Crew / CMO / Ground). Checkboxes are local UI state only.
-- **Alerts:** `alerts[]` with source badge (`rule` = hard clinical limit, `model` = AI pattern + probability).
-- **Vitals grid:** for each of 8 vitals: value, unit, baseline, delta with arrow; highlight if a rule alert references that signal.
+- **Alerts:** `alerts[]` with source badge (`rule` = hard clinical limit, `model` = statistical model, named in `alert.model`), the one-sentence `reason`, and the NASA hazard.
+- **Vitals grid:** for each of 8 vitals and each daily indicator (`indicators`: resting HR, sleep hours, mood, stress, fatigue, blood glucose): value, unit, baseline, delta with arrow, and a **source badge** (real dataset vs simulated); highlight if an alert references that signal.
 - **Charts (72 h):** HR, SpO2, core temp, systolic/diastolic BP, resp rate, HRV, PVT. Shade hours where timeline `p_abnormal > 0.5`, colored by condition. Mark sleep hours (`is_asleep`) and exercise hours (`exercise_type`).
 - **Why:** `drivers[]` — "Respiration +3.8 br/min above your baseline" etc.
-- **Condition probabilities:** horizontal bars for the 7 conditions.
+- **Evidence by condition:** horizontal bars from `probabilities` (relative evidence, not calibrated probabilities).
+- **Body figure:** `body_systems[]` (heart, lungs, brain, bones/muscles, blood, immune), each clickable, colored by status, showing its function and summary.
+- **Check-in form:** BP, glucose, temperature, mood, stress, fatigue, sleep, headache → `POST /api/assess` with `checkin`; show the returned assessment.
+- **Reminders:** `/reminders` items that are due now, and the check-in streak.
+- **Indicator explainer cards:** `/api/indicators` (why measure it, how space affects it, when to escalate, prevention).
 - **Daily plan:** `daily_plan[]` (sleep, hydration, exercise targets).
 
 ### 4.3 Long-term risk (tab in detail)
@@ -56,12 +60,14 @@ Quick-jump buttons (verified against the demo data):
 
 | Button | `at` | What judges see |
 |---|---|---|
-| Day 50 | `2026-10-19T12:00:00` | Nadia YELLOW — sleep debt |
-| Day 59 | `2026-10-28T08:00:00` | Crew GREEN, but radiation SPE banner (solar particle event) |
-| Day 62 | `2026-10-31T06:00:00` | Nadia RED — CO2 |
-| Day 67 | `2026-11-05T12:00:00` | Sofia YELLOW — sleep debt |
-| Day 75 20:00 | `2026-11-13T20:00:00` | Sofia RED (CO2), Yuki YELLOW (fever starting), Karim YELLOW (dehydration) |
-| Now | (no `at`) | Yuki has escalated to RED — fever sustained for 3 h |
+| A quiet day | `2026-09-20T12:00:00` | Whole crew GREEN |
+| Cabin CO2 | `2026-10-01T12:00:00` | Nadia YELLOW: "likely environmental", ventilation first; cabin CO2 7-day mean above 2.5 mmHg for everyone |
+| Slow drift | `2026-10-19T12:00:00` | Karim YELLOW: resting heart rate drifting above his own normal (CUSUM) |
+| Odd combination | `2026-11-03T12:00:00` | Sofia: mood, stress and sleep worse together; low-mood rule on day 5 |
+| Solar storm | `2026-11-13T08:00:00` | Whole crew RED: "SPE in progress: whole crew to the storm shelter" |
+| Now | (no `at`) | Storm still under way, 19 hours in |
+
+The marks come from `GET /api/mission → replay_marks` (case starts) and `data/demo/api_snapshots/replay_marks.json` (the moments saved for mock mode).
 
 ### 4.5 Alerts feed (`/alerts`)
 All alerts across crew from each assessment, worst first, with astronaut name and link.
@@ -83,5 +89,4 @@ Real sensor integration, authentication, multi-mission storage, diagnosis, drug 
 - The replay slider shows each planted case (from `data/demo/planted_cases.json`) appearing and being caught.
 - Works with the API stopped (mock mode). `pytest` green, `npm run build` clean, no console errors.
 
-(Crew names and scenario states will change when notebook 08 regenerates the demo crew, so the quick-jump table in
-4.4 must be refreshed from `planted_cases.json` at that point.)
+(The quick-jump table in 4.4 was refreshed after notebook 08 regenerated the demo crew.)
