@@ -11,6 +11,8 @@ All medical logic (status, thresholds, actions, explanations) lives here, never 
 from __future__ import annotations
 
 import json
+import threading
+from contextlib import asynccontextmanager
 from functools import lru_cache
 
 import numpy as np
@@ -19,18 +21,28 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from sol_ml import indicators as catalogue
+from sol_ml import config, indicators as catalogue
+from sol_ml.detectors import cabin as cabin_limits
 from sol_ml.config import DEMO_DIR, ALL_SIGNALS, ENGINE_CONDITIONS, ENGINE_CONDITION_LABELS
 from sol_ml.engine import HealthEngine, LEVEL_RANK, Prepared
 
 MIN_HISTORY_HOURS = 24
+# Replay buttons: the moment at which each planted case is worth looking at (the engine has had time to react).
+SHOW_AFTER_HOURS = {"cabin_co2": 8 * 24 + 12, "slow_drift": 6 * 24 + 12, "odd_combination": 4 * 24 + 12, "solar_storm": 3}
+QUIET_DAY = "2026-09-15 12:00:00"
 CITATIONS = [
     "PMData: Thambawita et al., PMData: A Sports Logging Dataset, MMSys 2020, doi:10.1145/3339825.3394926",
     "Data and visualizations are courtesy of the Environmental Data Application (EDA) (https://visualization.osdr.nasa.gov/eda/).",
     "MSL RAD: NASA/JPL, Hassler et al. (Curiosity Radiation Assessment Detector), level-2 data from NASA CDAWeb.",
 ]
 
-app = FastAPI(title="Sol Health API", version="2.0.0",
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    threading.Thread(target=warm_up, daemon=True).start()
+    yield
+
+
+app = FastAPI(title="Sol Health API", version="2.0.0", lifespan=lifespan,
               description="Astronaut health monitoring: indicators, status with a reason, actions, forecasts. "
                           "The crew is simulated (calibrated on real data); decision support only.")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
@@ -64,6 +76,20 @@ def _prepared(aid: str) -> Prepared:
     profile = _profile(aid)
     _, tel, daily, _, _ = demo()
     return engine().prepare(tel[tel["astronaut_id"] == aid], profile, daily[daily["astronaut_id"] == aid])
+
+
+@lru_cache
+def _full_timeline(aid: str) -> list[dict]:
+    """Hour-by-hour status for the whole mission, computed once (about 2 s per crewmember). Because every table is
+    causal, the status at hour i is the same whatever moment is being replayed, so any window is a slice of this."""
+    prep = _prepared(aid)
+    return engine().timeline(None, prep=prep, end=len(prep.hourly) - 1, hours=len(prep.hourly))
+
+
+def warm_up():
+    """Fill the caches in the background so the first page load does not wait for them."""
+    for p in demo()[0]["crew"]:
+        _full_timeline(p["astronaut_id"])
 
 
 def _at(aid: str, at: str | None) -> tuple[Prepared, int]:
@@ -100,7 +126,9 @@ def mission(at: str | None = None):
     end = pd.Timestamp(at) if at else tel["timestamp"].max()
     return {**meta["mission"], "now": str(end),
             "time_range": {"start": str(tel["timestamp"].min()), "end": str(tel["timestamp"].max())},
-            "replay_marks": [{"id": c["id"], "label": c["title"], "at": c["start"], "astronaut_id": c["astronaut_id"]} for c in cases]}
+            "replay_marks": [{"id": "quiet_day", "label": "A quiet day", "at": QUIET_DAY, "show_at": QUIET_DAY, "astronaut_id": "ALL"}] + [
+                {"id": c["id"], "label": c["title"], "at": c["start"], "astronaut_id": c["astronaut_id"],
+                 "show_at": str(pd.Timestamp(c["start"]) + pd.Timedelta(hours=SHOW_AFTER_HOURS.get(c["id"], 24)))} for c in cases]}
 
 
 @app.get("/api/meta")
@@ -108,7 +136,18 @@ def meta_info():
     """Static lists the UI needs: conditions, signals, hazards, data sources and citations."""
     return {"conditions": [{"id": c, "label": ENGINE_CONDITION_LABELS[c]} for c in ENGINE_CONDITIONS],
             "signals": ALL_SIGNALS, "levels": list(LEVEL_RANK), "hazards": catalogue.HAZARDS,
-            "sources": demo()[4], "citations": CITATIONS}
+            "sources": demo()[4], "citations": CITATIONS, "limits": display_limits()}
+
+
+def display_limits() -> dict:
+    """Reference lines and targets the UI draws. They come from the engine so the frontend holds no thresholds."""
+    e = engine()
+    return {"cabin_co2_1h_mmhg": cabin_limits.LIMIT_1H_MMHG, "cabin_co2_7d_mmhg": cabin_limits.LIMIT_7D_MMHG,
+            "radiation_ratio_elevated": e.spe_yellow, "radiation_ratio_shelter": e.spe_red,
+            "career_dose_msv": config.CAREER_RADIATION_LIMIT_MSV, "dose_yellow_share": 0.8,
+            "hip_bmd_loss_alert_pct": config.BMD_LOSS_ALERT_PCT, "sleep_target_h": config.SLEEP_TARGET_H,
+            "fluid_target_ml": config.DAILY_FLUID_TARGET_ML, "ared_target_min_week": config.ARED_TARGET_MIN_WEEK,
+            "aerobic_target_min_week": config.AEROBIC_TARGET_MIN_WEEK}
 
 
 @app.get("/api/indicators")
@@ -185,8 +224,8 @@ def assessment(aid: str, at: str | None = None):
 @app.get("/api/crew/{aid}/timeline")
 def timeline(aid: str, hours: int = Query(72, ge=1, le=24 * 200), at: str | None = None):
     """Hour-by-hour status for status strips / replay."""
-    prep, idx = _at(aid, at)
-    return engine().timeline(None, prep=prep, end=idx, hours=hours)
+    _, idx = _at(aid, at)
+    return _full_timeline(aid)[max(0, idx - hours + 1): idx + 1]
 
 
 @app.get("/api/crew/{aid}/forecast")

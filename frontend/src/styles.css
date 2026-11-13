@@ -1,0 +1,64 @@
+@import "tailwindcss";
+@import "@fontsource-variable/archivo/wdth.css";
+@import "@fontsource/atkinson-hyperlegible/400.css";
+@import "@fontsource/atkinson-hyperlegible/700.css";
+
+/* Sol Health: a habitat console at Martian dusk.
+   Basalt slate for the room, warm dust for text, the blue of a Mars sunset for anything you can press.
+   Green / amber / red are reserved for health status and are never used as decoration. */
+@theme {
+  --color-basalt: #1c2229;
+  --color-hab: #252d36;
+  --color-hab-raised: #2f3944;
+  --color-line: #414d5b;
+  --color-dust: #ece5d8;
+  --color-dust-dim: #b6b0a3;
+  --color-dusk: #8ec1e3;
+  --color-dusk-deep: #2d5672;
+  --color-clear: #6cc394;
+  --color-watch: #ecb84a;
+  --color-act: #f0735e;
+
+  --font-display: "Archivo Variable", "Arial Narrow", sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", sans-serif;
+
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.3125rem;
+  --text-xl: 1.625rem;
+  --text-2xl: 2.0625rem;
+  --text-3xl: 2.5625rem;
+}
+
+@layer base {
+  html { background: var(--color-basalt); color: var(--color-dust); font-family: var(--font-body); font-size: 16px; }
+  body { margin: 0; min-height: 100vh; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  h1, h2, h3, .display { font-family: var(--font-display); font-stretch: 112%; font-weight: 650; line-height: 1.12; letter-spacing: -0.005em; }
+  .numeral { font-family: var(--font-display); font-stretch: 88%; font-weight: 600; font-variant-numeric: tabular-nums; }
+  a { color: var(--color-dusk); text-underline-offset: 3px; }
+  :focus-visible { outline: 3px solid var(--color-dusk); outline-offset: 2px; border-radius: 3px; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  ::selection { background: var(--color-dusk-deep); }
+}
+
+@layer components {
+  .panel { background: var(--color-hab); border-radius: 4px; }
+  .btn { background: var(--color-dusk); color: #10202b; font-weight: 700; padding: 0.5rem 1rem; border-radius: 6px; border: 0; }
+  .btn:hover { background: #a6d0ec; }
+  .btn:disabled { background: var(--color-line); color: var(--color-dust-dim); cursor: not-allowed; }
+  .btn-quiet { background: transparent; color: var(--color-dusk); border: 1px solid var(--color-line); padding: 0.375rem 0.75rem; border-radius: 6px; }
+  .btn-quiet:hover { border-color: var(--color-dusk); }
+  .btn-quiet[aria-pressed="true"] { background: var(--color-dusk-deep); border-color: var(--color-dusk); color: var(--color-dust); }
+  .field { background: var(--color-basalt); border: 1px solid var(--color-line); border-radius: 6px; padding: 0.4rem 0.6rem; color: var(--color-dust); width: 100%; }
+  .skeleton { background: linear-gradient(90deg, var(--color-hab) 0%, var(--color-hab-raised) 50%, var(--color-hab) 100%); background-size: 200% 100%; animation: sweep 1.4s linear infinite; border-radius: 4px; }
+}
+
+@keyframes sweep { to { background-position: -200% 0; } }
+/* The one piece of unprompted motion: a storm in progress pulses on the sol strip and the shelter banner. */
+@keyframes storm { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.storm-pulse { animation: storm 1.6s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton, .storm-pulse { animation: none; }
+}

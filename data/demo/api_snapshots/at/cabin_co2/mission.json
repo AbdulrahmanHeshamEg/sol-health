@@ -25,28 +25,39 @@
  },
  "replay_marks": [
   {
+   "id": "quiet_day",
+   "label": "A quiet day",
+   "at": "2026-09-15 12:00:00",
+   "show_at": "2026-09-15 12:00:00",
+   "astronaut_id": "ALL"
+  },
+  {
    "id": "cabin_co2",
    "label": "Cabin CO2 with headache reports",
    "at": "2026-09-23 00:00:00",
-   "astronaut_id": "UH-01"
+   "astronaut_id": "UH-01",
+   "show_at": "2026-10-01 12:00:00"
   },
   {
    "id": "slow_drift",
    "label": "Slow drift (illness onset)",
    "at": "2026-10-13 00:00:00",
-   "astronaut_id": "UH-02"
+   "astronaut_id": "UH-02",
+   "show_at": "2026-10-19 12:00:00"
   },
   {
    "id": "solar_storm",
    "label": "Solar storm (SPE)",
    "at": "2026-11-13 05:00:00",
-   "astronaut_id": "ALL"
+   "astronaut_id": "ALL",
+   "show_at": "2026-11-13 08:00:00"
   },
   {
    "id": "odd_combination",
    "label": "Odd combination (behavioural health)",
    "at": "2026-10-31 00:00:00",
-   "astronaut_id": "UH-03"
+   "astronaut_id": "UH-03",
+   "show_at": "2026-11-04 12:00:00"
   }
  ]
 }

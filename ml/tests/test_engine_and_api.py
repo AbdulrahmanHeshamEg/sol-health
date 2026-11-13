@@ -190,7 +190,8 @@ def test_api_new_endpoints_for_the_challenge_extras():
     assert [c["id"] for c in cases] == ["cabin_co2", "slow_drift", "solar_storm", "odd_combination"]
     meta = client.get("/api/meta").json()
     assert len(meta["citations"]) == 3 and meta["sources"]["radiation_ugy_per_day"]["kind"] == "real"
-    assert len(client.get("/api/mission").json()["replay_marks"]) == 4
+    assert meta["limits"]["cabin_co2_1h_mmhg"] == 3.0 and meta["limits"]["radiation_ratio_shelter"] == 2.0
+    assert len(client.get("/api/mission").json()["replay_marks"]) == 5
 
 
 def test_checkin_form_changes_the_assessment():

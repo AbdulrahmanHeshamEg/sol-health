@@ -15,7 +15,8 @@ GLOBAL = {"mission": "/api/mission", "meta": "/api/meta", "crew": "/api/crew", "
 PER_CREW = {"profile": "/api/crew/{id}", "assessment": "/api/crew/{id}/assessment", "vitals_72h": "/api/crew/{id}/vitals?hours=72",
             "timeline_72h": "/api/crew/{id}/timeline?hours=72", "daily_30d": "/api/crew/{id}/daily?days=30",
             "forecast": "/api/crew/{id}/forecast?horizon_days=90", "radiation": "/api/crew/{id}/radiation",
-            "reminders": "/api/crew/{id}/reminders"}
+            "reminders": "/api/crew/{id}/reminders", "timeline_all": "/api/crew/{id}/timeline?hours=1800",
+            "daily_all": "/api/crew/{id}/daily?days=75"}
 TIMED = ("mission", "crew")
 TIMED_PER_CREW = ("assessment", "vitals_72h", "timeline_72h", "daily_30d", "forecast", "radiation", "reminders")
 
@@ -42,12 +43,7 @@ def main():
             save(out / f"{cid}_{name}.json", url.format(id=cid))
 
     mission = client.get("/api/mission").json()
-    marks = [{"id": "quiet_day", "label": "A quiet day", "at": "2026-09-15 12:00:00"}]
-    for m in mission["replay_marks"]:
-        # look two days into each case (the storm: three hours in), when the engine has had a chance to react
-        offset = 3 if m["id"] == "solar_storm" else {"cabin_co2": 8 * 24 + 12, "slow_drift": 6 * 24 + 12, "odd_combination": 4 * 24 + 12}[m["id"]]
-        at = str(__import__("pandas").Timestamp(m["at"]) + __import__("pandas").Timedelta(hours=offset))
-        marks.append({"id": m["id"], "label": m["label"], "at": at})
+    marks = [{"id": m["id"], "label": m["label"], "at": m["show_at"]} for m in mission["replay_marks"]]
     n = 0
     for mark in marks:
         base = out / "at" / mark["id"]
