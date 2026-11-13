@@ -39,6 +39,7 @@ rng = setup()
 pd.set_option("display.width", 250); pd.set_option("display.max_columns", 40)
 warnings.filterwarnings("ignore")
 TARGET_FA = 1.0
+DEPS = [f"detectors/{m}.py" for m in ("baseline", "univariate", "multivariate", "evaluation", "body")]
 N_INJECTIONS = 200
 CASES = list(INJECTIONS)
 
@@ -104,7 +105,7 @@ print(len(specs), "configurations x", len(CASES) * N_INJECTIONS, "planted runs e
 def run_all(spec_list):
     return pd.DataFrame(Parallel(n_jobs=-1)(delayed(body.run_spec)(s, people, sites, SEED) for s in spec_list))
 
-sweep = cached("nb02_sweep", [specs, sites], lambda: run_all(specs))
+sweep = cached("nb02_sweep", [specs, sites], lambda: run_all(specs), deps=DEPS)
 sweep["family"] = sweep.kind + np.where(sweep["mode"].notna(), " (" + sweep["mode"].fillna("") + ")", "") \
     + np.where(sweep.sided.eq("both"), " two-sided", "")
 sweep.groupby("family").false_alarms.agg(["count", "min", "max"]).round(2)
@@ -215,7 +216,7 @@ for family in ("personal_z", "cusum", "ewma"):
     for j, s in enumerate(BODY_SIGNALS):
         abl_specs.append(spec_of(points[family], cols=[j])); labels.append((family, s))
     abl_specs.append(spec_of(points[family], cols=list(range(5)))); labels.append((family, "all five"))
-abl = cached("nb02_ablation", [abl_specs, sites], lambda: run_all(abl_specs))
+abl = cached("nb02_ablation", [abl_specs, sites], lambda: run_all(abl_specs), deps=DEPS)
 abl.index = pd.MultiIndex.from_tuples(labels, names=["detector", "signal"])
 abl[["false_alarms"] + [c + "_miss" for c in CASES]].round(2)
 
@@ -246,7 +247,7 @@ for s in spike_opts:
 members += [[d, m] for d in drift_opts for m in combo_opts]
 combo_specs = [dict(kind="any_of", members=m) for m in members]
 print(len(spike_opts), "spike x", len(drift_opts), "drift x", len(combo_opts), "combination options ->", len(combo_specs), "unions")
-combos = cached("nb02_combos", [combo_specs, sites], lambda: run_all(combo_specs))
+combos = cached("nb02_combos", [combo_specs, sites], lambda: run_all(combo_specs), deps=DEPS)
 combos["members"] = [" + ".join(LETTER[m["kind"]] for m in ms) for ms in members]
 combos["spec"] = [json.dumps(ms) for ms in members]
 rows = []

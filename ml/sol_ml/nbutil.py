@@ -37,18 +37,22 @@ def savefig(name: str, fig=None) -> Path:
     return path
 
 
-def cached(name: str, key, compute):
+def cached(name: str, key, compute, deps: list[str] | None = None):
     """Reuse a results table from data/processed/cache/ when neither `key` (any JSON-able object, e.g. the list of
-    specs) nor the sol_ml library code has changed; otherwise call compute() and store its DataFrame."""
+    specs) nor the library code it depends on has changed; otherwise call compute() and store its DataFrame.
+    `deps` are paths relative to ml/sol_ml (default: every module in sol_ml/detectors)."""
     import pandas as pd
-    code = b"".join(p.read_bytes() for p in sorted((ROOT / "ml" / "sol_ml").rglob("*.py")) if p.name != "nbutil.py")
+    lib = ROOT / "ml" / "sol_ml"
+    files = [lib / d for d in deps] if deps else sorted((lib / "detectors").glob("*.py"))
+    code = b"".join(f.read_bytes().replace(b"\r\n", b"\n") for f in files)     # same hash on any line-ending setting
     digest = hashlib.md5(code + json.dumps(key, sort_keys=True, default=str).encode()).hexdigest()[:12]
     path = PROCESSED / "cache" / f"{name}_{digest}.parquet"
+    old = list(path.parent.glob(f"{name}_*.parquet")) if path.parent.exists() else []
     if path.exists():
         return pd.read_parquet(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    for old in path.parent.glob(f"{name}_*.parquet"):
-        old.unlink()
+    for stale in old:
+        stale.unlink()
     df = compute()
     df.to_parquet(path, index=False)
     return df
