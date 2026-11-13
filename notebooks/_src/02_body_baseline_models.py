@@ -343,4 +343,52 @@ config_path.write_text(json.dumps(config, indent=2))
 print(json.dumps(config["body"], indent=2))
 
 # %% [markdown]
-# DECISION_PLACEHOLDER
+# ## Decision
+#
+# **Chosen: B + C + E, the team's plan, at these settings** (written to `models/engine_config.json`):
+# - **B, personal robust z** (spikes): 14-day window, alert at z > 5 in the unhealthy direction.
+# - **C, CUSUM on z** (drifts) of resting HR, sleep and fatigue: 28-day window, k = 1.0, h = 4.0.
+# - **E, Isolation Forest** (odd combinations) on the 5-signal z-vector: pooled across people in z-space, flags the most isolated 5 % of training days,
+#   and only when the day is on the unhealthy side on average.
+#
+# **Numbers that justify it** (real PMData, 14 people, 60 person-months; 200 planted changes per case):
+#
+# | | false alarms / person-month | drift_hr | drift_multi | combo_odd | step_sleep |
+# |---|---|---|---|---|---|
+# | **B + C + E (chosen)** | **0.98** | caught 74 %, median 6 d | caught 84 %, 5 d | caught 54 %, 2 d | caught 54 %, 2 d |
+# | C + E | 0.83 | 73 %, 6 d | 82 %, 5 d | 54 %, 2 d | 54 %, 2 d |
+# | B + C | 0.97 | 72 %, 6 d | 83 %, 6 d | 33 %, 2 d | 52 %, 2 d |
+# | best single model: D, EWMA | 0.93 | 78 %, 5 d | 92 %, 5 d | 30 %, 2 d | 52 %, 2 d |
+# | B alone (z > 4) | 0.75 | 32 % | 38 % | 16 % | 25 % |
+# | A, population z (z > 4) | 0.15 | 0 % | 17 % | 8 % | 14 % |
+#
+# **What the comparison showed**
+# 1. **The methods do complement each other, as the team expected.** CUSUM and EWMA catch the drifts (74–92 %) and miss most odd combinations;
+#    the Isolation Forest is the reverse (67 % of odd combinations alone, 22 % of resting-HR drifts). Adding E to B + C lifts `combo_odd` from 33 % to 54 % caught.
+# 2. **Personal beats population.** The population z-score never catches a resting-HR drift (0 of 200): a +2 SD personal change is invisible against a 6.8 bpm spread between people.
+# 3. **The plan's "alert at |z| > 3" is far too loose on real data.** Personal z-scores have heavy tails: with a 14-day window 4.1 % of real resting-HR days exceed z = 3
+#    (a normal distribution would give 0.13 %). At z > 3 the threshold rule alone gives 1.6 false alarms per person-month one-sided and 3.0 two-sided. It needs z > 4 to meet the target, and z > 5 inside the combination.
+# 4. **One-sided is better than two-sided**: same detection, roughly half the false alarms. An unusually good day is not an alarm.
+# 5. **B adds almost nothing once C and E are present** (C + E is within 2 points on every case). It is kept because it is the only member that answers within a day
+#    to a single extreme value, and it is the easiest to explain; it costs 0.15 false alarms per person-month.
+# 6. **Pooled Isolation Forest beat the per-person rolling one** (33 % vs 46 % missed on `combo_odd`), and it needs no per-person training history, which suits a new crew member.
+# 7. **Signal ablation:** resting HR carries the drift detection (CUSUM on resting HR alone catches 74 % of `drift_hr`), sleep carries `step_sleep`, and mood and stress only matter in combination.
+#    The self-reports alone almost never cross a threshold (0 false alarms and 0–4 % caught).
+#
+# **Rejected, and why**
+# - **A, population z:** misses every personal drift.
+# - **D, EWMA:** the best single model and slightly better than CUSUM on drifts, but in combination with E it was slower overall (mean delay 7.5 vs 5.5 days). It is the fallback if CUSUM misbehaves in the engine.
+# - **F, robust Mahalanobis, and G, LOF:** weaker than the Isolation Forest on `combo_odd` at the same false-alarm rate (F 52–68 % missed, G 62 %, E 33 %).
+# - **Per-person rolling multivariate models:** no better than pooled, 20x slower, and need 30 days of history.
+#
+# **What does not meet the plan's hopes (also reported in chat)**
+# - **About a quarter to a half of the planted changes are missed at the 1-false-alarm target.** The cases as specified are subtle on purpose
+#   (`combo_odd` keeps every signal within ±1.5 SD for only 5 days; `step_sleep` is 2 SD when ordinary nights already vary by 1.5–1.8 SD).
+#   Catching more needs a looser target: this is the team's call, and the trade-off curves above show the price.
+# - **The false-alarm rate is an average.** 6 of 14 people are above 1 per month (worst: p02 with 2.2), 1 person has none.
+# - **CUSUM alarms last long.** Once the sum is above h it stays there until the signal comes back, so one episode can cover many days (p06: 3 episodes, 68 alert days).
+#   The protocol counts episodes, so this does not show in the headline number. The engine should reset the sum when the alert is acknowledged.
+#
+# **Known limits:** PMData has no medical events, so detection is measured only on planted changes whose size and shape we chose.
+# Resting-HR z-scores are autocorrelated (lag-1 = 0.83), which is why textbook CUSUM/EWMA limits do not apply and all limits here are empirical.
+# The Isolation Forest explains itself only through the z-scores of its inputs; the alert sentence names the signal that is furthest from normal.

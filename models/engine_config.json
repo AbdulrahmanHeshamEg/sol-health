@@ -1,0 +1,57 @@
+{
+  "body": {
+    "source_notebook": "02_body_baseline_models",
+    "signals": [
+      "resting_hr",
+      "sleep_minutes",
+      "fatigue",
+      "mood",
+      "stress"
+    ],
+    "scale": {
+      "continuous": "1.4826*MAD",
+      "ordinal": "1.2533*mean_abs_dev, floor 0.5 point",
+      "direction": "badness (positive z = worse)"
+    },
+    "members": [
+      {
+        "kind": "personal_z",
+        "window": 14,
+        "thr": 5.0,
+        "sided": "worse"
+      },
+      {
+        "kind": "cusum",
+        "window": 28,
+        "k": 1.0,
+        "h": 4.0
+      },
+      {
+        "kind": "iforest",
+        "window": 14,
+        "mode": "pooled",
+        "rate": 0.05
+      }
+    ],
+    "false_alarms_per_person_month_pmdata": 0.982,
+    "target_false_alarms_per_person_month": 1.0,
+    "detection": {
+      "drift_hr": {
+        "median_delay_days": 6.0,
+        "miss_rate": 0.265
+      },
+      "drift_multi": {
+        "median_delay_days": 5.0,
+        "miss_rate": 0.165
+      },
+      "combo_odd": {
+        "median_delay_days": 1.5,
+        "miss_rate": 0.46
+      },
+      "step_sleep": {
+        "median_delay_days": 2.0,
+        "miss_rate": 0.465
+      }
+    }
+  }
+}
