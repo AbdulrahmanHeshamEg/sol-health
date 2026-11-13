@@ -23,7 +23,7 @@ function CrewRow({ card }: { card: CrewCard }) {
             {card.top_reason ?? "Every indicator is within this person's own normal range."}
           </p>
         </div>
-        <dl className="grid grid-cols-5 gap-x-5 self-center text-right md:grid-cols-[repeat(5,auto)]">
+        <dl className="grid grid-cols-3 gap-x-5 gap-y-3 self-center text-left sm:grid-cols-5 sm:text-right md:grid-cols-[repeat(5,auto)]">
           {[
             ["Score", fmt(card.health_score), "/100"],
             ["Heart", fmt(v.heart_rate), "bpm"],

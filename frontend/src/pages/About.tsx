@@ -1,6 +1,16 @@
 import { useCases, useMeta, useMission } from "../api/hooks";
 import { ErrorNote, Panel, Skeleton, SourceBadge, when } from "../components/ui";
 
+// Display names for the source keys the API reports (data/demo/sources.json).
+const NAMES: Record<string, string> = {
+  resting_hr: "resting heart rate", sleep_minutes: "sleep", heart_rate: "heart rate", cabin_co2_mmhg: "cabin CO2",
+  radiation_ugy_per_day: "radiation dose rate", radiation_msv: "radiation dose (mSv, quality factor 3.0)",
+  systolic_bp: "blood pressure (upper)", diastolic_bp: "blood pressure (lower)", spo2: "blood oxygen", core_temp: "body temperature",
+  resp_rate: "breathing rate", hrv_rmssd: "heart rate variability", pvt_reaction_ms: "reaction time", fluid_intake_ml: "fluid intake",
+  blood_glucose_mg_dl: "blood sugar", headache: "headache reports",
+};
+const nameOf = (key: string) => NAMES[key] ?? key.replace(/_/g, " ");
+
 export function About() {
   const meta = useMeta();
   const mission = useMission();
@@ -11,7 +21,7 @@ export function About() {
   const real = sources.filter(([, s]) => s.kind === "real");
   const simulated = sources.filter(([, s]) => s.kind === "simulated");
   const byCalibration = new Map<string, string[]>();
-  for (const [key, s] of simulated) byCalibration.set(s.calibrated_on ?? "other", [...(byCalibration.get(s.calibrated_on ?? "other") ?? []), key.replace(/_/g, " ")]);
+  for (const [key, s] of simulated) byCalibration.set(s.calibrated_on ?? "other", [...(byCalibration.get(s.calibrated_on ?? "other") ?? []), nameOf(key)]);
 
   return (
     <div className="space-y-6">
@@ -25,7 +35,7 @@ export function About() {
 
       <Panel title="Real measurements" aside={<SourceBadge source={{ kind: "real" }} />}>
         <ul className="m-0 list-disc space-y-1 pl-5 text-base">
-          {real.map(([key, s]) => <li key={key}>{key.replace(/_/g, " ")}: {s.dataset}</li>)}
+          {real.map(([key, s]) => <li key={key}>{nameOf(key)}: {s.dataset}</li>)}
         </ul>
         {mission.data?.radiation_replay && (
           <p className="mt-3 max-w-[72ch] text-sm text-dust-dim">

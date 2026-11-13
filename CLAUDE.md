@@ -39,11 +39,11 @@ Success is measured by **false alarms per person per month on real PMData** and 
 | v0 baseline | `ml/sol_ml/engine_v0.py`, `data/demo_v0/` | Kept only for the comparison in notebook 09 |
 | Action protocols | `ml/sol_ml/protocols.py`, `indicators.py` | Extended (SPE shelter, likely environmental, drift, mood, glucose); indicator explainer catalogue |
 | Demo crew | `data/demo/` | Data-calibrated crew with 4 planted cases (notebook 08) + `api_snapshots/` for mock mode |
-| Frontend | `frontend/` | To build (`docs/PRD.md`) |
+| Frontend | `frontend/` | **Done**: React + Vite dashboard per `docs/PRD.md` (sol-strip replay, body figure, check-in, explainer cards, offline snapshot mode). Run with `npm --prefix frontend run dev` |
 
 ## Work order
-1. **Get the data:** `python data/fetch/fetch_pmdata.py`, `python data/fetch/fetch_msl_rad.py 2024 2026`, then ask the human to do the
-   OSDR EDA manual download (5 minutes, steps in `data/fetch/OSDR_EDA_DOWNLOAD.md`). While waiting, continue with notebooks 00–05.
+1. **Get the data:** `python data/fetch/fetch_pmdata.py`, `python data/fetch/fetch_msl_rad.py 2024 2025 2026`, then the
+   OSDR EDA download (`python data/fetch/fetch_osdr_eda.py`; manual fallback in `data/fetch/OSDR_EDA_DOWNLOAD.md`).
 2. **Notebooks 00 → 09**, exactly as specified in `docs/NOTEBOOKS.md`. Each one explores the data, compares several models with the shared
    evaluation protocol, and ends with a **Decision** cell. Put reusable code in `ml/sol_ml/data/` and `ml/sol_ml/detectors/` with unit tests.
 3. **Refactor the engine** to the chosen models via `models/engine_config.json`. **Keep the API response shape** (`docs/API.md`) so the
@@ -65,7 +65,8 @@ Success is measured by **false alarms per person per month on real PMData** and 
 ```bash
 pip install -r ml/requirements.txt
 python data/fetch/fetch_pmdata.py
-python data/fetch/fetch_msl_rad.py 2024 2026        # add --limit 30 for a quick test
+python data/fetch/fetch_msl_rad.py 2024 2025 2026   # add --limit 30 for a quick test
+python data/fetch/fetch_osdr_eda.py
 python data/fetch/inspect_sources.py                 # print real variable names, units, sampling
 jupyter lab notebooks/
 jupyter nbconvert --to notebook --execute --inplace notebooks/NN_name.ipynb
@@ -81,16 +82,17 @@ docs/DATASETS.md              sources, licenses, units, gotchas
 docs/NOTEBOOKS.md             notebook-by-notebook spec + evaluation protocol
 docs/BUILD_PLAN.md            ready-to-paste prompts
 docs/PRD.md, API.md           frontend spec and API contract (keep the response shape)
-docs/MODELS.md                model cards (v0 now; update after notebook 09)
-docs/ARCHITECTURE.md, DATA_DICTIONARY.md, CLINICAL_PROTOCOLS.md   v0 design docs, to be updated
+docs/MODELS.md                model cards with the final numbers (notebook 09)
+docs/ARCHITECTURE.md, DATA_DICTIONARY.md, CLINICAL_PROTOCOLS.md   design docs for the v2 engine
+docs/PROJECT_GUIDE_AR.md      Arabic guide to the whole project
 data/fetch/                   download + inspection scripts
 data/raw/                     downloaded data (git-ignored)
 data/processed/               tidy parquet tables from the notebooks
 data/demo/                    demo crew + api_snapshots for frontend mock mode
-notebooks/                    00–09 (to build)
+notebooks/                    00–09 (sources in notebooks/_src/)
 ml/sol_ml/                    library code (loaders, detectors, engine, protocols)
 ml/api/main.py                FastAPI
 models/                       engine_config.json (after nb 09) + v0 joblib baseline
 reports/figures/              notebook figures for slides
-frontend/                     dashboard (later)
+frontend/                     React dashboard (see frontend/README.md)
 ```

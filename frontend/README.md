@@ -1,5 +1,3 @@
-# frontend/
-
 # Frontend
 
 The React + TypeScript + Vite dashboard is implemented in `src/`.
