@@ -1,6 +1,8 @@
 """Shared notebook setup: paths, seed, figure saving. Import with `from sol_ml.nbutil import *`."""
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 
 import matplotlib
@@ -15,7 +17,7 @@ PROCESSED = ROOT / "data" / "processed"
 FIGURES = ROOT / "reports" / "figures"
 MODELS = ROOT / "models"
 
-__all__ = ["SEED", "ROOT", "RAW", "PROCESSED", "FIGURES", "MODELS", "setup", "savefig"]
+__all__ = ["SEED", "ROOT", "RAW", "PROCESSED", "FIGURES", "MODELS", "setup", "savefig", "cached"]
 
 
 def setup() -> np.random.Generator:
@@ -33,3 +35,20 @@ def savefig(name: str, fig=None) -> Path:
     path = FIGURES / f"{name}.png"
     (fig or plt.gcf()).savefig(path, bbox_inches="tight")
     return path
+
+
+def cached(name: str, key, compute):
+    """Reuse a results table from data/processed/cache/ when neither `key` (any JSON-able object, e.g. the list of
+    specs) nor the sol_ml library code has changed; otherwise call compute() and store its DataFrame."""
+    import pandas as pd
+    code = b"".join(p.read_bytes() for p in sorted((ROOT / "ml" / "sol_ml").rglob("*.py")) if p.name != "nbutil.py")
+    digest = hashlib.md5(code + json.dumps(key, sort_keys=True, default=str).encode()).hexdigest()[:12]
+    path = PROCESSED / "cache" / f"{name}_{digest}.parquet"
+    if path.exists():
+        return pd.read_parquet(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    for old in path.parent.glob(f"{name}_*.parquet"):
+        old.unlink()
+    df = compute()
+    df.to_parquet(path, index=False)
+    return df
