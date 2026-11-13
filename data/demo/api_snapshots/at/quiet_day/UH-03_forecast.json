@@ -1,44 +1,44 @@
 {
  "inputs": {
-  "ared_minutes_7d": 300.0,
-  "aerobic_minutes_7d": 60.0,
-  "mission_day": 21,
+  "ared_minutes_7d": 240.0,
+  "aerobic_minutes_7d": 240.0,
+  "mission_day": 16,
   "horizon_days": 90
  },
  "hip_bmd": {
   "rate_pct_per_month": {
-   "q10": 0.829,
-   "median": 0.993,
-   "q90": 1.2
+   "q10": 0.972,
+   "median": 1.097,
+   "q90": 1.281
   },
-  "estimated_loss_to_date_pct": 0.7,
+  "estimated_loss_to_date_pct": 0.59,
   "projected_loss_pct": {
-   "q10": 3.07,
-   "median": 3.68,
-   "q90": 4.44
+   "q10": 3.44,
+   "median": 3.88,
+   "q90": 4.53
   },
-  "projected_loss_if_ared_target_met_pct": 3.01,
+  "projected_loss_if_ared_target_met_pct": 2.93,
   "alert": false
  },
  "thigh_muscle": {
   "rate_pct_per_month": {
-   "q10": 0.975,
-   "median": 1.185,
-   "q90": 1.354
+   "q10": 1.134,
+   "median": 1.304,
+   "q90": 1.48
   },
-  "estimated_loss_to_date_pct": 0.83,
+  "estimated_loss_to_date_pct": 0.7,
   "projected_loss_pct": {
-   "q10": 3.61,
-   "median": 4.39,
-   "q90": 5.01
+   "q10": 4.01,
+   "median": 4.61,
+   "q90": 5.23
   },
-  "projected_loss_if_ared_target_met_pct": 3.65
+  "projected_loss_if_ared_target_met_pct": 3.23
  },
  "fitness_trend": {
   "alert": false,
   "shift_bpm": 0.0,
   "weeks_ago": 0,
-  "sessions": 17,
+  "sessions": 13,
   "reason": "Not enough exercise sessions yet to judge a fitness trend."
  },
  "source": {

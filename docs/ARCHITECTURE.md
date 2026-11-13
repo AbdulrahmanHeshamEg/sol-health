@@ -62,7 +62,7 @@ Because the tables are causal, replaying any earlier moment costs about 1 ms and
 - **Rules + statistics:** rules give auditable behaviour for clear emergencies; the statistical models watch for slow or combined changes.
 - **Each model does one job** and can say why in a sentence. Nothing is a black box, and nothing was trained on invented labels.
 - **Real data sets the numbers:** thresholds were tuned against false alarms on real people, not against a simulator.
-- **Offline-first:** numpy, pandas and one small scikit-learn forest (0.3 MB). No cloud calls.
+- **Offline-first:** numpy, pandas and one small scikit-learn forest (0.5 MB). No cloud calls.
 
 ## Tech
 Python 3.13, numpy, pandas, scikit-learn 1.9, scipy, statsmodels, ruptures, FastAPI. Frontend: React + Vite + TypeScript + Tailwind + Recharts.

@@ -1,9 +1,9 @@
 {
  "astronaut_id": "UH-02",
- "timestamp": "2026-09-20 12:00:00",
- "mission_day": 21,
+ "timestamp": "2026-09-15 12:00:00",
+ "mission_day": 16,
  "status": "GREEN",
- "health_score": 93,
+ "health_score": 87,
  "condition": "nominal",
  "condition_label": "Nominal",
  "probabilities": {
@@ -22,33 +22,33 @@
   "low_blood_sugar": 0.0,
   "high_blood_sugar": 0.0
  },
- "anomaly_score": 0.439,
+ "anomaly_score": 0.852,
  "alerts": [],
  "drivers": [
   {
-   "signal": "fatigue",
-   "deviation": -1.0,
-   "unit": "points",
-   "z": 1.35
+   "signal": "sleep_minutes",
+   "deviation": -145.5,
+   "unit": "min",
+   "z": 1.8
   },
   {
    "signal": "mood",
-   "deviation": 0.0,
+   "deviation": -1.0,
    "unit": "points",
-   "z": 0.0
+   "z": 1.4
   },
   {
-   "signal": "stress",
+   "signal": "resting_hr",
    "deviation": 0.0,
-   "unit": "points",
+   "unit": "bpm",
    "z": 0.0
   }
  ],
  "vitals": {
   "heart_rate": {
-   "value": 77.5,
+   "value": 87.2,
    "baseline": 83.7,
-   "delta": -6.2,
+   "delta": 3.5,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -56,9 +56,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 58.13,
+   "value": 50.65,
    "baseline": 53.8,
-   "delta": 4.33,
+   "delta": -3.15,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -66,9 +66,9 @@
    }
   },
   "spo2": {
-   "value": 98.74,
+   "value": 96.56,
    "baseline": 97.48,
-   "delta": 1.26,
+   "delta": -0.92,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -76,9 +76,9 @@
    }
   },
   "resp_rate": {
-   "value": 13.21,
+   "value": 13.3,
    "baseline": 14.3,
-   "delta": -1.09,
+   "delta": -1.0,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -86,9 +86,9 @@
    }
   },
   "systolic_bp": {
-   "value": 120.26,
+   "value": 132.18,
    "baseline": 120.98,
-   "delta": -0.72,
+   "delta": 11.2,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -96,9 +96,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 71.47,
+   "value": 72.43,
    "baseline": 69.68,
-   "delta": 1.79,
+   "delta": 2.75,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -116,9 +116,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 251.31,
+   "value": 223.59,
    "baseline": 257.81,
-   "delta": -6.5,
+   "delta": -34.22,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -129,12 +129,12 @@
  "indicators": {
   "resting_hr": {
    "label": "Resting heart rate",
-   "value": 68.6,
-   "baseline": 69.5,
-   "delta": -0.9,
+   "value": 69.2,
+   "baseline": 69.2,
+   "delta": 0.0,
    "unit": "bpm",
-   "z": -0.51,
-   "date": "2026-09-20",
+   "z": 0.0,
+   "date": "2026-09-15",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -142,12 +142,12 @@
   },
   "sleep_hours": {
    "label": "Sleep last night",
-   "value": 8.32,
-   "baseline": 7.34,
-   "delta": 0.97,
+   "value": 5.33,
+   "baseline": 7.76,
+   "delta": -2.42,
    "unit": "h",
-   "z": -1.11,
-   "date": "2026-09-20",
+   "z": 1.8,
+   "date": "2026-09-15",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -155,12 +155,12 @@
   },
   "fatigue": {
    "label": "Fatigue score",
-   "value": 1.0,
+   "value": 2.0,
    "baseline": 2.0,
-   "delta": -1.0,
+   "delta": 0.0,
    "unit": "1-5, 5 = fresh",
-   "z": 1.35,
-   "date": "2026-09-20",
+   "z": 0.0,
+   "date": "2026-09-15",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -169,11 +169,11 @@
   "mood": {
    "label": "Mood score",
    "value": 3.0,
-   "baseline": 3.0,
-   "delta": 0.0,
+   "baseline": 4.0,
+   "delta": -1.0,
    "unit": "1-5, 5 = best",
-   "z": 0.0,
-   "date": "2026-09-20",
+   "z": 1.4,
+   "date": "2026-09-15",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -181,12 +181,12 @@
   },
   "stress": {
    "label": "Stress score",
-   "value": 2.0,
+   "value": 3.0,
    "baseline": 2.0,
-   "delta": 0.0,
+   "delta": 1.0,
    "unit": "1-5, 5 = relaxed",
-   "z": 0.0,
-   "date": "2026-09-20",
+   "z": -2.0,
+   "date": "2026-09-15",
    "source": {
     "kind": "simulated",
     "calibrated_on": "PMData"
@@ -194,12 +194,12 @@
   },
   "blood_glucose_mg_dl": {
    "label": "Fasting blood glucose",
-   "value": 85.0,
-   "baseline": 90.5,
-   "delta": -5.5,
+   "value": 86.0,
+   "baseline": 89.5,
+   "delta": -3.5,
    "unit": "mg/dL",
    "z": null,
-   "date": "2026-09-20",
+   "date": "2026-09-15",
    "source": {
     "kind": "simulated",
     "calibrated_on": "published normal ranges"
@@ -289,31 +289,36 @@
   }
  ],
  "context": {
-  "activity_level": 0.056,
+  "activity_level": 0.207,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 1.12,
-  "sleep_last_24h": 8.0,
-  "fluid_last_24h": 3004.6,
+  "cabin_co2_mmhg": 1.58,
+  "sleep_last_24h": 5.0,
+  "fluid_last_24h": 2769.6,
   "ared_minutes_7d": 360.0,
-  "aerobic_minutes_7d": 240.0,
-  "cabin_co2_7d_mean_mmhg": 1.67,
+  "aerobic_minutes_7d": 180.0,
+  "cabin_co2_7d_mean_mmhg": 1.69,
   "cabin_co2_high": false,
-  "radiation_ratio_to_7d": 1.02,
+  "radiation_ratio_to_7d": 1.0,
   "radiation_level": "GREEN"
  },
  "actions": [],
  "daily_plan": [
   {
    "who": "self",
-   "category": "routine",
-   "action": "All routine targets met. Keep the current sleep, hydration and exercise schedule."
+   "category": "sleep",
+   "action": "Aim for 8 h sleep tonight (last 24 h: 5 h)."
+  },
+  {
+   "who": "self",
+   "category": "exercise",
+   "action": "Add 60 min of aerobic exercise (treadmill/cycle) this week."
   }
  ],
  "fitness_trend": {
   "alert": false,
   "shift_bpm": 0.0,
   "weeks_ago": 0,
-  "sessions": 27,
+  "sessions": 20,
   "reason": "Not enough exercise sessions yet to judge a fitness trend."
  },
  "disclaimer": "Decision support only. The crew is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. The crew medical officer and flight surgeon make all medical decisions."

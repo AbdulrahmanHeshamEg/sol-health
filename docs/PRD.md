@@ -60,10 +60,10 @@ Quick-jump buttons (verified against the demo data):
 
 | Button | `at` | What judges see |
 |---|---|---|
-| A quiet day | `2026-09-20T12:00:00` | Whole crew GREEN |
+| A quiet day | `2026-09-15T12:00:00` | Whole crew GREEN |
 | Cabin CO2 | `2026-10-01T12:00:00` | Nadia YELLOW: "likely environmental", ventilation first; cabin CO2 7-day mean above 2.5 mmHg for everyone |
-| Slow drift | `2026-10-19T12:00:00` | Karim YELLOW: resting heart rate drifting above his own normal (CUSUM) |
-| Odd combination | `2026-11-03T12:00:00` | Sofia: mood, stress and sleep worse together; low-mood rule on day 5 |
+| Slow drift | `2026-10-19T12:00:00` | Karim YELLOW: resting heart rate drifting above his own normal (CUSUM). Sofia is also YELLOW here: a false alarm, kept visible on purpose |
+| Odd combination | `2026-11-04T12:00:00` | Sofia YELLOW: low mood for 5 days in a row (the Isolation Forest missed this case; the rule caught it) |
 | Solar storm | `2026-11-13T08:00:00` | Whole crew RED: "SPE in progress: whole crew to the storm shelter" |
 | Now | (no `at`) | Storm still under way, 19 hours in |
 

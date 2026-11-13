@@ -1,22 +1,6 @@
 [
  {
   "astronaut_id": "UH-02",
-  "date": "2026-10-05",
-  "mission_day": 36,
-  "resting_hr": 69.1,
-  "sleep_minutes": 330.0,
-  "fatigue": 3.0,
-  "mood": 4.0,
-  "stress": 3.0,
-  "headache": 0,
-  "blood_glucose_mg_dl": 86.0,
-  "sleep_hours": 5.5,
-  "flag_spike": false,
-  "flag_drift": false,
-  "flag_combo": false
- },
- {
-  "astronaut_id": "UH-02",
   "date": "2026-10-06",
   "mission_day": 37,
   "resting_hr": 67.3,
@@ -477,6 +461,22 @@
   "sleep_hours": 6.2,
   "flag_spike": false,
   "flag_drift": true,
+  "flag_combo": false
+ },
+ {
+  "astronaut_id": "UH-02",
+  "date": "2026-11-04",
+  "mission_day": 66,
+  "resting_hr": 71.9,
+  "sleep_minutes": 443.0,
+  "fatigue": 1.0,
+  "mood": 5.0,
+  "stress": 3.0,
+  "headache": 0,
+  "blood_glucose_mg_dl": 89.0,
+  "sleep_hours": 7.38,
+  "flag_spike": false,
+  "flag_drift": false,
   "flag_combo": false
  }
 ]
