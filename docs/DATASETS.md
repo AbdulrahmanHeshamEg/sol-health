@@ -34,11 +34,21 @@ Download everything with `data/fetch/` (see the README section "Get the data"). 
 | `injury.csv` | injury date, location, severity | per event | **Exclude these days** when counting false alarms (they are real changes) |
 | `srpe.csv`, `reporting.csv`, food images | training load, meals, weight, water | — | No (only if time allows) |
 
+**Confirmed from the files (13 Nov 2026):** 16 participants (`p01`–`p16`), **1 Nov 2019 to 30 Mar 2020** (about 150 days; several people start 6–17 Nov and p10, p11, p13, p16 stop earlier in wellness). Wellness has 72–147 entries per person.
+- ⚠️ `resting_heart_rate.json` is **missing for p12 and p13**, and short for p04 (35 entries), p02 (91), p05 (95) and p11 (98). `sleep_score.csv` also carries a nightly `resting_heart_rate` that can fill gaps.
+- ⚠️ p12 has **one** sleep-score night and p13 has 47; `injury.csv` is missing for p08. Expect about 13–14 usable people for the body models, not 16.
+- The mirror's `license.txt` says CC BY-NC 4.0.
+
 **Limits:** healthy athletes on Earth. There is no BP, body temperature, SpO2 or glucose, and no medical events, so **every red alert on PMData counts as a false alarm.**
 
 ## 2. MSL RAD: radiation on the Mars surface
 - **Get:** `python data/fetch/fetch_msl_rad.py 2024 2026` downloads daily level-2 CDF files from CDAWeb (`…/sp_phys/data/msl/rad/cdf/obs-l2/<year>/`). The file version differs per day and some days exist twice, so the script keeps the highest version. The 2026 folder held 316 files (to day 315) when checked on 13 Nov 2026. Backup source: the PDS PPI node.
-- **Read:** `cdflib.CDF(path).cdf_info().zVariables`. **The variable names aren't known yet**: run `data/fetch/inspect_sources.py` first and record them here.
+- **Read:** `cdflib.CDF(path)`. **Variable names confirmed from the files (13 Nov 2026):**
+  - `EPOCH` (CDF_TIME_TT2000): one timestamp per observation. Cadence is irregular: a median of about 17 minutes on a quiet day (85 observations on 1 Jan 2024) and about 9 minutes during the storm (142 on 20 May 2024).
+  - `DOSIMETRY_TOTAL` (shape n × 3, **µGy/day**), columns labelled by `DOSIMETRY_DOSE_LABEL`: `[0]` Total Dose B (silicon, includes the RTG), `[1]` **RTG Corrected Dose B**, `[2]` **Total Dose E** (tissue-equivalent plastic). Fill value −1e31.
+  - `FLAGGED_DATA` (string, `''` = good, e.g. `'Cmds'` = quality issue), `ALIVE_TIME` (seconds observed).
+  - `DOSIMETRY_TIMESLICE` (n × 16 × 3) holds the same doses in 1/16 slices of each observation, for finer time resolution if needed.
+  - Sanity check: 1 Jan 2024 medians are B = 191, B RTG-corrected = 132, E = 180 µGy/day. 20 May 2024 peaks at E = 8,378 and B = 7,354 µGy/day.
 
 | Feature | Unit | Detector |
 |---|---|---|
