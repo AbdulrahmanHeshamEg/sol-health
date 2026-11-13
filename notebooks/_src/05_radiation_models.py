@@ -303,6 +303,7 @@ config["radiation"] = {
                                      "mars_surface": round(float(rates.loc["Mars surface", "dose equivalent (mSv/day)"]), 3)}},
     "spe_detector": {"method": chosen.method, "signal": "dose_e hourly mean (uGy/day)", "baseline_window_hours": rad.WEEK_HOURS,
                      "deseasonalize": bool(chosen.deseasonalized), "threshold": float(chosen.thr), "hold_hours": int(chosen.hold_hours),
+                     "levels": {"yellow": float(chosen.thr), "red": 2.0},      # team decision, 13 Nov 2026: two-level alarm
                      "may2024_delay_hours": float(chosen.may2024_delay_h), "other_alarm_events_in_record": int(chosen.other_events),
                      "of_which_confirmed_by_detector_b": int(chosen.confirmed_by_detector_b), "false_alarms_in_record": int(chosen.false_alarms),
                      "record_months": round(float(months), 1),
@@ -362,7 +363,7 @@ print("\nteam's plan (A robust z) at its best setting:", plan[show[2:]].round(2)
 # **What needs a team decision (also raised in chat)**
 # - **Six smaller real events in 35 months (1.4–1.7× normal) also trigger "whole crew to the shelter".** They are real rises (the independent silicon detector confirms each), but small.
 #   A two-level alarm would fit better: YELLOW "radiation elevated" from 1.3×, RED "shelter" from 2× (at 2× there is 1 other event in 35 months and May 2024 is still caught in the first hour,
-#   but only half of the planted 2× storms are). The plan specifies a single shelter alarm, so that is what is written to `engine_config.json`.
+#   but only half of the planted 2× storms are). **Team decision (13 Nov 2026): two levels.** `engine_config.json` carries `levels: {yellow: 1.3, red: 2.0}`.
 # - **Q = 3.0 was measured on the Mars surface.** Applying it to ISS dosimetry probably overstates the ISS dose equivalent; the ISS line should be read as conservative.
 #
 # **Known limits:** one large storm in the record, so sensitivity comes from scaled copies of that one storm's shape. "False alarm" means "not confirmed by RAD's second detector",

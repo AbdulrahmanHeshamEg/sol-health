@@ -1,0 +1,13 @@
+{
+  "mission_dose_msv": 87.9,
+  "career_dose_msv": 147.9,
+  "career_limit_msv": 600.0,
+  "career_used_pct": 24.6,
+  "dose_rate_msv_per_day_7d": 0.998,
+  "dose_last_24h_msv": 1.02,
+  "projected_career_at_mission_end_msv": 252.7,
+  "projected_used_pct": 42.1,
+  "spe_in_progress": false,
+  "spe_event_limit_msv": 250.0,
+  "status": "GREEN"
+}

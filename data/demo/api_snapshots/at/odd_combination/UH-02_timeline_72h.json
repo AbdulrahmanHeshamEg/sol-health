@@ -1,0 +1,506 @@
+[
+ {
+  "timestamp": "2026-10-31 13:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 14:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 15:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 16:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 17:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 18:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 19:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 20:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 21:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 22:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-10-31 23:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-11-01 00:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-11-01 01:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-11-01 02:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-11-01 03:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-11-01 04:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-11-01 05:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-11-01 06:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-11-01 07:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.8,
+  "anomaly_score": 0.959
+ },
+ {
+  "timestamp": "2026-11-01 08:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 09:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 10:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 11:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 12:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 13:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 14:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 15:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 16:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 17:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 18:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 19:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 20:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 21:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 22:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-01 23:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-02 00:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-02 01:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-02 02:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-02 03:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-02 04:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-02 05:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-02 06:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-02 07:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.747
+ },
+ {
+  "timestamp": "2026-11-02 08:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 09:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 10:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 11:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 12:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 13:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 14:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 15:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 16:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 17:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 18:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 19:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 20:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 21:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 22:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-02 23:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-03 00:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-03 01:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-03 02:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-03 03:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-03 04:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-03 05:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-03 06:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-03 07:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.639
+ },
+ {
+  "timestamp": "2026-11-03 08:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.395
+ },
+ {
+  "timestamp": "2026-11-03 09:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.395
+ },
+ {
+  "timestamp": "2026-11-03 10:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.395
+ },
+ {
+  "timestamp": "2026-11-03 11:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.395
+ },
+ {
+  "timestamp": "2026-11-03 12:00:00",
+  "status": "YELLOW",
+  "condition": "physiological_drift",
+  "p_abnormal": 0.667,
+  "anomaly_score": 0.395
+ }
+]

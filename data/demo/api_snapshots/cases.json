@@ -1,0 +1,42 @@
+[
+ {
+  "id": "cabin_co2",
+  "title": "Cabin CO2 with headache reports",
+  "astronaut_id": "UH-01",
+  "affects": "cabin (whole crew)",
+  "start": "2026-09-23 00:00:00",
+  "end": "2026-10-03 00:00:00",
+  "planted": "the highest real 10-day CO2 stretch of ISS mission RR-1 spliced into the cabin series; daily headache reports and fatigue <= 2 from day 27",
+  "expected": "environmental gate: 7-day CO2 mean above 2.5 mmHg with symptoms -> 'likely environmental', ventilation first"
+ },
+ {
+  "id": "slow_drift",
+  "title": "Slow drift (illness onset)",
+  "astronaut_id": "UH-02",
+  "affects": "one crewmember",
+  "start": "2026-10-13 00:00:00",
+  "end": "2026-11-13 23:00:00",
+  "planted": "resting HR +6 bpm, sleep -60 min and fatigue one point worse, ramping over 10 days and then held",
+  "expected": "CUSUM on the personal z-score of resting HR / sleep / fatigue"
+ },
+ {
+  "id": "solar_storm",
+  "title": "Solar storm (SPE)",
+  "astronaut_id": "ALL",
+  "affects": "whole crew",
+  "start": "2026-11-13 05:00:00",
+  "end": "2026-11-13 23:00:00",
+  "planted": "replay of the real 20 May 2024 storm measured by MSL RAD (nothing was scaled)",
+  "expected": "SPE alarm in the first hour: radiation elevated (>= 1.3x) then whole crew to the storm shelter (>= 2x)"
+ },
+ {
+  "id": "odd_combination",
+  "title": "Odd combination (behavioural health)",
+  "astronaut_id": "UH-03",
+  "affects": "one crewmember",
+  "start": "2026-10-31 00:00:00",
+  "end": "2026-11-07 00:00:00",
+  "planted": "mood and stress one point worse and sleep 55 min shorter for 7 days; each within the normal range alone",
+  "expected": "multivariate model (Isolation Forest on the daily z-vector)"
+ }
+]

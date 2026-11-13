@@ -1,0 +1,37 @@
+{
+  "inputs": {
+    "ared_minutes_7d": 120.0,
+    "aerobic_minutes_7d": 240.0,
+    "mission_day": 75,
+    "horizon_days": 90
+  },
+  "hip_bmd": {
+    "rate_pct_per_month": {
+      "q10": 1.23,
+      "median": 1.414,
+      "q90": 1.586
+    },
+    "estimated_loss_to_date_pct": 3.53,
+    "projected_loss_pct": {
+      "q10": 6.77,
+      "median": 7.78,
+      "q90": 8.72
+    },
+    "projected_loss_if_ared_target_met_pct": 4.56,
+    "alert": true
+  },
+  "thigh_muscle": {
+    "rate_pct_per_month": {
+      "q10": 1.603,
+      "median": 1.801,
+      "q90": 1.982
+    },
+    "estimated_loss_to_date_pct": 4.5,
+    "projected_loss_pct": {
+      "q10": 8.82,
+      "median": 9.91,
+      "q90": 10.9
+    },
+    "projected_loss_if_ared_target_met_pct": 5.02
+  }
+}

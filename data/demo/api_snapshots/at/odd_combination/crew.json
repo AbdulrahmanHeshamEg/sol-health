@@ -1,0 +1,94 @@
+[
+ {
+  "astronaut_id": "UH-01",
+  "name": "Nadia Farouk",
+  "role": "Commander",
+  "status": "YELLOW",
+  "health_score": 67,
+  "condition": "acute_deviation",
+  "condition_label": "Unusual reading for you",
+  "top_alert": "Unusual sleep for you",
+  "top_reason": "Sleep is 5.4 robust SD below your 14-day normal, for 1 day.",
+  "vitals": {
+   "heart_rate": 79.8,
+   "hrv_rmssd": 40.82,
+   "spo2": 98.48,
+   "resp_rate": 15.31,
+   "systolic_bp": 118.18,
+   "diastolic_bp": 73.76,
+   "core_temp": 37.14,
+   "pvt_reaction_ms": 271.49
+  },
+  "cabin_co2_mmhg": 1.33,
+  "timestamp": "2026-11-03 12:00:00"
+ },
+ {
+  "astronaut_id": "UH-02",
+  "name": "Karim Adel",
+  "role": "Flight Engineer",
+  "status": "YELLOW",
+  "health_score": 76,
+  "condition": "physiological_drift",
+  "condition_label": "Slow drift from your normal",
+  "top_alert": "Slow drift in sleep",
+  "top_reason": "Sleep has been below your 28-day normal for 12 days (average 1.7 robust SD); the alert has been active for 18 days.",
+  "vitals": {
+   "heart_rate": 84.5,
+   "hrv_rmssd": 42.09,
+   "spo2": 96.72,
+   "resp_rate": 15.6,
+   "systolic_bp": 126.06,
+   "diastolic_bp": 76.58,
+   "core_temp": 37.23,
+   "pvt_reaction_ms": 238.56
+  },
+  "cabin_co2_mmhg": 1.25,
+  "timestamp": "2026-11-03 12:00:00"
+ },
+ {
+  "astronaut_id": "UH-03",
+  "name": "Sofia Mendes",
+  "role": "Mission Specialist",
+  "status": "YELLOW",
+  "health_score": 78,
+  "condition": "low_mood",
+  "condition_label": "Low mood for several days",
+  "top_alert": "Low mood for several days",
+  "top_reason": "Mood score has been 2 or lower (5 = best) for 4 days in a row.",
+  "vitals": {
+   "heart_rate": 92.3,
+   "hrv_rmssd": 48.74,
+   "spo2": 98.3,
+   "resp_rate": 15.62,
+   "systolic_bp": 129.82,
+   "diastolic_bp": 74.91,
+   "core_temp": 37.01,
+   "pvt_reaction_ms": 219.8
+  },
+  "cabin_co2_mmhg": 1.23,
+  "timestamp": "2026-11-03 12:00:00"
+ },
+ {
+  "astronaut_id": "UH-04",
+  "name": "Yuki Tanaka",
+  "role": "Crew Medical Officer",
+  "status": "GREEN",
+  "health_score": 95,
+  "condition": "nominal",
+  "condition_label": "Nominal",
+  "top_alert": null,
+  "top_reason": null,
+  "vitals": {
+   "heart_rate": 64.5,
+   "hrv_rmssd": 65.49,
+   "spo2": 96.47,
+   "resp_rate": 17.19,
+   "systolic_bp": 141.82,
+   "diastolic_bp": 83.17,
+   "core_temp": 37.02,
+   "pvt_reaction_ms": 235.01
+  },
+  "cabin_co2_mmhg": 1.25,
+  "timestamp": "2026-11-03 12:00:00"
+ }
+]

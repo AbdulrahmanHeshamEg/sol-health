@@ -107,6 +107,10 @@
         "2x": 1.0,
         "3x": 1.0,
         "5x": 1.0
+      },
+      "levels": {
+        "yellow": 1.3,
+        "red": 2.0
       }
     },
     "action": "SPE in progress: whole crew to the storm shelter"
@@ -140,6 +144,20 @@
       },
       "fitted_on": "real hourly ISS CO2 (OSDR EDA)",
       "output_is": "simulated"
+    }
+  },
+  "engine": {
+    "drift": {
+      "kind": "bounded_cusum",
+      "window": 28,
+      "k": 1.0,
+      "h": 5.0,
+      "cap": 8.0,
+      "z_clip": 4.0
+    },
+    "fitness": {
+      "penalty": 2.0,
+      "thr": 8.0
     }
   }
 }

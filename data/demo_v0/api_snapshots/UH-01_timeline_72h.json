@@ -1,0 +1,434 @@
+[
+  {
+    "timestamp": "2026-11-11 00:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.009,
+    "anomaly_score": 0.085
+  },
+  {
+    "timestamp": "2026-11-11 01:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.004,
+    "anomaly_score": 0.05
+  },
+  {
+    "timestamp": "2026-11-11 02:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.006,
+    "anomaly_score": 0.041
+  },
+  {
+    "timestamp": "2026-11-11 03:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.007,
+    "anomaly_score": 0.108
+  },
+  {
+    "timestamp": "2026-11-11 04:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.006,
+    "anomaly_score": 0.237
+  },
+  {
+    "timestamp": "2026-11-11 05:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.003,
+    "anomaly_score": 0.206
+  },
+  {
+    "timestamp": "2026-11-11 06:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.016,
+    "anomaly_score": 0.289
+  },
+  {
+    "timestamp": "2026-11-11 07:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.016,
+    "anomaly_score": 0.015
+  },
+  {
+    "timestamp": "2026-11-11 08:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.016,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 09:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.002,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 10:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.002,
+    "anomaly_score": 0.188
+  },
+  {
+    "timestamp": "2026-11-11 11:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.002,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 12:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.004,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 13:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.01,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 14:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.031,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 15:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.051,
+    "anomaly_score": 1.0
+  },
+  {
+    "timestamp": "2026-11-11 16:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.114,
+    "anomaly_score": 0.007
+  },
+  {
+    "timestamp": "2026-11-11 17:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.092,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 18:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.073,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 19:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.004,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 20:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.004,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 21:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.004,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-11 22:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.005,
+    "anomaly_score": 0.233
+  },
+  {
+    "timestamp": "2026-11-11 23:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.005,
+    "anomaly_score": 0.097
+  },
+  {
+    "timestamp": "2026-11-12 00:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.005,
+    "anomaly_score": 0.298
+  },
+  {
+    "timestamp": "2026-11-12 01:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.005,
+    "anomaly_score": 0.473
+  },
+  {
+    "timestamp": "2026-11-12 02:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.006,
+    "anomaly_score": 0.466
+  },
+  {
+    "timestamp": "2026-11-12 03:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.008,
+    "anomaly_score": 0.799
+  },
+  {
+    "timestamp": "2026-11-12 04:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.023,
+    "anomaly_score": 0.743
+  },
+  {
+    "timestamp": "2026-11-12 05:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.023,
+    "anomaly_score": 0.627
+  },
+  {
+    "timestamp": "2026-11-12 06:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.036,
+    "anomaly_score": 0.55
+  },
+  {
+    "timestamp": "2026-11-12 07:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.023,
+    "anomaly_score": 0.189
+  },
+  {
+    "timestamp": "2026-11-12 08:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.027,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 09:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.017,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 10:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.032,
+    "anomaly_score": 0.458
+  },
+  {
+    "timestamp": "2026-11-12 11:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.026,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 12:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.021,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 13:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.009,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 14:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.014,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 15:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.013,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 16:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.018,
+    "anomaly_score": 0.661
+  },
+  {
+    "timestamp": "2026-11-12 17:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.014,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 18:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.017,
+    "anomaly_score": 0.005
+  },
+  {
+    "timestamp": "2026-11-12 19:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.006,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 20:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.005,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 21:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.003,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-12 22:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.006,
+    "anomaly_score": 0.033
+  },
+  {
+    "timestamp": "2026-11-12 23:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.014,
+    "anomaly_score": 0.08
+  },
+  {
+    "timestamp": "2026-11-13 00:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.016,
+    "anomaly_score": 0.001
+  },
+  {
+    "timestamp": "2026-11-13 01:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.013,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 02:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.017,
+    "anomaly_score": 0.082
+  },
+  {
+    "timestamp": "2026-11-13 03:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.017,
+    "anomaly_score": 0.109
+  },
+  {
+    "timestamp": "2026-11-13 04:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.016,
+    "anomaly_score": 0.228
+  },
+  {
+    "timestamp": "2026-11-13 05:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.018,
+    "anomaly_score": 0.152
+  },
+  {
+    "timestamp": "2026-11-13 06:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.024,
+    "anomaly_score": 0.068
+  },
+  {
+    "timestamp": "2026-11-13 07:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.023,
+    "anomaly_score": 0.068
+  },
+  {
+    "timestamp": "2026-11-13 08:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.013,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 09:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.104,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 10:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.105,
+    "anomaly_score": 0.53
+  },
+  {
+    "timestamp": "2026-11-13 11:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.115,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 12:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.022,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 13:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.022,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 14:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.014,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 15:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.008,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 16:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.084,
+    "anomaly_score": 0.82
+  },
+  {
+    "timestamp": "2026-11-13 17:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.079,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 18:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.233,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 19:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.156,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 20:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.156,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 21:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.003,
+    "anomaly_score": 0.0
+  },
+  {
+    "timestamp": "2026-11-13 22:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.006,
+    "anomaly_score": 0.16
+  },
+  {
+    "timestamp": "2026-11-13 23:00:00",
+    "condition": "nominal",
+    "p_abnormal": 0.01,
+    "anomaly_score": 0.492
+  }
+]

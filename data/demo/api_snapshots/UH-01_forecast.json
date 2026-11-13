@@ -1,37 +1,48 @@
 {
-  "inputs": {
-    "ared_minutes_7d": 420.0,
-    "aerobic_minutes_7d": 360.0,
-    "mission_day": 75,
-    "horizon_days": 90
+ "inputs": {
+  "ared_minutes_7d": 420.0,
+  "aerobic_minutes_7d": 300.0,
+  "mission_day": 75,
+  "horizon_days": 90
+ },
+ "hip_bmd": {
+  "rate_pct_per_month": {
+   "q10": 0.417,
+   "median": 0.519,
+   "q90": 0.665
   },
-  "hip_bmd": {
-    "rate_pct_per_month": {
-      "q10": 0.417,
-      "median": 0.541,
-      "q90": 0.665
-    },
-    "estimated_loss_to_date_pct": 1.35,
-    "projected_loss_pct": {
-      "q10": 2.29,
-      "median": 2.97,
-      "q90": 3.66
-    },
-    "projected_loss_if_ared_target_met_pct": 2.97,
-    "alert": false
+  "estimated_loss_to_date_pct": 1.3,
+  "projected_loss_pct": {
+   "q10": 2.29,
+   "median": 2.86,
+   "q90": 3.66
   },
-  "thigh_muscle": {
-    "rate_pct_per_month": {
-      "q10": 0.311,
-      "median": 0.651,
-      "q90": 0.915
-    },
-    "estimated_loss_to_date_pct": 1.63,
-    "projected_loss_pct": {
-      "q10": 1.71,
-      "median": 3.58,
-      "q90": 5.03
-    },
-    "projected_loss_if_ared_target_met_pct": 3.58
-  }
+  "projected_loss_if_ared_target_met_pct": 2.86,
+  "alert": false
+ },
+ "thigh_muscle": {
+  "rate_pct_per_month": {
+   "q10": 0.359,
+   "median": 0.589,
+   "q90": 0.786
+  },
+  "estimated_loss_to_date_pct": 1.47,
+  "projected_loss_pct": {
+   "q10": 1.97,
+   "median": 3.24,
+   "q90": 4.32
+  },
+  "projected_loss_if_ared_target_met_pct": 3.24
+ },
+ "fitness_trend": {
+  "alert": false,
+  "shift_bpm": 0.0,
+  "weeks_ago": 0,
+  "sessions": 122,
+  "reason": "Exercise heart rate is stable for the same exercise types."
+ },
+ "source": {
+  "kind": "simulated",
+  "calibrated_on": "published bone and muscle loss rates (model trained on a simulated cohort)"
+ }
 }

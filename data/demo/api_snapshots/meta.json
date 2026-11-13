@@ -1,52 +1,170 @@
 {
-  "conditions": [
-    {
-      "id": "nominal",
-      "label": "Nominal"
-    },
-    {
-      "id": "sleep_deprivation",
-      "label": "Fatigue / sleep debt"
-    },
-    {
-      "id": "dehydration",
-      "label": "Dehydration"
-    },
-    {
-      "id": "co2_exposure",
-      "label": "Elevated CO2 exposure"
-    },
-    {
-      "id": "cardiovascular_strain",
-      "label": "Cardiovascular strain"
-    },
-    {
-      "id": "fever_infection",
-      "label": "Fever / possible infection"
-    },
-    {
-      "id": "hypoxia",
-      "label": "Low blood oxygen (hypoxia)"
-    }
-  ],
-  "signals": [
-    "heart_rate",
-    "hrv_rmssd",
-    "spo2",
-    "resp_rate",
-    "systolic_bp",
-    "diastolic_bp",
-    "core_temp",
-    "pvt_reaction_ms",
-    "activity_level",
-    "is_asleep",
-    "fluid_intake_ml",
-    "cabin_co2_mmhg",
-    "radiation_msv"
-  ],
-  "levels": [
-    "GREEN",
-    "YELLOW",
-    "RED"
-  ]
+ "conditions": [
+  {
+   "id": "nominal",
+   "label": "Nominal"
+  },
+  {
+   "id": "acute_deviation",
+   "label": "Unusual reading for you"
+  },
+  {
+   "id": "physiological_drift",
+   "label": "Slow drift from your normal"
+  },
+  {
+   "id": "unusual_combination",
+   "label": "Unusual combination of signals"
+  },
+  {
+   "id": "low_mood",
+   "label": "Low mood for several days"
+  },
+  {
+   "id": "deconditioning",
+   "label": "Fitness may be slipping"
+  },
+  {
+   "id": "co2_exposure",
+   "label": "Elevated CO2 / likely environmental"
+  },
+  {
+   "id": "radiation_event",
+   "label": "Solar particle event"
+  },
+  {
+   "id": "hypoxia",
+   "label": "Low blood oxygen (hypoxia)"
+  },
+  {
+   "id": "fever_infection",
+   "label": "Fever / possible infection"
+  },
+  {
+   "id": "cardiovascular_strain",
+   "label": "Cardiovascular strain"
+  },
+  {
+   "id": "dehydration",
+   "label": "Dehydration"
+  },
+  {
+   "id": "low_blood_sugar",
+   "label": "Low blood sugar"
+  },
+  {
+   "id": "high_blood_sugar",
+   "label": "High blood sugar"
+  }
+ ],
+ "signals": [
+  "heart_rate",
+  "hrv_rmssd",
+  "spo2",
+  "resp_rate",
+  "systolic_bp",
+  "diastolic_bp",
+  "core_temp",
+  "pvt_reaction_ms",
+  "activity_level",
+  "is_asleep",
+  "fluid_intake_ml",
+  "cabin_co2_mmhg",
+  "radiation_msv"
+ ],
+ "levels": [
+  "GREEN",
+  "YELLOW",
+  "RED"
+ ],
+ "hazards": {
+  "R": "Space radiation",
+  "I": "Isolation and confinement",
+  "D": "Distance from Earth",
+  "G": "Altered gravity fields",
+  "E": "Hostile / closed environments"
+ },
+ "sources": {
+  "resting_hr": {
+   "kind": "simulated",
+   "calibrated_on": "PMData"
+  },
+  "sleep_minutes": {
+   "kind": "simulated",
+   "calibrated_on": "PMData"
+  },
+  "fatigue": {
+   "kind": "simulated",
+   "calibrated_on": "PMData"
+  },
+  "mood": {
+   "kind": "simulated",
+   "calibrated_on": "PMData"
+  },
+  "stress": {
+   "kind": "simulated",
+   "calibrated_on": "PMData"
+  },
+  "heart_rate": {
+   "kind": "simulated",
+   "calibrated_on": "PMData"
+  },
+  "cabin_co2_mmhg": {
+   "kind": "simulated",
+   "calibrated_on": "NASA OSDR EDA (ISS cabin)"
+  },
+  "radiation_ugy_per_day": {
+   "kind": "real",
+   "dataset": "NASA/JPL MSL RAD (Curiosity), replayed"
+  },
+  "radiation_msv": {
+   "kind": "real",
+   "dataset": "NASA/JPL MSL RAD x quality factor 3.0, replayed"
+  },
+  "systolic_bp": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "diastolic_bp": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "spo2": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "core_temp": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "resp_rate": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "hrv_rmssd": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "pvt_reaction_ms": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "fluid_intake_ml": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "blood_glucose_mg_dl": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "headache": {
+   "kind": "simulated",
+   "calibrated_on": "scripted for the planted cabin case"
+  }
+ },
+ "citations": [
+  "PMData: Thambawita et al., PMData: A Sports Logging Dataset, MMSys 2020, doi:10.1145/3339825.3394926",
+  "Data and visualizations are courtesy of the Environmental Data Application (EDA) (https://visualization.osdr.nasa.gov/eda/).",
+  "MSL RAD: NASA/JPL, Hassler et al. (Curiosity Radiation Assessment Detector), level-2 data from NASA CDAWeb."
+ ]
 }

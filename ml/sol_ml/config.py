@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MODELS_DIR = ROOT / "models"
 DATA_DIR = ROOT / "data"
 DEMO_DIR = DATA_DIR / "demo"
+DEMO_V0_DIR = DATA_DIR / "demo_v0"          # the purely simulated v0 crew, kept as the baseline
 
 # ---------------------------------------------------------------------------
 # Hourly telemetry signals (one row = one astronaut-hour)
@@ -53,6 +54,27 @@ CONDITION_LABELS = {
     "fever_infection": "Fever / possible infection",
     "hypoxia": "Low blood oxygen (hypoxia)",
 }
+
+# ---------------------------------------------------------------------------
+# Conditions of the v2 engine (sol_ml.engine). The list above belongs to the v0 classifier baseline.
+# ---------------------------------------------------------------------------
+ENGINE_CONDITION_LABELS = {
+    "nominal": "Nominal",
+    "acute_deviation": "Unusual reading for you",
+    "physiological_drift": "Slow drift from your normal",
+    "unusual_combination": "Unusual combination of signals",
+    "low_mood": "Low mood for several days",
+    "deconditioning": "Fitness may be slipping",
+    "co2_exposure": "Elevated CO2 / likely environmental",
+    "radiation_event": "Solar particle event",
+    "hypoxia": "Low blood oxygen (hypoxia)",
+    "fever_infection": "Fever / possible infection",
+    "cardiovascular_strain": "Cardiovascular strain",
+    "dehydration": "Dehydration",
+    "low_blood_sugar": "Low blood sugar",
+    "high_blood_sugar": "High blood sugar",
+}
+ENGINE_CONDITIONS = list(ENGINE_CONDITION_LABELS)
 
 # ---------------------------------------------------------------------------
 # Hard clinical limits. These override the ML model (rules win over models).

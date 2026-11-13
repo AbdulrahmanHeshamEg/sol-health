@@ -1,0 +1,320 @@
+{
+ "astronaut_id": "UH-01",
+ "timestamp": "2026-10-19 12:00:00",
+ "mission_day": 50,
+ "status": "GREEN",
+ "health_score": 89,
+ "condition": "nominal",
+ "condition_label": "Nominal",
+ "probabilities": {
+  "nominal": 1.0,
+  "acute_deviation": 0.0,
+  "physiological_drift": 0.0,
+  "unusual_combination": 0.0,
+  "low_mood": 0.0,
+  "deconditioning": 0.0,
+  "co2_exposure": 0.0,
+  "radiation_event": 0.0,
+  "hypoxia": 0.0,
+  "fever_infection": 0.0,
+  "cardiovascular_strain": 0.0,
+  "dehydration": 0.0,
+  "low_blood_sugar": 0.0,
+  "high_blood_sugar": 0.0
+ },
+ "anomaly_score": 0.707,
+ "alerts": [],
+ "drivers": [
+  {
+   "signal": "stress",
+   "deviation": -1.0,
+   "unit": "points",
+   "z": 0.67
+  },
+  {
+   "signal": "resting_hr",
+   "deviation": 0.05,
+   "unit": "bpm",
+   "z": 0.04
+  },
+  {
+   "signal": "sleep_minutes",
+   "deviation": -2.0,
+   "unit": "min",
+   "z": 0.02
+  }
+ ],
+ "vitals": {
+  "heart_rate": {
+   "value": 95.8,
+   "baseline": 87.9,
+   "delta": 7.9,
+   "unit": "bpm",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "hrv_rmssd": {
+   "value": 47.73,
+   "baseline": 40.47,
+   "delta": 7.26,
+   "unit": "ms",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "spo2": {
+   "value": 97.51,
+   "baseline": 98.14,
+   "delta": -0.63,
+   "unit": "%",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "resp_rate": {
+   "value": 13.6,
+   "baseline": 16.04,
+   "delta": -2.44,
+   "unit": "br/min",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "systolic_bp": {
+   "value": 120.61,
+   "baseline": 120.14,
+   "delta": 0.47,
+   "unit": "mmHg",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "diastolic_bp": {
+   "value": 70.11,
+   "baseline": 75.35,
+   "delta": -5.24,
+   "unit": "mmHg",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "core_temp": {
+   "value": 37.04,
+   "baseline": 37.09,
+   "delta": -0.05,
+   "unit": "C",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "pvt_reaction_ms": {
+   "value": 266.78,
+   "baseline": 260.8,
+   "delta": 5.98,
+   "unit": "ms",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  }
+ },
+ "indicators": {
+  "resting_hr": {
+   "label": "Resting heart rate",
+   "value": 73.4,
+   "baseline": 73.35,
+   "delta": 0.05,
+   "unit": "bpm",
+   "z": 0.04,
+   "date": "2026-10-19",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "sleep_hours": {
+   "label": "Sleep last night",
+   "value": 6.62,
+   "baseline": 6.65,
+   "delta": -0.03,
+   "unit": "h",
+   "z": 0.02,
+   "date": "2026-10-19",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "fatigue": {
+   "label": "Fatigue score",
+   "value": 2.0,
+   "baseline": 2.0,
+   "delta": 0.0,
+   "unit": "1-5, 5 = fresh",
+   "z": 0.0,
+   "date": "2026-10-19",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "mood": {
+   "label": "Mood score",
+   "value": 4.0,
+   "baseline": 3.0,
+   "delta": 1.0,
+   "unit": "1-5, 5 = best",
+   "z": -2.0,
+   "date": "2026-10-19",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "stress": {
+   "label": "Stress score",
+   "value": 2.0,
+   "baseline": 3.0,
+   "delta": -1.0,
+   "unit": "1-5, 5 = relaxed",
+   "z": 0.67,
+   "date": "2026-10-19",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "blood_glucose_mg_dl": {
+   "label": "Fasting blood glucose",
+   "value": 90.0,
+   "baseline": 83.5,
+   "delta": 6.5,
+   "unit": "mg/dL",
+   "z": null,
+   "date": "2026-10-19",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  }
+ },
+ "body_systems": [
+  {
+   "id": "heart",
+   "label": "Heart and circulation",
+   "function": "Pumps blood and oxygen to every organ. In weightlessness fluid shifts toward the head and the heart works differently.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "heart_rate",
+    "resting_hr",
+    "systolic_bp",
+    "diastolic_bp",
+    "hrv_rmssd"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "lungs",
+   "label": "Lungs and breathing",
+   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around a crewmember.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "spo2",
+    "resp_rate",
+    "cabin_co2_mmhg"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "brain",
+   "label": "Brain, sleep and mood",
+   "function": "Attention, mood and sleep. Isolation, confinement and a shifted day-night cycle wear them down.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "mood",
+    "stress",
+    "fatigue",
+    "sleep_hours",
+    "pvt_reaction_ms"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "bones_muscles",
+   "label": "Bones and muscles",
+   "function": "Carry and move the body. Without gravity they lose mass unless loaded by exercise.",
+   "status": "GREEN",
+   "summary": "Exercise heart rate is stable for the same exercise types.",
+   "indicators": [
+    "ared_minutes_7d",
+    "aerobic_minutes_7d",
+    "exercise_heart_rate"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "blood",
+   "label": "Blood and metabolism",
+   "function": "Carries sugar, fluid and salts. Fluid loss and irregular meals show up here first.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "blood_glucose_mg_dl",
+    "fluid_last_24h"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "immune",
+   "label": "Immune system and radiation",
+   "function": "Defends against infection. Radiation and stress weaken it, and a closed cabin spreads germs.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "core_temp",
+    "radiation_dose_rate"
+   ],
+   "alerts": []
+  }
+ ],
+ "context": {
+  "activity_level": 0.28,
+  "is_asleep": 0,
+  "cabin_co2_mmhg": 1.63,
+  "sleep_last_24h": 7.0,
+  "fluid_last_24h": 3419.2,
+  "ared_minutes_7d": 420.0,
+  "aerobic_minutes_7d": 300.0,
+  "cabin_co2_7d_mean_mmhg": 1.69,
+  "cabin_co2_high": false,
+  "radiation_ratio_to_7d": 0.97,
+  "radiation_level": "GREEN"
+ },
+ "actions": [],
+ "daily_plan": [
+  {
+   "who": "self",
+   "category": "routine",
+   "action": "All routine targets met. Keep the current sleep, hydration and exercise schedule."
+  }
+ ],
+ "fitness_trend": {
+  "alert": false,
+  "shift_bpm": 0.0,
+  "weeks_ago": 0,
+  "sessions": 81,
+  "reason": "Exercise heart rate is stable for the same exercise types."
+ },
+ "disclaimer": "Decision support only. The crew is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. The crew medical officer and flight surgeon make all medical decisions."
+}

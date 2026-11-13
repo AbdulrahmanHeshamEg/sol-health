@@ -1,24 +1,24 @@
 {
-  "astronaut_id": "UH-04",
-  "name": "Yuki Tanaka",
-  "role": "Crew Medical Officer",
-  "agency": "Fictional",
-  "age": 51,
-  "sex": "M",
-  "mass_kg": 74.0,
-  "prior_career_dose_msv": 240.0,
-  "protein_g_per_kg": 1.4,
-  "vitamin_d_ng_ml": 38.0,
-  "ared_minutes_week": 340,
-  "aerobic_minutes_week": 240,
-  "baseline": {
-    "heart_rate": 74.26,
-    "hrv_rmssd": 52.49,
-    "spo2": 97.46,
-    "resp_rate": 16.5,
-    "systolic_bp": 120.47,
-    "diastolic_bp": 80.64,
-    "core_temp": 36.96,
-    "pvt_reaction_ms": 234.58
-  }
+ "astronaut_id": "UH-04",
+ "name": "Yuki Tanaka",
+ "role": "Crew Medical Officer",
+ "agency": "Fictional",
+ "age": 51,
+ "sex": "M",
+ "mass_kg": 74.0,
+ "prior_career_dose_msv": 240.0,
+ "protein_g_per_kg": 1.4,
+ "vitamin_d_ng_ml": 38.0,
+ "ared_minutes_week": 340,
+ "aerobic_minutes_week": 240,
+ "baseline": {
+  "heart_rate": 73.0,
+  "hrv_rmssd": 53.62,
+  "spo2": 96.99,
+  "resp_rate": 15.36,
+  "systolic_bp": 139.94,
+  "diastolic_bp": 78.93,
+  "core_temp": 36.97,
+  "pvt_reaction_ms": 269.94
+ }
 }

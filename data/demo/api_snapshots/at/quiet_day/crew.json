@@ -1,0 +1,94 @@
+[
+ {
+  "astronaut_id": "UH-03",
+  "name": "Sofia Mendes",
+  "role": "Mission Specialist",
+  "status": "YELLOW",
+  "health_score": 80,
+  "condition": "physiological_drift",
+  "condition_label": "Slow drift from your normal",
+  "top_alert": "Slow drift in resting heart rate",
+  "top_reason": "Resting heart rate has been above your 28-day normal for 6 days (average 3.4 robust SD); the alert has been active for 4 days.",
+  "vitals": {
+   "heart_rate": 86.0,
+   "hrv_rmssd": 52.71,
+   "spo2": 97.4,
+   "resp_rate": 18.61,
+   "systolic_bp": 112.55,
+   "diastolic_bp": 78.95,
+   "core_temp": 36.95,
+   "pvt_reaction_ms": 256.44
+  },
+  "cabin_co2_mmhg": 1.15,
+  "timestamp": "2026-09-20 12:00:00"
+ },
+ {
+  "astronaut_id": "UH-01",
+  "name": "Nadia Farouk",
+  "role": "Commander",
+  "status": "GREEN",
+  "health_score": 88,
+  "condition": "nominal",
+  "condition_label": "Nominal",
+  "top_alert": null,
+  "top_reason": null,
+  "vitals": {
+   "heart_rate": 97.2,
+   "hrv_rmssd": 38.9,
+   "spo2": 98.09,
+   "resp_rate": 16.53,
+   "systolic_bp": 122.49,
+   "diastolic_bp": 78.33,
+   "core_temp": 37.32,
+   "pvt_reaction_ms": 266.35
+  },
+  "cabin_co2_mmhg": 1.19,
+  "timestamp": "2026-09-20 12:00:00"
+ },
+ {
+  "astronaut_id": "UH-04",
+  "name": "Yuki Tanaka",
+  "role": "Crew Medical Officer",
+  "status": "GREEN",
+  "health_score": 90,
+  "condition": "nominal",
+  "condition_label": "Nominal",
+  "top_alert": null,
+  "top_reason": null,
+  "vitals": {
+   "heart_rate": 65.5,
+   "hrv_rmssd": 61.0,
+   "spo2": 97.56,
+   "resp_rate": 15.07,
+   "systolic_bp": 136.0,
+   "diastolic_bp": 78.04,
+   "core_temp": 36.86,
+   "pvt_reaction_ms": 287.73
+  },
+  "cabin_co2_mmhg": 1.17,
+  "timestamp": "2026-09-20 12:00:00"
+ },
+ {
+  "astronaut_id": "UH-02",
+  "name": "Karim Adel",
+  "role": "Flight Engineer",
+  "status": "GREEN",
+  "health_score": 93,
+  "condition": "nominal",
+  "condition_label": "Nominal",
+  "top_alert": null,
+  "top_reason": null,
+  "vitals": {
+   "heart_rate": 77.5,
+   "hrv_rmssd": 58.13,
+   "spo2": 98.74,
+   "resp_rate": 13.21,
+   "systolic_bp": 120.26,
+   "diastolic_bp": 71.47,
+   "core_temp": 37.21,
+   "pvt_reaction_ms": 251.31
+  },
+  "cabin_co2_mmhg": 1.12,
+  "timestamp": "2026-09-20 12:00:00"
+ }
+]

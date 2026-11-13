@@ -1,20 +1,23 @@
 """Save real API responses to data/demo/api_snapshots/ for frontend mock mode.
 
     cd ml && python -m sol_ml.snapshots
+
+File names: `<name>.json` for the current moment, and `at/<mark>/<name>.json` for each replay mark
+(the start of every planted case plus a quiet day), so the mock mode can also replay the mission.
 """
 import json
+import shutil
 
 from .config import DEMO_DIR
 
-CALLS = {
-    "mission": "/api/mission", "meta": "/api/meta", "crew": "/api/crew",
-    "UH-03_profile": "/api/crew/UH-03", "UH-03_assessment": "/api/crew/UH-03/assessment",
-    "UH-01_assessment": "/api/crew/UH-01/assessment",
-    "UH-03_vitals_48h": "/api/crew/UH-03/vitals?hours=48",
-    "UH-03_timeline_72h": "/api/crew/UH-03/timeline?hours=72",
-    "UH-03_forecast": "/api/crew/UH-03/forecast?horizon_days=90",
-    "UH-03_radiation": "/api/crew/UH-03/radiation",
-}
+GLOBAL = {"mission": "/api/mission", "meta": "/api/meta", "crew": "/api/crew", "indicators": "/api/indicators",
+          "cases": "/api/demo/cases"}
+PER_CREW = {"profile": "/api/crew/{id}", "assessment": "/api/crew/{id}/assessment", "vitals_72h": "/api/crew/{id}/vitals?hours=72",
+            "timeline_72h": "/api/crew/{id}/timeline?hours=72", "daily_30d": "/api/crew/{id}/daily?days=30",
+            "forecast": "/api/crew/{id}/forecast?horizon_days=90", "radiation": "/api/crew/{id}/radiation",
+            "reminders": "/api/crew/{id}/reminders"}
+TIMED = ("mission", "crew")
+TIMED_PER_CREW = ("assessment", "vitals_72h", "timeline_72h", "daily_30d", "forecast", "radiation", "reminders")
 
 
 def main():
@@ -22,21 +25,40 @@ def main():
     from api.main import app
     client = TestClient(app)
     out = DEMO_DIR / "api_snapshots"
-    out.mkdir(parents=True, exist_ok=True)
-    for crew_id in ("UH-01", "UH-02", "UH-04"):          # full set for every astronaut
-        CALLS.setdefault(f"{crew_id}_profile", f"/api/crew/{crew_id}")
-        CALLS.setdefault(f"{crew_id}_assessment", f"/api/crew/{crew_id}/assessment")
-        CALLS[f"{crew_id}_vitals_72h"] = f"/api/crew/{crew_id}/vitals?hours=72"
-        CALLS[f"{crew_id}_timeline_72h"] = f"/api/crew/{crew_id}/timeline?hours=72"
-        CALLS[f"{crew_id}_forecast"] = f"/api/crew/{crew_id}/forecast?horizon_days=90"
-        CALLS[f"{crew_id}_radiation"] = f"/api/crew/{crew_id}/radiation"
-    CALLS["UH-03_vitals_72h"] = "/api/crew/UH-03/vitals?hours=72"
-    for name, url in CALLS.items():
-        r = client.get(url)
+    shutil.rmtree(out, ignore_errors=True)
+    out.mkdir(parents=True)
+
+    def save(path, url, at=None):
+        r = client.get(url, params={"at": at} if at else None)
         r.raise_for_status()
-        with open(out / f"{name}.json", "w") as f:
-            json.dump(r.json(), f, indent=2)
-    print(f"{len(CALLS)} snapshots -> {out}")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(r.json(), indent=1))
+
+    crew_ids = [c["astronaut_id"] for c in client.get("/api/crew").json()]
+    for name, url in GLOBAL.items():
+        save(out / f"{name}.json", url)
+    for cid in crew_ids:
+        for name, url in PER_CREW.items():
+            save(out / f"{cid}_{name}.json", url.format(id=cid))
+
+    mission = client.get("/api/mission").json()
+    marks = [{"id": "quiet_day", "label": "A quiet day", "at": "2026-09-20 12:00:00"}]
+    for m in mission["replay_marks"]:
+        # look two days into each case (the storm: three hours in), when the engine has had a chance to react
+        offset = 3 if m["id"] == "solar_storm" else {"cabin_co2": 8 * 24 + 12, "slow_drift": 6 * 24 + 12, "odd_combination": 3 * 24 + 12}[m["id"]]
+        at = str(__import__("pandas").Timestamp(m["at"]) + __import__("pandas").Timedelta(hours=offset))
+        marks.append({"id": m["id"], "label": m["label"], "at": at})
+    n = 0
+    for mark in marks:
+        base = out / "at" / mark["id"]
+        for name in TIMED:
+            save(base / f"{name}.json", GLOBAL[name], mark["at"])
+        for cid in crew_ids:
+            for name in TIMED_PER_CREW:
+                save(base / f"{cid}_{name}.json", PER_CREW[name].format(id=cid), mark["at"])
+                n += 1
+    (out / "replay_marks.json").write_text(json.dumps(marks, indent=1))
+    print(f"snapshots -> {out}: {len(GLOBAL) + len(crew_ids) * len(PER_CREW)} current, {n} replay files, marks: {[m['id'] for m in marks]}")
 
 
 if __name__ == "__main__":

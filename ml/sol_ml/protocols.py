@@ -40,8 +40,8 @@ PROTOCOLS: dict[str, dict[str, list[dict]]] = {
     },
     "co2_exposure": {
         "YELLOW": [
+            dict(who="crew", action="Increase ventilation first: check the cabin fan and CO2 scrubber for this module."),
             dict(who="self", action="Move to a well-ventilated module; avoid sleeping in a station with poor airflow."),
-            dict(who="crew", action="Check the cabin fan and CO2 scrubber status for this module."),
             dict(who="self", action="Report headache, blurred vision or trouble concentrating to the CMO."),
         ],
         "RED": [
@@ -84,6 +84,83 @@ PROTOCOLS: dict[str, dict[str, list[dict]]] = {
             dict(who="self", action="Put on an oxygen mask now."),
             dict(who="crew", action="Check for cabin leak or O2 system fault; follow the emergency checklist."),
             dict(who="ground", action="Contact flight surgeon and ECLSS now."),
+        ],
+    },
+    "radiation_event": {
+        "YELLOW": [
+            dict(who="crew", action="Radiation is elevated: stop EVA preparation and check that the storm shelter is clear and stocked."),
+            dict(who="crew", action="Keep personal dosimeters on and stay away from thinly shielded areas until the rate is back to normal."),
+            dict(who="ground", action="Report the dose-rate rise to the flight surgeon and space weather officer at the next comm pass."),
+        ],
+        "RED": [
+            dict(who="crew", action="SPE in progress: whole crew to the storm shelter now."),
+            dict(who="crew", action="Abort any EVA or rover traverse and return to the habitat."),
+            dict(who="cmo", action="CMO to log each crewmember's dosimeter reading on entering and leaving the shelter."),
+            dict(who="ground", action="Notify the flight surgeon; stay sheltered until the dose rate is below the elevated level."),
+        ],
+    },
+    "physiological_drift": {
+        "YELLOW": [
+            dict(who="self", action="Take a full set of vitals now (temperature, blood pressure, SpO2) and log any symptoms."),
+            dict(who="self", action="Protect tonight's sleep and keep fluids up; skip the hardest exercise set today."),
+            dict(who="cmo", action="CMO to review the trend; a slow rise in resting heart rate with poor sleep can come before an illness."),
+            dict(who="self", action="Recheck tomorrow morning; tell the CMO sooner if you feel unwell."),
+        ],
+        "RED": [dict(who="ground", action="Contact the flight surgeon with the trend data.")],
+    },
+    "acute_deviation": {
+        "YELLOW": [
+            dict(who="self", action="Repeat the measurement to rule out a sensor or logging error."),
+            dict(who="self", action="Note anything unusual in the last 24 h (workload, sleep, meals, medication)."),
+            dict(who="cmo", action="CMO to review if the reading is still far from your normal tomorrow."),
+        ],
+        "RED": [dict(who="ground", action="Contact the flight surgeon with the readings.")],
+    },
+    "unusual_combination": {
+        "YELLOW": [
+            dict(who="self", action="Check in with yourself: mood, stress and sleep have shifted together, each only a little."),
+            dict(who="self", action="Use tonight's wind-down routine and book private time or a family call."),
+            dict(who="crew", action="Crewmates: share the workload today and keep the next shared meal."),
+            dict(who="cmo", action="CMO to offer a private conversation; consider the behavioural-health checklist if it lasts a week."),
+        ],
+        "RED": [dict(who="ground", action="Arrange a private medical conference with the flight surgeon.")],
+    },
+    "low_mood": {
+        "YELLOW": [
+            dict(who="self", action="Tell the CMO how you have been feeling; several low days in a row are worth a conversation."),
+            dict(who="self", action="Keep exercise, daylight-spectrum lighting and regular meals: all three support mood."),
+            dict(who="cmo", action="CMO to schedule a private conference with the behavioural-health team on the ground."),
+        ],
+        "RED": [dict(who="ground", action="Arrange a private medical conference with the flight surgeon today.")],
+    },
+    "deconditioning": {
+        "YELLOW": [
+            dict(who="self", action="The same exercise is costing more heartbeats: do not skip resistive (ARED) and aerobic sessions this week."),
+            dict(who="self", action="Check sleep, hydration and nutrition, which also raise exercise heart rate."),
+            dict(who="cmo", action="CMO to review the exercise prescription with the ground exercise specialist."),
+        ],
+        "RED": [dict(who="ground", action="Send the exercise log to the flight surgeon.")],
+    },
+    "low_blood_sugar": {
+        "YELLOW": [
+            dict(who="self", action="Eat or drink 15 g of fast sugar (juice pouch or glucose tablets) and recheck in 15 minutes."),
+            dict(who="self", action="Do not start exercise or safety-critical work until glucose is back above 70 mg/dL."),
+        ],
+        "RED": [
+            dict(who="self", action="Take fast sugar now and tell a crewmate; do not stay alone."),
+            dict(who="cmo", action="CMO to follow the hypoglycemia checklist and recheck every 15 minutes."),
+            dict(who="ground", action="Contact the flight surgeon now."),
+        ],
+    },
+    "high_blood_sugar": {
+        "YELLOW": [
+            dict(who="self", action="Repeat the fasting measurement tomorrow morning before eating."),
+            dict(who="self", action="Drink water and log today's meals."),
+            dict(who="cmo", action="CMO to review if two fasting readings in a row are high."),
+        ],
+        "RED": [
+            dict(who="cmo", action="CMO to check for symptoms (thirst, frequent urination, nausea) and follow the hyperglycemia checklist."),
+            dict(who="ground", action="Contact the flight surgeon now."),
         ],
     },
 }

@@ -1,0 +1,78 @@
+{
+  "resting_hr": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+  },
+  "sleep_minutes": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+  },
+  "fatigue": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+  },
+  "mood": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+  },
+  "stress": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+  },
+  "heart_rate": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+  },
+  "cabin_co2_mmhg": {
+    "kind": "simulated",
+    "calibrated_on": "NASA OSDR EDA (ISS cabin)"
+  },
+  "radiation_ugy_per_day": {
+    "kind": "real",
+    "dataset": "NASA/JPL MSL RAD (Curiosity), replayed"
+  },
+  "radiation_msv": {
+    "kind": "real",
+    "dataset": "NASA/JPL MSL RAD x quality factor 3.0, replayed"
+  },
+  "systolic_bp": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "diastolic_bp": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "spo2": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "core_temp": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "resp_rate": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "hrv_rmssd": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "pvt_reaction_ms": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "fluid_intake_ml": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "blood_glucose_mg_dl": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "headache": {
+    "kind": "simulated",
+    "calibrated_on": "scripted for the planted cabin case"
+  }
+}

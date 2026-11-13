@@ -1,24 +1,24 @@
 {
-  "astronaut_id": "UH-03",
-  "name": "Sofia Mendes",
-  "role": "Mission Specialist",
-  "agency": "Fictional",
-  "age": 35,
-  "sex": "F",
-  "mass_kg": 58.0,
-  "prior_career_dose_msv": 0.0,
-  "protein_g_per_kg": 1.0,
-  "vitamin_d_ng_ml": 24.0,
-  "ared_minutes_week": 210,
-  "aerobic_minutes_week": 180,
-  "baseline": {
-    "heart_rate": 75.0,
-    "hrv_rmssd": 31.07,
-    "spo2": 97.75,
-    "resp_rate": 13.6,
-    "systolic_bp": 117.26,
-    "diastolic_bp": 84.04,
-    "core_temp": 36.99,
-    "pvt_reaction_ms": 235.34
-  }
+ "astronaut_id": "UH-03",
+ "name": "Sofia Mendes",
+ "role": "Mission Specialist",
+ "agency": "Fictional",
+ "age": 35,
+ "sex": "F",
+ "mass_kg": 58.0,
+ "prior_career_dose_msv": 0.0,
+ "protein_g_per_kg": 1.0,
+ "vitamin_d_ng_ml": 24.0,
+ "ared_minutes_week": 210,
+ "aerobic_minutes_week": 180,
+ "baseline": {
+  "heart_rate": 74.3,
+  "hrv_rmssd": 56.83,
+  "spo2": 97.64,
+  "resp_rate": 15.79,
+  "systolic_bp": 121.19,
+  "diastolic_bp": 73.68,
+  "core_temp": 36.95,
+  "pvt_reaction_ms": 254.15
+ }
 }

@@ -1,24 +1,24 @@
 {
-  "astronaut_id": "UH-01",
-  "name": "Nadia Farouk",
-  "role": "Commander",
-  "agency": "Fictional",
-  "age": 46,
-  "sex": "F",
-  "mass_kg": 63.0,
-  "prior_career_dose_msv": 180.0,
-  "protein_g_per_kg": 1.5,
-  "vitamin_d_ng_ml": 42.0,
-  "ared_minutes_week": 380,
-  "aerobic_minutes_week": 260,
-  "baseline": {
-    "heart_rate": 83.2,
-    "hrv_rmssd": 44.14,
-    "spo2": 97.56,
-    "resp_rate": 16.74,
-    "systolic_bp": 124.92,
-    "diastolic_bp": 76.12,
-    "core_temp": 37.04,
-    "pvt_reaction_ms": 256.21
-  }
+ "astronaut_id": "UH-01",
+ "name": "Nadia Farouk",
+ "role": "Commander",
+ "agency": "Fictional",
+ "age": 46,
+ "sex": "F",
+ "mass_kg": 63.0,
+ "prior_career_dose_msv": 180.0,
+ "protein_g_per_kg": 1.5,
+ "vitamin_d_ng_ml": 42.0,
+ "ared_minutes_week": 380,
+ "aerobic_minutes_week": 260,
+ "baseline": {
+  "heart_rate": 87.9,
+  "hrv_rmssd": 40.47,
+  "spo2": 98.14,
+  "resp_rate": 16.04,
+  "systolic_bp": 120.14,
+  "diastolic_bp": 75.35,
+  "core_temp": 37.09,
+  "pvt_reaction_ms": 260.8
+ }
 }

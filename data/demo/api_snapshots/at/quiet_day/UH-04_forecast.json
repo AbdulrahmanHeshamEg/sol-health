@@ -1,0 +1,48 @@
+{
+ "inputs": {
+  "ared_minutes_7d": 300.0,
+  "aerobic_minutes_7d": 300.0,
+  "mission_day": 21,
+  "horizon_days": 90
+ },
+ "hip_bmd": {
+  "rate_pct_per_month": {
+   "q10": 0.706,
+   "median": 0.836,
+   "q90": 0.978
+  },
+  "estimated_loss_to_date_pct": 0.59,
+  "projected_loss_pct": {
+   "q10": 2.61,
+   "median": 3.09,
+   "q90": 3.62
+  },
+  "projected_loss_if_ared_target_met_pct": 2.34,
+  "alert": false
+ },
+ "thigh_muscle": {
+  "rate_pct_per_month": {
+   "q10": 0.952,
+   "median": 1.146,
+   "q90": 1.352
+  },
+  "estimated_loss_to_date_pct": 0.8,
+  "projected_loss_pct": {
+   "q10": 3.52,
+   "median": 4.24,
+   "q90": 5.0
+  },
+  "projected_loss_if_ared_target_met_pct": 3.35
+ },
+ "fitness_trend": {
+  "alert": false,
+  "shift_bpm": 0.0,
+  "weeks_ago": 0,
+  "sessions": 29,
+  "reason": "Not enough exercise sessions yet to judge a fitness trend."
+ },
+ "source": {
+  "kind": "simulated",
+  "calibrated_on": "published bone and muscle loss rates (model trained on a simulated cohort)"
+ }
+}

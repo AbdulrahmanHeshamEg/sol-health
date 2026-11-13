@@ -1,0 +1,27 @@
+[
+ {
+  "id": "quiet_day",
+  "label": "A quiet day",
+  "at": "2026-09-20 12:00:00"
+ },
+ {
+  "id": "cabin_co2",
+  "label": "Cabin CO2 with headache reports",
+  "at": "2026-10-01 12:00:00"
+ },
+ {
+  "id": "slow_drift",
+  "label": "Slow drift (illness onset)",
+  "at": "2026-10-19 12:00:00"
+ },
+ {
+  "id": "solar_storm",
+  "label": "Solar storm (SPE)",
+  "at": "2026-11-13 08:00:00"
+ },
+ {
+  "id": "odd_combination",
+  "label": "Odd combination (behavioural health)",
+  "at": "2026-11-03 12:00:00"
+ }
+]

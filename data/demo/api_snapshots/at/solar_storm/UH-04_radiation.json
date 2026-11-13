@@ -1,0 +1,24 @@
+{
+ "mission_dose_msv": 38.8,
+ "career_dose_msv": 278.8,
+ "career_limit_msv": 600.0,
+ "career_used_pct": 46.5,
+ "dose_rate_msv_per_day_7d": 0.791,
+ "dose_last_24h_msv": 2.89,
+ "projected_career_at_mission_end_msv": 487.0,
+ "projected_used_pct": 81.2,
+ "spe_in_progress": true,
+ "spe_event_limit_msv": 250.0,
+ "status": "RED",
+ "spe_level": "RED",
+ "dose_rate_ratio_to_7d": 25.54,
+ "dose_rate_ugy_per_day": 3776.6,
+ "budget_status": "YELLOW",
+ "quality_factor": 3.0,
+ "reason": "Radiation dose rate is 25.5 times the 7-day normal and has been elevated for 4 hours.",
+ "action": "SPE in progress: whole crew to the storm shelter",
+ "source": {
+  "kind": "real",
+  "dataset": "NASA/JPL MSL RAD (Curiosity), replayed"
+ }
+}
