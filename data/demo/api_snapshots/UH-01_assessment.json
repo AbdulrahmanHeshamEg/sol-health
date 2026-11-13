@@ -1,0 +1,108 @@
+{
+  "astronaut_id": "UH-01",
+  "timestamp": "2026-11-13 23:00:00",
+  "mission_day": 75,
+  "status": "GREEN",
+  "health_score": 87,
+  "condition": "nominal",
+  "condition_label": "Nominal",
+  "probabilities": {
+    "nominal": 0.9896,
+    "sleep_deprivation": 0.0017,
+    "dehydration": 0.0015,
+    "co2_exposure": 0.0004,
+    "cardiovascular_strain": 0.0044,
+    "fever_infection": 0.002,
+    "hypoxia": 0.0005
+  },
+  "anomaly_score": 0.492,
+  "alerts": [],
+  "drivers": [
+    {
+      "signal": "heart_rate",
+      "deviation": -6.5,
+      "unit": "bpm",
+      "z": -2.17
+    },
+    {
+      "signal": "resp_rate",
+      "deviation": -1.43,
+      "unit": "br/min",
+      "z": -1.43
+    },
+    {
+      "signal": "systolic_bp",
+      "deviation": -5.23,
+      "unit": "mmHg",
+      "z": -1.05
+    }
+  ],
+  "vitals": {
+    "heart_rate": {
+      "value": 60.91,
+      "baseline": 83.2,
+      "delta": -22.29,
+      "unit": "bpm"
+    },
+    "hrv_rmssd": {
+      "value": 60.9,
+      "baseline": 44.14,
+      "delta": 16.76,
+      "unit": "ms"
+    },
+    "spo2": {
+      "value": 97.01,
+      "baseline": 97.56,
+      "delta": -0.55,
+      "unit": "%"
+    },
+    "resp_rate": {
+      "value": 11.67,
+      "baseline": 16.74,
+      "delta": -5.07,
+      "unit": "br/min"
+    },
+    "systolic_bp": {
+      "value": 99.85,
+      "baseline": 124.92,
+      "delta": -25.07,
+      "unit": "mmHg"
+    },
+    "diastolic_bp": {
+      "value": 59.52,
+      "baseline": 76.12,
+      "delta": -16.6,
+      "unit": "mmHg"
+    },
+    "core_temp": {
+      "value": 36.54,
+      "baseline": 37.04,
+      "delta": -0.5,
+      "unit": "C"
+    },
+    "pvt_reaction_ms": {
+      "value": 236.17,
+      "baseline": 256.21,
+      "delta": -20.04,
+      "unit": "ms"
+    }
+  },
+  "context": {
+    "activity_level": 0.02,
+    "is_asleep": 1,
+    "cabin_co2_mmhg": 1.58,
+    "sleep_last_24h": 8.0,
+    "fluid_last_24h": 3345.3,
+    "ared_minutes_7d": 420.0,
+    "aerobic_minutes_7d": 360.0
+  },
+  "actions": [],
+  "daily_plan": [
+    {
+      "who": "self",
+      "category": "routine",
+      "action": "All routine targets met. Keep the current sleep, hydration and exercise schedule."
+    }
+  ],
+  "disclaimer": "Decision support only. Synthetic-data models. The crew medical officer and flight surgeon make all medical decisions."
+}

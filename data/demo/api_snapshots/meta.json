@@ -1,0 +1,52 @@
+{
+  "conditions": [
+    {
+      "id": "nominal",
+      "label": "Nominal"
+    },
+    {
+      "id": "sleep_deprivation",
+      "label": "Fatigue / sleep debt"
+    },
+    {
+      "id": "dehydration",
+      "label": "Dehydration"
+    },
+    {
+      "id": "co2_exposure",
+      "label": "Elevated CO2 exposure"
+    },
+    {
+      "id": "cardiovascular_strain",
+      "label": "Cardiovascular strain"
+    },
+    {
+      "id": "fever_infection",
+      "label": "Fever / possible infection"
+    },
+    {
+      "id": "hypoxia",
+      "label": "Low blood oxygen (hypoxia)"
+    }
+  ],
+  "signals": [
+    "heart_rate",
+    "hrv_rmssd",
+    "spo2",
+    "resp_rate",
+    "systolic_bp",
+    "diastolic_bp",
+    "core_temp",
+    "pvt_reaction_ms",
+    "activity_level",
+    "is_asleep",
+    "fluid_intake_ml",
+    "cabin_co2_mmhg",
+    "radiation_msv"
+  ],
+  "levels": [
+    "GREEN",
+    "YELLOW",
+    "RED"
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "seed": 42,
+  "risk_classifier": {
+    "train_rows": 86400,
+    "test_rows": 23040,
+    "train_astronauts": 30,
+    "test_astronauts": 8,
+    "days_each": 120,
+    "macro_f1": 0.9397,
+    "weighted_f1": 0.979,
+    "abnormal_vs_nominal_auroc": 0.9939,
+    "per_class": {
+      "nominal": {
+        "precision": 0.9928,
+        "recall": 0.983,
+        "f1-score": 0.9879,
+        "support": 19491.0
+      },
+      "sleep_deprivation": {
+        "precision": 0.8791,
+        "recall": 0.9502,
+        "f1-score": 0.9133,
+        "support": 482.0
+      },
+      "dehydration": {
+        "precision": 0.8238,
+        "recall": 0.9105,
+        "f1-score": 0.865,
+        "support": 693.0
+      },
+      "co2_exposure": {
+        "precision": 0.993,
+        "recall": 0.993,
+        "f1-score": 0.993,
+        "support": 575.0
+      },
+      "cardiovascular_strain": {
+        "precision": 0.8532,
+        "recall": 0.9404,
+        "f1-score": 0.8947,
+        "support": 587.0
+      },
+      "fever_infection": {
+        "precision": 0.9562,
+        "recall": 0.9685,
+        "f1-score": 0.9623,
+        "support": 699.0
+      },
+      "hypoxia": {
+        "precision": 0.9505,
+        "recall": 0.9727,
+        "f1-score": 0.9615,
+        "support": 513.0
+      }
+    },
+    "confusion_matrix": {
+      "labels": [
+        "nominal",
+        "sleep_deprivation",
+        "dehydration",
+        "co2_exposure",
+        "cardiovascular_strain",
+        "fever_infection",
+        "hypoxia"
+      ],
+      "matrix": [
+        [
+          19160,
+          60,
+          129,
+          4,
+          89,
+          23,
+          26
+        ],
+        [
+          21,
+          458,
+          2,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          53,
+          0,
+          631,
+          0,
+          1,
+          8,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          571,
+          0,
+          0,
+          0
+        ],
+        [
+          31,
+          3,
+          1,
+          0,
+          552,
+          0,
+          0
+        ],
+        [
+          18,
+          0,
+          2,
+          0,
+          2,
+          677,
+          0
+        ],
+        [
+          11,
+          0,
+          1,
+          0,
+          2,
+          0,
+          499
+        ]
+      ]
+    },
+    "n_features": 33
+  },
+  "anomaly_detector": {
+    "trained_on_nominal_rows": 73006,
+    "abnormal_vs_nominal_auroc": 0.9031,
+    "flag_rate_nominal_at_0.5": 0.0646,
+    "flag_rate_abnormal_at_0.5": 0.6847
+  },
+  "seconds": 14.5,
+  "deconditioning_forecaster": {
+    "bmd_loss_pct_month": {
+      "mae_pct_per_month": 0.0977,
+      "baseline_mae_predict_mean": 0.2151,
+      "q10_q90_coverage": 0.7865,
+      "test_mean_rate": 1.0429
+    },
+    "muscle_loss_pct_month": {
+      "mae_pct_per_month": 0.1516,
+      "baseline_mae_predict_mean": 0.3309,
+      "q10_q90_coverage": 0.7485,
+      "test_mean_rate": 1.3863
+    },
+    "train_rows": 5475,
+    "test_rows": 1368
+  }
+}

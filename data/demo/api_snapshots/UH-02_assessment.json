@@ -1,0 +1,150 @@
+{
+  "astronaut_id": "UH-02",
+  "timestamp": "2026-11-13 23:00:00",
+  "mission_day": 75,
+  "status": "YELLOW",
+  "health_score": 47,
+  "condition": "dehydration",
+  "condition_label": "Dehydration",
+  "probabilities": {
+    "nominal": 0.0051,
+    "sleep_deprivation": 0.0001,
+    "dehydration": 0.9942,
+    "co2_exposure": 0.0001,
+    "cardiovascular_strain": 0.0002,
+    "fever_infection": 0.0003,
+    "hypoxia": 0.0001
+  },
+  "anomaly_score": 0.533,
+  "alerts": [
+    {
+      "source": "model",
+      "level": "YELLOW",
+      "condition": "dehydration",
+      "probability": 0.994,
+      "message": "Pattern consistent with dehydration (99% confidence)"
+    }
+  ],
+  "drivers": [
+    {
+      "signal": "systolic_bp",
+      "deviation": -11.1,
+      "unit": "mmHg",
+      "z": -2.22
+    },
+    {
+      "signal": "diastolic_bp",
+      "deviation": -5.02,
+      "unit": "mmHg",
+      "z": -1.25
+    },
+    {
+      "signal": "resp_rate",
+      "deviation": -1.13,
+      "unit": "br/min",
+      "z": -1.13
+    }
+  ],
+  "vitals": {
+    "heart_rate": {
+      "value": 51.54,
+      "baseline": 70.96,
+      "delta": -19.42,
+      "unit": "bpm"
+    },
+    "hrv_rmssd": {
+      "value": 62.24,
+      "baseline": 51.32,
+      "delta": 10.92,
+      "unit": "ms"
+    },
+    "spo2": {
+      "value": 97.07,
+      "baseline": 97.45,
+      "delta": -0.38,
+      "unit": "%"
+    },
+    "resp_rate": {
+      "value": 11.2,
+      "baseline": 16.26,
+      "delta": -5.06,
+      "unit": "br/min"
+    },
+    "systolic_bp": {
+      "value": 93.54,
+      "baseline": 122.18,
+      "delta": -28.64,
+      "unit": "mmHg"
+    },
+    "diastolic_bp": {
+      "value": 62.52,
+      "baseline": 72.13,
+      "delta": -9.61,
+      "unit": "mmHg"
+    },
+    "core_temp": {
+      "value": 36.77,
+      "baseline": 36.97,
+      "delta": -0.2,
+      "unit": "C"
+    },
+    "pvt_reaction_ms": {
+      "value": 262.33,
+      "baseline": 248.76,
+      "delta": 13.57,
+      "unit": "ms"
+    }
+  },
+  "context": {
+    "activity_level": 0.02,
+    "is_asleep": 1,
+    "cabin_co2_mmhg": 2.43,
+    "sleep_last_24h": 8.0,
+    "fluid_last_24h": 2318.4,
+    "ared_minutes_7d": 300.0,
+    "aerobic_minutes_7d": 180.0
+  },
+  "actions": [
+    {
+      "who": "self",
+      "action": "Drink 500 ml of water now, then about 250 ml every hour until urine color normalizes.",
+      "condition": "dehydration",
+      "level": "YELLOW",
+      "priority": 1
+    },
+    {
+      "who": "self",
+      "action": "Add an electrolyte drink pouch to the next 1 L of fluid.",
+      "condition": "dehydration",
+      "level": "YELLOW",
+      "priority": 2
+    },
+    {
+      "who": "self",
+      "action": "Postpone today's exercise session until heart rate returns to your baseline.",
+      "condition": "dehydration",
+      "level": "YELLOW",
+      "priority": 3
+    },
+    {
+      "who": "self",
+      "action": "Recheck vitals in 2 hours.",
+      "condition": "dehydration",
+      "level": "YELLOW",
+      "priority": 4
+    }
+  ],
+  "daily_plan": [
+    {
+      "who": "self",
+      "category": "exercise",
+      "action": "Add 60 min of resistive (ARED) exercise this week to protect bone and muscle."
+    },
+    {
+      "who": "self",
+      "category": "exercise",
+      "action": "Add 60 min of aerobic exercise (treadmill/cycle) this week."
+    }
+  ],
+  "disclaimer": "Decision support only. Synthetic-data models. The crew medical officer and flight surgeon make all medical decisions."
+}
