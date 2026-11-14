@@ -27,7 +27,8 @@ export function useCrew() {
 }
 export function useAssessment(id: string) {
   const { at } = useReplay();
-  return useQuery({ queryKey: ["assessment", id, at], queryFn: () => api.assessment(id, at), ...timed });
+  // Wait for the astronaut's id: some callers pass "" until /api/me has answered.
+  return useQuery({ queryKey: ["assessment", id, at], queryFn: () => api.assessment(id, at), enabled: !!id, ...timed });
 }
 export function useAssessments(ids: string[]) {
   const { at } = useReplay();
