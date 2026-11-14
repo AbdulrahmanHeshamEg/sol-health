@@ -1,0 +1,17 @@
+[
+  {
+    "date": "2026-08-31 09:00:00",
+    "mission_day": 1,
+    "image": "eye_day01.png"
+  },
+  {
+    "date": "2026-09-29 09:00:00",
+    "mission_day": 30,
+    "image": "eye_day30.png"
+  },
+  {
+    "date": "2026-10-29 09:00:00",
+    "mission_day": 60,
+    "image": "eye_day60.png"
+  }
+]

@@ -3,14 +3,14 @@
  "timestamp": "2026-10-31 12:00:00",
  "mission_day": 62,
  "status": "YELLOW",
- "health_score": 67,
+ "health_score": 58,
  "condition": "acute_deviation",
  "condition_label": "Unusual reading for you",
  "probabilities": {
-  "nominal": 0.2,
-  "acute_deviation": 0.4,
+  "nominal": 0.1429,
+  "acute_deviation": 0.2857,
   "physiological_drift": 0.0,
-  "unusual_combination": 0.4,
+  "unusual_combination": 0.2857,
   "low_mood": 0.0,
   "deconditioning": 0.0,
   "co2_exposure": 0.0,
@@ -20,7 +20,14 @@
   "cardiovascular_strain": 0.0,
   "dehydration": 0.0,
   "low_blood_sugar": 0.0,
-  "high_blood_sugar": 0.0
+  "high_blood_sugar": 0.0,
+  "optic_disc_change": 0.2857,
+  "kidney_stone_risk": 0.0,
+  "urinary_infection": 0.0,
+  "urine_abnormal": 0.0,
+  "constipation": 0.0,
+  "diarrhea": 0.0,
+  "stool_blood": 0.0
  },
  "anomaly_score": 0.985,
  "alerts": [
@@ -50,6 +57,20 @@
    "z": 5.59,
    "probability": 0.985,
    "model": "Isolation Forest on the daily z-vector"
+  },
+  {
+   "source": "model",
+   "level": "YELLOW",
+   "condition": "optic_disc_change",
+   "message": "Eye photo: optic disc changed",
+   "reason": "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report.",
+   "kind": "eye_exam",
+   "hazard": "Altered gravity",
+   "signal": "fundus_photo",
+   "value": 0.725,
+   "threshold": "margin sharpness < 75 % of baseline (watch), < 55 % or disc +35 % (act now)",
+   "probability": 0.5,
+   "model": "fundus photo measurement against your baseline photo (no trained model)"
   }
  ],
  "drivers": [
@@ -74,9 +95,9 @@
  ],
  "vitals": {
   "heart_rate": {
-   "value": 101.6,
-   "baseline": 87.0,
-   "delta": 14.6,
+   "value": 93.7,
+   "baseline": 88.05,
+   "delta": 5.65,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -84,9 +105,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 38.73,
-   "baseline": 43.5,
-   "delta": -4.77,
+   "value": 24.17,
+   "baseline": 44.2,
+   "delta": -20.03,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -94,9 +115,9 @@
    }
   },
   "spo2": {
-   "value": 98.57,
-   "baseline": 98.2,
-   "delta": 0.37,
+   "value": 97.61,
+   "baseline": 97.97,
+   "delta": -0.36,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -104,9 +125,9 @@
    }
   },
   "resp_rate": {
-   "value": 15.88,
-   "baseline": 15.54,
-   "delta": 0.34,
+   "value": 16.83,
+   "baseline": 15.88,
+   "delta": 0.95,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -114,9 +135,9 @@
    }
   },
   "systolic_bp": {
-   "value": 120.47,
-   "baseline": 117.86,
-   "delta": 2.61,
+   "value": 118.7,
+   "baseline": 117.46,
+   "delta": 1.25,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -124,9 +145,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 72.03,
-   "baseline": 73.27,
-   "delta": -1.24,
+   "value": 75.21,
+   "baseline": 74.29,
+   "delta": 0.92,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -134,9 +155,9 @@
    }
   },
   "core_temp": {
-   "value": 37.06,
-   "baseline": 37.08,
-   "delta": -0.02,
+   "value": 37.04,
+   "baseline": 37.13,
+   "delta": -0.09,
    "unit": "C",
    "source": {
     "kind": "simulated",
@@ -144,9 +165,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 256.59,
-   "baseline": 262.04,
-   "delta": -5.45,
+   "value": 290.07,
+   "baseline": 265.54,
+   "delta": 24.53,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -317,17 +338,57 @@
     "radiation_dose_rate"
    ],
    "alerts": []
+  },
+  {
+   "id": "eyes",
+   "label": "Eyes",
+   "function": "In weightlessness fluid shifts toward the head; in some astronauts the optic disc swells and near vision changes (SANS).",
+   "status": "YELLOW",
+   "summary": "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report.",
+   "indicators": [
+    "fundus_photo",
+    "vision_change"
+   ],
+   "alerts": [
+    "Eye photo: optic disc changed"
+   ]
+  },
+  {
+   "id": "kidneys",
+   "label": "Kidneys and urine",
+   "function": "Filter the blood. Bone loss in space puts extra calcium in the urine, which raises the risk of kidney stones.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "urine_sg",
+    "urine_blood",
+    "urine_leukocytes"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "gut",
+   "label": "Digestion",
+   "function": "Digests food and absorbs water. Space food, less movement and less fluid change bowel habits.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "stool_bristol",
+    "stool_count",
+    "stool_blood"
+   ],
+   "alerts": []
   }
  ],
  "context": {
-  "activity_level": 0.374,
+  "activity_level": 0.242,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 1.59,
+  "cabin_co2_mmhg": 1.65,
   "sleep_last_24h": 7.0,
-  "fluid_last_24h": 3323.9,
+  "fluid_last_24h": 3432.4,
   "ared_minutes_7d": 420.0,
-  "aerobic_minutes_7d": 120.0,
-  "cabin_co2_7d_mean_mmhg": 1.7,
+  "aerobic_minutes_7d": 360.0,
+  "cabin_co2_7d_mean_mmhg": 1.69,
   "cabin_co2_high": false,
   "radiation_ratio_to_7d": 0.99,
   "radiation_level": "GREEN"
@@ -349,52 +410,73 @@
   },
   {
    "who": "self",
+   "action": "Check your near vision with the eye chart in the medical kit and log any blurring or headache.",
+   "condition": "optic_disc_change",
+   "level": "YELLOW",
+   "priority": 3
+  },
+  {
+   "who": "self",
    "action": "Note anything unusual in the last 24 h (workload, sleep, meals, medication).",
    "condition": "acute_deviation",
    "level": "YELLOW",
-   "priority": 3
+   "priority": 4
   },
   {
    "who": "self",
    "action": "Use tonight's wind-down routine and schedule a family or friend call at the next comm pass.",
    "condition": "unusual_combination",
    "level": "YELLOW",
-   "priority": 4
+   "priority": 5
+  },
+  {
+   "who": "self",
+   "action": "Retake the fundus photo in 7 days, same camera settings.",
+   "condition": "optic_disc_change",
+   "level": "YELLOW",
+   "priority": 6
   },
   {
    "who": "ground",
    "action": "If it is still far from your normal tomorrow, it goes to your flight surgeon in the daily report.",
    "condition": "acute_deviation",
    "level": "YELLOW",
-   "priority": 5
+   "priority": 7
   },
   {
    "who": "self",
    "action": "Keep a fixed day: meals, exercise and work blocks at the same times.",
    "condition": "unusual_combination",
    "level": "YELLOW",
-   "priority": 6
+   "priority": 8
+  },
+  {
+   "who": "ground",
+   "action": "Your eye photo and baseline photo go to your flight surgeon in today's report.",
+   "condition": "optic_disc_change",
+   "level": "YELLOW",
+   "priority": 9
   },
   {
    "who": "ground",
    "action": "Your flight surgeon sees this in today's report and can offer a private conference.",
    "condition": "unusual_combination",
    "level": "YELLOW",
-   "priority": 7
+   "priority": 10
   }
  ],
  "daily_plan": [
   {
    "who": "self",
-   "category": "exercise",
-   "action": "Add 120 min of aerobic exercise (treadmill/cycle) this week."
+   "category": "routine",
+   "action": "All routine targets met. Keep the current sleep, hydration and exercise schedule."
   }
  ],
  "fitness_trend": {
   "alert": false,
-  "shift_bpm": -5.7,
+  "shift_bpm": 4.6,
   "weeks_ago": 2,
-  "sessions": 98,
+  "sessions": 93,
   "reason": "Exercise heart rate is stable for the same exercise types."
  },
  "escalation": {
@@ -406,7 +488,8 @@
   "summary": "Included in your daily report to the flight surgeon at 20:00.",
   "items": [
    "Mood score is 5.6 robust SD worse than your 14-day normal, for 1 day.",
-   "Today's combination is unusual for you (mood score +5.6 SD, stress score +2.7 SD; positive = worse), for 1 day; no single signal is far out on its own."
+   "Today's combination is unusual for you (mood score +5.6 SD, stress score +2.7 SD; positive = worse), for 1 day; no single signal is far out on its own.",
+   "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report."
   ]
  },
  "disclaimer": "Decision support only. The astronaut is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. Your flight surgeon makes all medical decisions."

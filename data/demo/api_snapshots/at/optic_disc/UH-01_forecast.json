@@ -1,0 +1,48 @@
+{
+ "inputs": {
+  "ared_minutes_7d": 420.0,
+  "aerobic_minutes_7d": 360.0,
+  "mission_day": 61,
+  "horizon_days": 90
+ },
+ "hip_bmd": {
+  "rate_pct_per_month": {
+   "q10": 0.417,
+   "median": 0.541,
+   "q90": 0.665
+  },
+  "estimated_loss_to_date_pct": 1.1,
+  "projected_loss_pct": {
+   "q10": 2.1,
+   "median": 2.72,
+   "q90": 3.35
+  },
+  "projected_loss_if_ared_target_met_pct": 2.72,
+  "alert": false
+ },
+ "thigh_muscle": {
+  "rate_pct_per_month": {
+   "q10": 0.311,
+   "median": 0.651,
+   "q90": 0.915
+  },
+  "estimated_loss_to_date_pct": 1.32,
+  "projected_loss_pct": {
+   "q10": 1.57,
+   "median": 3.28,
+   "q90": 4.61
+  },
+  "projected_loss_if_ared_target_met_pct": 3.28
+ },
+ "fitness_trend": {
+  "alert": false,
+  "shift_bpm": 3.7,
+  "weeks_ago": 4,
+  "sessions": 91,
+  "reason": "Exercise heart rate is stable for the same exercise types."
+ },
+ "source": {
+  "kind": "simulated",
+  "calibrated_on": "published bone and muscle loss rates (model trained on a simulated cohort)"
+ }
+}

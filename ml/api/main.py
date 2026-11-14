@@ -22,12 +22,20 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from sol_ml import config, indicators as catalogue
+import base64
+
+from fastapi.responses import FileResponse
+
+from sol_ml import brief as daily_brief, config, indicators as catalogue, questions as qbank
+from sol_ml import fundus as fundus_rules
+from sol_ml.userdata import UserStore
 from sol_ml.detectors import cabin as cabin_limits
 from sol_ml.config import DEMO_DIR, ALL_SIGNALS, ENGINE_CONDITIONS, ENGINE_CONDITION_LABELS
 from sol_ml.engine import HealthEngine, LEVEL_RANK, Prepared
 
 MIN_HISTORY_HOURS = 24
+USER = UserStore(config.DATA_DIR / "user")            # the astronaut's own answers and eye photos (git-ignored)
+EYE_EXAM_EVERY_DAYS = 30
 # Replay buttons: the moment at which each planted case is worth looking at (the engine has had time to react).
 SHOW_AFTER_HOURS = {"cabin_co2": 8 * 24 + 12, "slow_drift": 7 * 24 + 12, "odd_combination": 12, "solar_storm": 3}
 QUIET_DAY = "2026-09-15 12:00:00"
@@ -66,6 +74,35 @@ def demo():
     return meta, tel, daily, cases, sources
 
 
+@lru_cache
+def demo_eye_exams() -> list[dict]:
+    path = DEMO_DIR / "eye_exams.json"
+    exams = json.loads(path.read_text()) if path.exists() else []
+    return [e | {"png": (DEMO_DIR / "eye_exams" / e["image"]).read_bytes(), "uploaded": False} for e in exams]
+
+
+def eye_exams() -> list[dict]:
+    """Demo photos plus the photos the astronaut uploaded."""
+    mine = [e | {"png": (USER.photos_dir / e["image"]).read_bytes()} for e in USER.photos() if (USER.photos_dir / e["image"]).exists()]
+    return sorted(demo_eye_exams() + mine, key=lambda e: e["date"])
+
+
+def entered() -> set:
+    """(date, field) pairs the astronaut entered, so the app can show them as 'you entered'."""
+    return _prepared_with_entries(me()["astronaut_id"])[1]
+
+
+def reset_caches():
+    """The cache keys include the state of the saved entries (`_stamp`), so a save or delete is picked up at once;
+    a background warm-up that started before it can only fill the old key."""
+    threading.Thread(target=warm_up, daemon=True).start()
+
+
+def _stamp() -> tuple:
+    files = (USER.answers_path, USER.photos_path)
+    return tuple(f.stat().st_mtime_ns if f.exists() else 0 for f in files)
+
+
 def _profile(aid: str) -> dict:
     for p in demo()[0]["crew"]:
         if p["astronaut_id"] == aid:
@@ -73,20 +110,34 @@ def _profile(aid: str) -> dict:
     raise HTTPException(404, f"Unknown astronaut_id {aid}")
 
 
-@lru_cache
-def _prepared(aid: str) -> Prepared:
-    """Causal tables for one astronaut's whole history, computed once. Any earlier hour is read from the same tables."""
+@lru_cache(maxsize=16)
+def _prepared_for(aid: str, stamp: tuple) -> tuple[Prepared, set]:
     profile = _profile(aid)
     _, tel, daily, _, _ = demo()
-    return engine().prepare(tel[tel["astronaut_id"] == aid], profile, daily[daily["astronaut_id"] == aid])
+    d, h, mine = USER.apply(daily[daily["astronaut_id"] == aid], tel[tel["astronaut_id"] == aid])
+    return engine().prepare(h, profile, d, eye_exams()), mine
 
 
-@lru_cache
-def _full_timeline(aid: str) -> list[dict]:
-    """Hour-by-hour status for the whole mission, computed once (about 2 s per crewmember). Because every table is
-    causal, the status at hour i is the same whatever moment is being replayed, so any window is a slice of this."""
-    prep = _prepared(aid)
+def _prepared_with_entries(aid: str) -> tuple[Prepared, set]:
+    return _prepared_for(aid, _stamp())
+
+
+def _prepared(aid: str) -> Prepared:
+    """Causal tables for one astronaut's whole history (with their own entries applied), computed once per state of
+    the entries. Any earlier hour is read from the same tables."""
+    return _prepared_with_entries(aid)[0]
+
+
+@lru_cache(maxsize=16)
+def _timeline_for(aid: str, stamp: tuple) -> list[dict]:
+    prep = _prepared_for(aid, stamp)[0]
     return engine().timeline(None, prep=prep, end=len(prep.hourly) - 1, hours=len(prep.hourly))
+
+
+def _full_timeline(aid: str) -> list[dict]:
+    """Hour-by-hour status for the whole mission (about 2 s to compute). Because every table is causal, the status at
+    hour i is the same whatever moment is being replayed, so any window is a slice of this."""
+    return _timeline_for(aid, _stamp())
 
 
 def warm_up():
@@ -151,7 +202,9 @@ def display_limits() -> dict:
             "career_dose_msv": config.CAREER_RADIATION_LIMIT_MSV, "dose_yellow_share": 0.8,
             "hip_bmd_loss_alert_pct": config.BMD_LOSS_ALERT_PCT, "sleep_target_h": config.SLEEP_TARGET_H,
             "fluid_target_ml": config.DAILY_FLUID_TARGET_ML, "ared_target_min_week": config.ARED_TARGET_MIN_WEEK,
-            "aerobic_target_min_week": config.AEROBIC_TARGET_MIN_WEEK}
+            "aerobic_target_min_week": config.AEROBIC_TARGET_MIN_WEEK,
+            "eye_margin_watch": fundus_rules.MARGIN_WATCH, "eye_margin_act": fundus_rules.MARGIN_ACT,
+            "eye_disc_growth_act": fundus_rules.DISC_GROWTH_ACT}
 
 
 @app.get("/api/indicators")
@@ -270,6 +323,16 @@ def assessment(aid: str, at: str | None = None):
         sent = pd.Timestamp(tl[start]["timestamp"])
         esc["sent_at"] = str(sent)
         esc["arrives_at"] = str(sent + pd.Timedelta(seconds=engine().comm_delay_s))
+    mine = _prepared_with_entries(aid)[1]                # values the astronaut typed are tagged as theirs
+    you = {"kind": "entered", "dataset": "you entered this"}
+    for name, ind in result["indicators"].items():
+        col = {"sleep_hours": "sleep_minutes"}.get(name, name)
+        if (ind["date"], col) in mine:
+            ind["source"] = you
+    answered_at = USER.answers().get(result["timestamp"][:10], {}).get("answered_at", "")
+    for name, v in result["vitals"].items():
+        if (result["timestamp"][:10], name) in mine and answered_at[:13] == result["timestamp"][:13]:
+            v["source"] = you
     return result
 
 
@@ -363,6 +426,126 @@ class AssessRequest(BaseModel):
 
 HOURLY_FIELDS = ("systolic_bp", "diastolic_bp", "heart_rate", "spo2", "core_temp")
 DAILY_FIELDS = ("blood_glucose_mg_dl", "mood", "stress", "fatigue")
+
+
+# ---------------------------------------------------------------- personal: questions, answers, eye photos, daily brief
+def _today(prep: Prepared, idx: int) -> tuple[str, int]:
+    ts = prep.hourly["timestamp"].iloc[idx]
+    return str(ts.date()), int(prep.hourly["mission_day"].iloc[idx])
+
+
+def _eye_due(prep: Prepared, idx: int) -> bool:
+    now = prep.hourly["timestamp"].iloc[idx]
+    done = [pd.Timestamp(e["date"]) for e in (prep.eye_exams or []) if pd.Timestamp(e["date"]) <= now]
+    return not done or (now - max(done)).days >= EYE_EXAM_EVERY_DAYS
+
+
+@app.get("/api/crew/{aid}/questions")
+def questions(aid: str, at: str | None = None):
+    """Today's questions: routine ones and follow-ups the engine adds from what it sees. Answered ones carry the answer."""
+    prep, idx = _at(aid, at)
+    date, _ = _today(prep, idx)
+    a = engine().assess_at(prep, idx)
+    d = int(prep.day_of_hour[idx])
+    answered = USER.answers().get(date, {}).get("values", {})
+    out = qbank.build(a, prep.daily.iloc[d] if d >= 0 else None, answered, _eye_due(prep, idx))
+    return {"date": date, **out}
+
+
+class Answers(BaseModel):
+    values: dict[str, float | int | None]
+    at: str | None = None
+
+
+@app.post("/api/crew/{aid}/answers")
+def save_answers(aid: str, body: Answers):
+    """Save answers to today's questions on this device. They replace the simulated values of that day (or hour, for
+    vitals) and the engine re-assesses. Returns the new assessment."""
+    prep, idx = _at(aid, body.at)
+    ranges = qbank.validation_ranges()
+    clean = {}
+    for field, value in body.values.items():
+        if value is None:
+            continue
+        if field not in ranges:
+            raise HTTPException(422, f"Unknown question: {field}")
+        lo, hi = ranges[field]
+        if not lo <= float(value) <= hi:
+            raise HTTPException(422, f"{field} must be between {lo} and {hi}")
+        clean[field] = value
+    date, _ = _today(prep, idx)
+    USER.save_answers(date, str(prep.hourly["timestamp"].iloc[idx]), clean)
+    reset_caches()
+    return assessment(aid, body.at)
+
+
+class EyePhoto(BaseModel):
+    image_base64: str = Field(..., description="The photo file, base64-encoded (PNG or JPEG)")
+    filename: str = "photo"
+    at: str | None = None
+
+
+@app.post("/api/crew/{aid}/eye-photo")
+def upload_eye_photo(aid: str, body: EyePhoto):
+    """Check a fundus photo (any image is accepted) against your baseline photo with classical image measurement,
+    store it, and send it on to the flight surgeon when it changed."""
+    from io import BytesIO
+    from PIL import Image, UnidentifiedImageError
+    from sol_ml import fundus
+    try:
+        raw = base64.b64decode(body.image_base64.split(",")[-1], validate=False)
+        img = Image.open(BytesIO(raw)).convert("RGB")
+    except (ValueError, UnidentifiedImageError):
+        raise HTTPException(422, "That file is not an image. Upload a PNG or JPEG photo.")
+    img.thumbnail((1024, 1024))
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    png = buf.getvalue()
+    prep, idx = _at(aid, body.at)
+    date, day = _today(prep, idx)
+    when = str(prep.hourly["timestamp"].iloc[idx])
+    USER.save_photo(when, day, png, body.filename)
+    reset_caches()
+    exam = next(e for e in eye_exams_list(aid, body.at) if e["date"] == when)
+    return {"exam": exam, "assessment": assessment(aid, body.at)}
+
+
+@app.get("/api/crew/{aid}/eye-exams")
+def eye_exams_list(aid: str, at: str | None = None):
+    """Every eye photo up to `at`, oldest first, with its measurements and the comparison with the baseline photo."""
+    prep, idx = _at(aid, at)
+    now = prep.hourly["timestamp"].iloc[idx]
+    return [{k: v for k, v in e.items() if k != "png"} | {"url": f"/api/eye-photos/{e['image']}",
+                                                         "source": {"kind": "simulated", "calibrated_on": "synthetic retina image"}
+                                                         if not e.get("uploaded") else {"kind": "entered", "dataset": "your photo"}}
+            for e in (prep.eye_exams or []) if pd.Timestamp(e["date"]) <= now]
+
+
+@app.get("/api/eye-photos/{name}")
+def eye_photo_file(name: str):
+    for folder in (DEMO_DIR / "eye_exams", USER.photos_dir):
+        path = (folder / name).resolve()
+        if path.parent == folder.resolve() and path.exists():
+            return FileResponse(path, media_type="image/png")
+    raise HTTPException(404, "No such photo")
+
+
+@app.get("/api/crew/{aid}/daily-brief")
+def brief(aid: str, at: str | None = None):
+    """Your day in a few lines, with tips. Written by rules for now, in the shape an AI model will use later."""
+    prep, idx = _at(aid, at)
+    a = assessment(aid, at)
+    q = questions(aid, at)
+    d = int(prep.day_of_hour[idx])
+    return daily_brief.build(_profile(aid)["name"], a, prep.daily, max(d, 0), reports(aid, at), q["total"] - q["answered"])
+
+
+@app.delete("/api/me/entries")
+def clear_entries():
+    """Forget every answer and photo entered on this device (the demo data stays)."""
+    USER.clear()
+    reset_caches()
+    return {"cleared": True}
 
 
 @app.post("/api/assess")

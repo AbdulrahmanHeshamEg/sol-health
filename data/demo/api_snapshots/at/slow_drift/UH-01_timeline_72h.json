@@ -4,133 +4,133 @@
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 14:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 15:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 16:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 17:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 18:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 19:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 20:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 21:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 22:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-13 23:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-14 00:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-14 01:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-14 02:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-14 03:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-14 04:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-14 05:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-14 06:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-14 07:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.832
+  "anomaly_score": 0.843
  },
  {
   "timestamp": "2026-10-14 08:00:00",
@@ -305,202 +305,202 @@
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 09:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 10:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 11:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 12:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 13:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 14:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 15:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 16:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 17:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 18:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 19:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 20:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 21:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 22:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-15 23:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-16 00:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-16 01:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-16 02:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-16 03:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-16 04:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-16 05:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-16 06:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-16 07:00:00",
   "status": "GREEN",
   "condition": "nominal",
   "p_abnormal": 0.0,
-  "anomaly_score": 0.921
+  "anomaly_score": 0.925
  },
  {
   "timestamp": "2026-10-16 08:00:00",
   "status": "YELLOW",
   "condition": "physiological_drift",
   "p_abnormal": 0.667,
-  "anomaly_score": 0.81
+  "anomaly_score": 0.761
  },
  {
   "timestamp": "2026-10-16 09:00:00",
   "status": "YELLOW",
   "condition": "physiological_drift",
   "p_abnormal": 0.667,
-  "anomaly_score": 0.81
+  "anomaly_score": 0.761
  },
  {
   "timestamp": "2026-10-16 10:00:00",
   "status": "YELLOW",
   "condition": "physiological_drift",
   "p_abnormal": 0.667,
-  "anomaly_score": 0.81
+  "anomaly_score": 0.761
  },
  {
   "timestamp": "2026-10-16 11:00:00",
   "status": "YELLOW",
   "condition": "physiological_drift",
   "p_abnormal": 0.667,
-  "anomaly_score": 0.81
+  "anomaly_score": 0.761
  },
  {
   "timestamp": "2026-10-16 12:00:00",
   "status": "YELLOW",
   "condition": "physiological_drift",
   "p_abnormal": 0.667,
-  "anomaly_score": 0.81
+  "anomaly_score": 0.761
  }
 ]

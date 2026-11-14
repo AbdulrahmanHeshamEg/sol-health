@@ -2,8 +2,8 @@
 // Mock mode: when VITE_USE_MOCK=true, or when the API cannot be reached, responses come from /mock/*.json
 // (copies of data/demo/api_snapshots). The snapshots hold the current moment and a few replay marks.
 import type {
-  Assessment, CheckIn, CrewCard, DailyRow, Forecast, IndicatorCard, Me, Meta, Mission, PlantedCase, Profile, Radiation,
-  Reminders, ReplayMark, Report, TelemetryRow, TimelinePoint,
+  Assessment, Brief, CrewCard, DailyRow, EyeExam, Forecast, IndicatorCard, Me, Meta, Mission, PlantedCase, Profile, Questions,
+  Radiation, Reminders, ReplayMark, Report, TelemetryRow, TimelinePoint,
 } from "./types";
 
 const FORCE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
@@ -80,6 +80,21 @@ async function get<T>(url: string, mockFile: string, at?: string | null, timed =
   return fromMock<T>(mockFile, at, timed);
 }
 
+/** Photos are served by the API; offline they come from the saved snapshot. */
+export const photoUrl = (url: string) => (mode === "mock" ? url.replace("/api/eye-photos/", "/mock/eye-photos/") : BASE + url);
+
+async function send<T>(url: string, method: "POST" | "DELETE", body?: unknown): Promise<T> {
+  if (mode === "mock") throw new Error("This needs the engine running: start the API (uvicorn api.main:app --port 8000) and try again.");
+  const res = await fetch(BASE + url, {
+    method, headers: body ? { "Content-Type": "application/json" } : undefined, body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) {
+    const detail = (await res.json().catch(() => null))?.detail;
+    throw new Error(Array.isArray(detail) ? detail.map((d: { msg: string }) => d.msg).join("; ") : detail ?? `Not saved (${res.status}).`);
+  }
+  return res.json();
+}
+
 export const api = {
   mission: (at?: string | null) => get<Mission>("/api/mission", "mission", at),
   meta: () => get<Meta>("/api/meta", "meta", null, false),
@@ -88,6 +103,18 @@ export const api = {
   crew: (at?: string | null) => get<CrewCard[]>("/api/crew", "crew", at),
   me: () => get<Me>("/api/me", "me", null, false),
   reports: (id: string, at?: string | null) => get<Report[]>(`/api/crew/${id}/reports`, `${id}_reports`, at),
+  questions: (id: string, at?: string | null) => get<Questions>(`/api/crew/${id}/questions`, `${id}_questions`, at),
+  brief: (id: string, at?: string | null) => get<Brief>(`/api/crew/${id}/daily-brief`, `${id}_brief`, at),
+  eyeExams: (id: string, at?: string | null) => get<EyeExam[]>(`/api/crew/${id}/eye-exams`, `${id}_eye_exams`, at),
+
+  /** Save answers to today's questions. They change your assessment, so they need the engine (the live API). */
+  answer: (id: string, values: Record<string, number>, at?: string | null) =>
+    send<Assessment>(`/api/crew/${id}/answers`, "POST", { values, at: at ?? undefined }),
+  /** Upload an eye photo (any image); the engine measures it against your baseline photo. */
+  eyePhoto: (id: string, imageBase64: string, filename: string, at?: string | null) =>
+    send<{ exam: EyeExam; assessment: Assessment }>(`/api/crew/${id}/eye-photo`, "POST", { image_base64: imageBase64, filename, at: at ?? undefined }),
+  /** Forget every answer and photo you entered (the demo data stays). */
+  clearEntries: () => send<{ cleared: boolean }>("/api/me/entries", "DELETE"),
   profile: (id: string) => get<Profile>(`/api/crew/${id}`, `${id}_profile`, null, false),
   assessment: (id: string, at?: string | null) => get<Assessment>(`/api/crew/${id}/assessment`, `${id}_assessment`, at),
   vitals: (id: string, at?: string | null) => get<TelemetryRow[]>(`/api/crew/${id}/vitals?hours=72`, `${id}_vitals_72h`, at),
@@ -98,18 +125,4 @@ export const api = {
   radiation: (id: string, at?: string | null) => get<Radiation>(`/api/crew/${id}/radiation`, `${id}_radiation`, at),
   reminders: (id: string, at?: string | null) => get<Reminders>(`/api/crew/${id}/reminders`, `${id}_reminders`, at),
 
-  /** Apply a manual check-in to your latest values. Needs the live API: the engine does the assessing. */
-  async checkin(id: string, checkin: CheckIn, at?: string | null): Promise<Assessment> {
-    if (mode === "mock") throw new Error("The check-in needs the API running: the engine assesses your entry. Start it with: uvicorn api.main:app --port 8000");
-    const res = await fetch(BASE + "/api/assess", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ astronaut_id: id, checkin, at: at ?? undefined }),
-    });
-    if (!res.ok) {
-      const body = await res.json().catch(() => null);
-      const detail = Array.isArray(body?.detail) ? body.detail.map((d: { loc: string[]; msg: string }) => `${d.loc.at(-1)}: ${d.msg}`).join("; ") : body?.detail;
-      throw new Error(detail ?? `The check-in was not accepted (${res.status}).`);
-    }
-    return res.json();
-  },
 };

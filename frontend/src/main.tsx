@@ -8,9 +8,12 @@ import { ReplayProvider } from "./state/replay";
 import { Skeleton } from "./components/ui";
 
 // Pages (and the charting library most of them use) load when opened.
-const Me = lazy(() => import("./pages/Me").then((m) => ({ default: m.Me })));
+const Today = lazy(() => import("./pages/Today").then((m) => ({ default: m.Today })));
+const Body = lazy(() => import("./pages/Body").then((m) => ({ default: m.Body })));
+const Eyes = lazy(() => import("./pages/Eyes").then((m) => ({ default: m.Eyes })));
 const Cabin = lazy(() => import("./pages/Cabin").then((m) => ({ default: m.Cabin })));
 const Reports = lazy(() => import("./pages/Reports").then((m) => ({ default: m.Reports })));
+const Settings = lazy(() => import("./pages/Settings").then((m) => ({ default: m.Settings })));
 const Learn = lazy(() => import("./pages/Learn").then((m) => ({ default: m.Learn })));
 const About = lazy(() => import("./pages/About").then((m) => ({ default: m.About })));
 const page = (el: React.ReactNode) => <Suspense fallback={<Skeleton lines={6} height={28} />}>{el}</Suspense>;
@@ -24,12 +27,15 @@ createRoot(document.getElementById("root")!).render(
         <ReplayProvider>
           <Routes>
             <Route element={<Layout />}>
-              <Route index element={page(<Me />)} />
+              <Route index element={page(<Today />)} />
+              <Route path="body" element={page(<Body />)} />
+              <Route path="eyes" element={page(<Eyes />)} />
               <Route path="cabin" element={page(<Cabin />)} />
-              <Route path="reports" element={page(<Reports />)} />
+              <Route path="doctor" element={page(<Reports />)} />
+              <Route path="settings" element={page(<Settings />)} />
               <Route path="learn" element={page(<Learn />)} />
               <Route path="about" element={page(<About />)} />
-              <Route path="*" element={<p>That page does not exist. Go back to your health page.</p>} />
+              <Route path="*" element={<p>That page does not exist. Go back to Today.</p>} />
             </Route>
           </Routes>
         </ReplayProvider>

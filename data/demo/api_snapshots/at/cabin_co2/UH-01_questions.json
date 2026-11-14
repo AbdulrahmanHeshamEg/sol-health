@@ -1,0 +1,401 @@
+{
+ "date": "2026-10-01",
+ "groups": [
+  {
+   "id": "follow_up",
+   "title": "The app needs to know",
+   "questions": [
+    {
+     "field": "headache",
+     "text": "Cabin CO2 is high. Do you have a headache right now?",
+     "why": "If yes, the app treats it as likely environmental and asks you to ventilate first.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 1,
+       "label": "Yes"
+      },
+      {
+       "value": 0,
+       "label": "No"
+      }
+     ],
+     "trigger": "Cabin CO2 is high",
+     "answered": false,
+     "answer": null
+    }
+   ]
+  },
+  {
+   "id": "feel",
+   "title": "How you feel",
+   "questions": [
+    {
+     "field": "sleep_hours",
+     "text": "How many hours did you sleep last night?",
+     "why": "Sleep protects attention and mood; your watch can miss short wake-ups.",
+     "type": "number",
+     "unit": "hours",
+     "min": 0,
+     "max": 16,
+     "step": 0.25,
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "mood",
+     "text": "How is your mood today?",
+     "why": "A daily score makes a slow change visible long before it feels serious.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 1,
+       "label": "1 \u00b7 Very low"
+      },
+      {
+       "value": 2,
+       "label": "2 \u00b7 Low"
+      },
+      {
+       "value": 3,
+       "label": "3 \u00b7 Okay"
+      },
+      {
+       "value": 4,
+       "label": "4 \u00b7 Good"
+      },
+      {
+       "value": 5,
+       "label": "5 \u00b7 Very good"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "stress",
+     "text": "How stressed do you feel?",
+     "why": "Stress, mood and sleep moving together is an early sign worth acting on.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 1,
+       "label": "1 \u00b7 Very stressed"
+      },
+      {
+       "value": 2,
+       "label": "2 \u00b7 Stressed"
+      },
+      {
+       "value": 3,
+       "label": "3 \u00b7 Normal"
+      },
+      {
+       "value": 4,
+       "label": "4 \u00b7 Calm"
+      },
+      {
+       "value": 5,
+       "label": "5 \u00b7 Very relaxed"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "fatigue",
+     "text": "How is your energy?",
+     "why": "Fatigue with a rising resting heart rate can come before an illness.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 1,
+       "label": "1 \u00b7 Exhausted"
+      },
+      {
+       "value": 2,
+       "label": "2 \u00b7 Tired"
+      },
+      {
+       "value": 3,
+       "label": "3 \u00b7 Normal"
+      },
+      {
+       "value": 4,
+       "label": "4 \u00b7 Fresh"
+      },
+      {
+       "value": 5,
+       "label": "5 \u00b7 Very fresh"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "headache",
+     "text": "Do you have a headache?",
+     "why": "A headache while cabin CO2 is high is probably the air, not you.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 1,
+       "label": "Yes"
+      },
+      {
+       "value": 0,
+       "label": "No"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    }
+   ]
+  },
+  {
+   "id": "morning_tests",
+   "title": "Morning tests",
+   "questions": [
+    {
+     "field": "blood_glucose_mg_dl",
+     "text": "Fasting blood sugar, before breakfast",
+     "why": "Low or high sugar affects thinking and energy.",
+     "type": "number",
+     "unit": "mg/dL",
+     "min": 20,
+     "max": 600,
+     "step": 1,
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "urine_sg",
+     "text": "Urine dipstick: specific gravity",
+     "why": "Shows how concentrated your urine is: high means drink more.",
+     "type": "number",
+     "unit": "",
+     "min": 1.0,
+     "max": 1.04,
+     "step": 0.005,
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "urine_blood",
+     "text": "Urine dipstick: blood pad",
+     "why": "Blood can be the first sign of a kidney stone; bone loss in space raises that risk.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 0,
+       "label": "Negative"
+      },
+      {
+       "value": 1,
+       "label": "Trace"
+      },
+      {
+       "value": 2,
+       "label": "+"
+      },
+      {
+       "value": 3,
+       "label": "++"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "urine_leukocytes",
+     "text": "Urine dipstick: white-cell pad",
+     "why": "White cells with nitrite point to a urinary infection.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 0,
+       "label": "Negative"
+      },
+      {
+       "value": 1,
+       "label": "Trace"
+      },
+      {
+       "value": 2,
+       "label": "+"
+      },
+      {
+       "value": 3,
+       "label": "++"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "urine_nitrite",
+     "text": "Urine dipstick: is the nitrite pad positive?",
+     "why": "Nitrite comes from bacteria in the urine.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 1,
+       "label": "Yes"
+      },
+      {
+       "value": 0,
+       "label": "No"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "urine_protein",
+     "text": "Urine dipstick: protein pad",
+     "why": "Protein in urine is normally absent; if it stays, the kidneys need a look.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 0,
+       "label": "Negative"
+      },
+      {
+       "value": 1,
+       "label": "Trace"
+      },
+      {
+       "value": 2,
+       "label": "+"
+      },
+      {
+       "value": 3,
+       "label": "++"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    }
+   ]
+  },
+  {
+   "id": "stool",
+   "title": "Stool log",
+   "questions": [
+    {
+     "field": "stool_bristol",
+     "text": "What did your stool look like today? (Bristol chart)",
+     "why": "Types 3-5 are normal; hard or watery stools change your fluid needs.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 1,
+       "label": "Type 1: separate hard lumps"
+      },
+      {
+       "value": 2,
+       "label": "Type 2: lumpy, sausage-shaped"
+      },
+      {
+       "value": 3,
+       "label": "Type 3: sausage with cracks"
+      },
+      {
+       "value": 4,
+       "label": "Type 4: smooth and soft"
+      },
+      {
+       "value": 5,
+       "label": "Type 5: soft blobs"
+      },
+      {
+       "value": 6,
+       "label": "Type 6: mushy"
+      },
+      {
+       "value": 7,
+       "label": "Type 7: watery"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "stool_count",
+     "text": "How many times today?",
+     "why": "Three or more loose stools a day dehydrates fast.",
+     "type": "number",
+     "unit": "times",
+     "min": 0,
+     "max": 10,
+     "step": 1,
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "stool_blood",
+     "text": "Any blood in your stool?",
+     "why": "Your flight surgeon should hear about any blood.",
+     "type": "choice",
+     "options": [
+      {
+       "value": 1,
+       "label": "Yes"
+      },
+      {
+       "value": 0,
+       "label": "No"
+      }
+     ],
+     "answered": false,
+     "answer": null
+    }
+   ]
+  },
+  {
+   "id": "vitals",
+   "title": "Vitals check (seated, at rest)",
+   "optional": true,
+   "questions": [
+    {
+     "field": "systolic_bp",
+     "text": "Blood pressure: upper number",
+     "why": "Blood pressure is judged at rest; your cuff reading replaces this hour's sensor value.",
+     "type": "number",
+     "unit": "mmHg",
+     "min": 50,
+     "max": 260,
+     "step": 1,
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "diastolic_bp",
+     "text": "Blood pressure: lower number",
+     "why": "The lower number completes the reading.",
+     "type": "number",
+     "unit": "mmHg",
+     "min": 30,
+     "max": 160,
+     "step": 1,
+     "answered": false,
+     "answer": null
+    },
+    {
+     "field": "core_temp",
+     "text": "Body temperature",
+     "why": "Fever is the clearest sign of infection.",
+     "type": "number",
+     "unit": "\u00b0C",
+     "min": 33,
+     "max": 43,
+     "step": 0.1,
+     "answered": false,
+     "answer": null
+    }
+   ]
+  }
+ ],
+ "answered": 0,
+ "total": 15
+}

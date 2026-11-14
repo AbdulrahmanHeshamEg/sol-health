@@ -10,16 +10,16 @@
   "top_alert": "Likely environmental: cabin CO2 is high",
   "top_reason": "You reported headache and fatigue while cabin CO2 7-day average is 2.83 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
   "vitals": {
-   "heart_rate": 95.0,
-   "hrv_rmssd": 39.66,
-   "spo2": 97.57,
-   "resp_rate": 13.76,
-   "systolic_bp": 120.71,
-   "diastolic_bp": 74.91,
-   "core_temp": 37.01,
-   "pvt_reaction_ms": 266.27
+   "heart_rate": 101.7,
+   "hrv_rmssd": 41.68,
+   "spo2": 98.08,
+   "resp_rate": 14.35,
+   "systolic_bp": 121.42,
+   "diastolic_bp": 72.95,
+   "core_temp": 37.16,
+   "pvt_reaction_ms": 240.58
   },
-  "cabin_co2_mmhg": 2.7,
+  "cabin_co2_mmhg": 2.67,
   "timestamp": "2026-10-01 12:00:00"
  }
 ]

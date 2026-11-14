@@ -55,6 +55,34 @@
   {
    "id": "high_blood_sugar",
    "label": "High blood sugar"
+  },
+  {
+   "id": "optic_disc_change",
+   "label": "Possible optic disc swelling (eye)"
+  },
+  {
+   "id": "kidney_stone_risk",
+   "label": "Blood in urine: kidney stone risk"
+  },
+  {
+   "id": "urinary_infection",
+   "label": "Possible urinary infection"
+  },
+  {
+   "id": "urine_abnormal",
+   "label": "Unusual urine test"
+  },
+  {
+   "id": "constipation",
+   "label": "Constipation"
+  },
+  {
+   "id": "diarrhea",
+   "label": "Diarrhoea"
+  },
+  {
+   "id": "stool_blood",
+   "label": "Blood in stool"
   }
  ],
  "signals": [
@@ -160,6 +188,54 @@
   "headache": {
    "kind": "simulated",
    "calibrated_on": "scripted for the planted cabin case"
+  },
+  "urine_sg": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_ph": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_blood": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_protein": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_glucose": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_ketones": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_leukocytes": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_nitrite": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "stool_bristol": {
+   "kind": "simulated",
+   "calibrated_on": "published Bristol stool scale distribution"
+  },
+  "stool_count": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "stool_blood": {
+   "kind": "simulated",
+   "calibrated_on": "published normal ranges"
+  },
+  "fundus_photo": {
+   "kind": "simulated",
+   "calibrated_on": "synthetic retina image (sol_ml.sim.fundus_image)"
   }
  },
  "citations": [
@@ -178,6 +254,9 @@
   "sleep_target_h": 8.0,
   "fluid_target_ml": 2500,
   "ared_target_min_week": 360,
-  "aerobic_target_min_week": 240
+  "aerobic_target_min_week": 240,
+  "eye_margin_watch": 0.75,
+  "eye_margin_act": 0.55,
+  "eye_disc_growth_act": 1.35
  }
 }

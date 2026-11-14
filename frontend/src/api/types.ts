@@ -5,7 +5,7 @@ export type VitalName =
   | "heart_rate" | "hrv_rmssd" | "spo2" | "resp_rate" | "systolic_bp" | "diastolic_bp" | "core_temp" | "pvt_reaction_ms";
 export type Who = "self" | "ground";
 
-export interface Source { kind: "real" | "simulated"; dataset?: string; calibrated_on?: string }
+export interface Source { kind: "real" | "simulated" | "entered"; dataset?: string; calibrated_on?: string }
 
 export interface ReplayMark { id: string; label: string; at: string; show_at?: string; astronaut_id?: string }
 
@@ -23,6 +23,7 @@ export interface Limits {
   cabin_co2_1h_mmhg: number; cabin_co2_7d_mmhg: number; radiation_ratio_elevated: number; radiation_ratio_shelter: number;
   career_dose_msv: number; dose_yellow_share: number; hip_bmd_loss_alert_pct: number; sleep_target_h: number;
   fluid_target_ml: number; ared_target_min_week: number; aerobic_target_min_week: number;
+  eye_margin_watch: number; eye_margin_act: number; eye_disc_growth_act: number;
 }
 
 export interface Meta {
@@ -56,7 +57,7 @@ export interface IndicatorReading {
   label: string; value: number; baseline: number | null; delta: number | null; unit: string; z: number | null; date: string; source: Source;
 }
 export interface BodySystem {
-  id: "heart" | "lungs" | "brain" | "bones_muscles" | "blood" | "immune";
+  id: "heart" | "lungs" | "brain" | "bones_muscles" | "blood" | "immune" | "eyes" | "kidneys" | "gut";
   label: string; function: string; status: Level; summary: string; indicators: string[]; alerts: string[];
 }
 export interface Action { who: Who; action: string; condition: string; level: Level; priority: number }
@@ -102,6 +103,7 @@ export interface TelemetryRow extends Record<VitalName, number> {
 export interface DailyRow {
   astronaut_id: string; date: string; mission_day: number; resting_hr: number; sleep_minutes: number; sleep_hours: number;
   fatigue: number; mood: number; stress: number; headache: 0 | 1; blood_glucose_mg_dl: number;
+  urine_sg: number; urine_blood: number; stool_bristol: number; stool_count: number;
   flag_spike: boolean; flag_drift: boolean; flag_combo: boolean;
 }
 
@@ -143,4 +145,31 @@ export interface PlantedCase {
 export interface CheckIn {
   systolic_bp?: number; diastolic_bp?: number; heart_rate?: number; spo2?: number; core_temp?: number;
   blood_glucose_mg_dl?: number; sleep_hours?: number; mood?: number; stress?: number; fatigue?: number; headache?: boolean;
+}
+
+/** A question the engine asks; `field` is where the answer goes. */
+export interface Question {
+  field: string; text: string; why: string; type: "number" | "choice" | "photo";
+  options?: Array<{ value: number; label: string }>; unit?: string; min?: number; max?: number; step?: number;
+  trigger?: string; answered: boolean; answer: number | null;
+}
+export interface QuestionGroup { id: string; title: string; optional?: boolean; questions: Question[] }
+export interface Questions { date: string; groups: QuestionGroup[]; answered: number; total: number }
+
+/** The daily brief: written by rules today, by an AI model later, same shape. */
+export interface Brief {
+  date: string; greeting: string; headline: string; paragraphs: string[]; status: Level;
+  changes: Array<{ label: string; direction: "worse" | "better"; text: string }>; tips: string[]; ask_next: string[];
+  generated_by: { kind: string; label: string; note: string };
+}
+
+export interface FundusMeasurements {
+  usable: boolean; problems: string[];
+  quality: { field_coverage: number; brightness: number; contrast: number; sharpness: number; red_share: number };
+  disc: { center: [number, number]; radius_px: number; area_px: number; margin_sharpness: number; vessel_visibility: number };
+}
+export interface EyeExam {
+  date: string; mission_day: number; image: string; url: string; uploaded?: boolean; source: Source;
+  measurements: FundusMeasurements;
+  result: { level: Level; kind: string; reason: string; ratios: { margin_sharpness: number; disc_area: number; vessel_visibility: number } | null };
 }

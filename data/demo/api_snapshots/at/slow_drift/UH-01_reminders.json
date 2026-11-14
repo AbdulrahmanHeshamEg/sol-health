@@ -35,6 +35,20 @@
    "due_at": "2026-10-16 20:00:00",
    "status": "upcoming",
    "logged_automatically": false
+  },
+  {
+   "id": "urine_test",
+   "label": "Urine dipstick (first urine of the day)",
+   "due_at": "2026-10-16 07:00:00",
+   "status": "done",
+   "logged_automatically": true
+  },
+  {
+   "id": "stool_log",
+   "label": "Stool log (Bristol chart)",
+   "due_at": "2026-10-16 21:00:00",
+   "status": "upcoming",
+   "logged_automatically": true
   }
  ],
  "checkin_streak_days": 47,

@@ -1,44 +1,44 @@
 {
  "inputs": {
-  "ared_minutes_7d": 420.0,
-  "aerobic_minutes_7d": 300.0,
+  "ared_minutes_7d": 360.0,
+  "aerobic_minutes_7d": 240.0,
   "mission_day": 47,
   "horizon_days": 90
  },
  "hip_bmd": {
   "rate_pct_per_month": {
-   "q10": 0.417,
-   "median": 0.519,
-   "q90": 0.666
+   "q10": 0.503,
+   "median": 0.673,
+   "q90": 0.834
   },
-  "estimated_loss_to_date_pct": 0.81,
+  "estimated_loss_to_date_pct": 1.05,
   "projected_loss_pct": {
-   "q10": 1.9,
-   "median": 2.37,
-   "q90": 3.04
+   "q10": 2.3,
+   "median": 3.07,
+   "q90": 3.81
   },
-  "projected_loss_if_ared_target_met_pct": 2.37,
+  "projected_loss_if_ared_target_met_pct": 3.07,
   "alert": false
  },
  "thigh_muscle": {
   "rate_pct_per_month": {
-   "q10": 0.359,
-   "median": 0.589,
-   "q90": 0.786
+   "q10": 0.651,
+   "median": 0.843,
+   "q90": 1.06
   },
-  "estimated_loss_to_date_pct": 0.92,
+  "estimated_loss_to_date_pct": 1.32,
   "projected_loss_pct": {
-   "q10": 1.64,
-   "median": 2.69,
-   "q90": 3.59
+   "q10": 2.97,
+   "median": 3.85,
+   "q90": 4.84
   },
-  "projected_loss_if_ared_target_met_pct": 2.69
+  "projected_loss_if_ared_target_met_pct": 3.85
  },
  "fitness_trend": {
   "alert": false,
-  "shift_bpm": 0.0,
-  "weeks_ago": 0,
-  "sessions": 75,
+  "shift_bpm": 5.6,
+  "weeks_ago": 2,
+  "sessions": 67,
   "reason": "Exercise heart rate is stable for the same exercise types."
  },
  "source": {

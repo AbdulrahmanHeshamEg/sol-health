@@ -1,0 +1,32 @@
+{
+ "date": "2026-09-15",
+ "greeting": "Good afternoon, Nadia.",
+ "headline": "A steady day: everything is within your own normal.",
+ "paragraphs": [
+  "Your heart, sleep, mood and morning tests are all close to your own normal, and the cabin air is within limits."
+ ],
+ "changes": [
+  {
+   "label": "Stress score",
+   "direction": "better",
+   "text": "Stress score is 3, higher than your last week (2)."
+  },
+  {
+   "label": "Energy",
+   "direction": "worse",
+   "text": "Energy is 2, lower than your last week (3)."
+  }
+ ],
+ "tips": [
+  "Add 180 min of resistive (ARED) exercise this week to protect bone and muscle."
+ ],
+ "ask_next": [
+  "14 of today's questions are still open: answering them sharpens tomorrow's read."
+ ],
+ "status": "GREEN",
+ "generated_by": {
+  "kind": "rules",
+  "label": "Written from your data by fixed rules",
+  "note": "An AI version will write this card from the same data. It will explain and advise only; your status and alerts stay with the engine."
+ }
+}

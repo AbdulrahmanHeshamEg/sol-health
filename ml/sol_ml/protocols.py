@@ -150,6 +150,68 @@ PROTOCOLS: dict[str, dict[str, list[dict]]] = {
             dict(who=G, action="Your flight surgeon has been notified."),
         ],
     },
+    "optic_disc_change": {
+        "YELLOW": [
+            dict(who=S, action="Check your near vision with the eye chart in the medical kit and log any blurring or headache."),
+            dict(who=S, action="Retake the fundus photo in 7 days, same camera settings."),
+            dict(who=G, action="Your eye photo and baseline photo go to your flight surgeon in today's report."),
+        ],
+        "RED": [
+            dict(who=S, action="Avoid straining and heavy resistive sets until your flight surgeon replies."),
+            dict(who=S, action="Take an OCT scan if the habitat has one, and log your vision daily."),
+            dict(who=G, action="Your eye photos have been sent to your flight surgeon for urgent review."),
+        ],
+    },
+    "kidney_stone_risk": {
+        "YELLOW": [
+            dict(who=S, action="Drink at least 2.5-3 L today and repeat the urine dipstick tomorrow morning."),
+            dict(who=S, action="Log any pain in your side, back or groin."),
+            dict(who=G, action="The result goes to your flight surgeon in today's report."),
+        ],
+        "RED": [
+            dict(who=S, action="Rest, drink water, and follow the kidney-stone checklist in the medical kit (pain relief)."),
+            dict(who=G, action="Your flight surgeon has been notified and will guide you through the next steps."),
+        ],
+    },
+    "urinary_infection": {
+        "YELLOW": [
+            dict(who=S, action="Drink more water and check your temperature."),
+            dict(who=S, action="Log burning, urgency or pain when passing urine."),
+            dict(who=G, action="Your flight surgeon reviews the result today and may start antibiotics from the kit."),
+        ],
+        "RED": [dict(who=G, action="Your flight surgeon has been notified.")],
+    },
+    "urine_abnormal": {
+        "YELLOW": [
+            dict(who=S, action="Repeat the urine dipstick tomorrow morning, before breakfast."),
+            dict(who=G, action="If it is still positive, your flight surgeon reviews it in the daily report."),
+        ],
+        "RED": [dict(who=G, action="Your flight surgeon has been notified.")],
+    },
+    "constipation": {
+        "YELLOW": [
+            dict(who=S, action="Drink more water and add fibre (fruit, vegetables, bran pouches) to your meals."),
+            dict(who=S, action="Keep your daily exercise: movement helps the bowel."),
+            dict(who=G, action="If it lasts more than 5 days, your flight surgeon can advise a laxative from the kit."),
+        ],
+        "RED": [dict(who=G, action="Your flight surgeon has been notified.")],
+    },
+    "diarrhea": {
+        "YELLOW": [
+            dict(who=S, action="Drink oral rehydration solution with every loose stool."),
+            dict(who=S, action="Check your temperature and log any cramps or vomiting."),
+            dict(who=G, action="Your flight surgeon sees this in today's report."),
+        ],
+        "RED": [dict(who=G, action="Your flight surgeon has been notified.")],
+    },
+    "stool_blood": {
+        "YELLOW": [
+            dict(who=S, action="Note the colour (bright red or black) and amount in your log."),
+            dict(who=S, action="Check for dizziness or a fast heart rate when standing."),
+            dict(who=G, action="Your flight surgeon reviews this in today's report."),
+        ],
+        "RED": [dict(who=G, action="Your flight surgeon has been notified.")],
+    },
     "high_blood_sugar": {
         "YELLOW": [
             dict(who=S, action="Repeat the fasting measurement tomorrow morning before eating."),

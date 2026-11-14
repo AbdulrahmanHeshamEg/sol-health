@@ -1,0 +1,29 @@
+{
+ "date": "2026-10-01",
+ "greeting": "Good afternoon, Nadia.",
+ "headline": "One thing to watch today: likely environmental: cabin co2 is high.",
+ "paragraphs": [
+  "You reported headache and fatigue while cabin CO2 7-day average is 2.83 mmHg, above the 2.5 mmHg limit: likely environmental, increase ventilation first.",
+  "It goes to your flight surgeon in tonight's report; nothing else is needed from you for that."
+ ],
+ "changes": [
+  {
+   "label": "Stress score",
+   "direction": "better",
+   "text": "Stress score is 4, higher than your last week (3)."
+  }
+ ],
+ "tips": [
+  "Ventilate first: check the fan and scrubber, and sleep in the best-ventilated module tonight.",
+  "Add 60 min of aerobic exercise (treadmill/cycle) this week."
+ ],
+ "ask_next": [
+  "15 of today's questions are still open: answering them sharpens tomorrow's read."
+ ],
+ "status": "YELLOW",
+ "generated_by": {
+  "kind": "rules",
+  "label": "Written from your data by fixed rules",
+  "note": "An AI version will write this card from the same data. It will explain and advise only; your status and alerts stay with the engine."
+ }
+}

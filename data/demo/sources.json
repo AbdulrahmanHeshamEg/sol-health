@@ -74,5 +74,53 @@
   "headache": {
     "kind": "simulated",
     "calibrated_on": "scripted for the planted cabin case"
+  },
+  "urine_sg": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_ph": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_blood": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_protein": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_glucose": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_ketones": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_leukocytes": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "urine_nitrite": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+  },
+  "stool_bristol": {
+    "kind": "simulated",
+    "calibrated_on": "published Bristol stool scale distribution"
+  },
+  "stool_count": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "stool_blood": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+  },
+  "fundus_photo": {
+    "kind": "simulated",
+    "calibrated_on": "synthetic retina image (sol_ml.sim.fundus_image)"
   }
 }

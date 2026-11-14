@@ -62,7 +62,14 @@ RIDGE = {  # NASA Human Research Program hazard behind each condition
     "cardiovascular_strain": "Altered gravity", "deconditioning": "Altered gravity", "dehydration": "Altered gravity",
     "physiological_drift": "Distance from Earth", "acute_deviation": "Distance from Earth",
     "low_blood_sugar": "Distance from Earth", "high_blood_sugar": "Distance from Earth",
+    "optic_disc_change": "Altered gravity", "kidney_stone_risk": "Altered gravity", "urinary_infection": "Hostile / closed environment",
+    "urine_abnormal": "Distance from Earth", "constipation": "Distance from Earth", "diarrhea": "Hostile / closed environment",
+    "stool_blood": "Distance from Earth",
 }
+URINE_SG_CONCENTRATED = 1.030                # specific gravity above this = concentrated urine
+DIPSTICK_WORDS = {0: "negative", 1: "trace", 2: "+", 3: "++"}
+CONSTIPATION_DAYS, DIARRHEA_MOTIONS = 3, 3
+EYE_EXAM_VALID_DAYS = 35                     # an eye-photo result stands until the next monthly photo
 GLUCOSE_LIMITS = [("<", 54.0, "RED", "low_blood_sugar", "Fasting glucose below 54 mg/dL"),
                   ("<", 70.0, "YELLOW", "low_blood_sugar", "Fasting glucose below 70 mg/dL"),
                   (">=", 250.0, "RED", "high_blood_sugar", "Fasting glucose at or above 250 mg/dL"),
@@ -82,8 +89,14 @@ BODY_SYSTEMS = [
      ["blood_glucose_mg_dl", "fluid_last_24h"], {"dehydration", "low_blood_sugar", "high_blood_sugar"}),
     ("immune", "Immune system and radiation", "Defends against infection. Radiation and stress weaken it, and a closed cabin spreads germs.",
      ["core_temp", "radiation_dose_rate"], {"fever_infection", "radiation_event"}),
+    ("eyes", "Eyes", "In weightlessness fluid shifts toward the head; in some astronauts the optic disc swells and near vision changes (SANS).",
+     ["fundus_photo", "vision_change"], {"optic_disc_change"}),
+    ("kidneys", "Kidneys and urine", "Filter the blood. Bone loss in space puts extra calcium in the urine, which raises the risk of kidney stones.",
+     ["urine_sg", "urine_blood", "urine_leukocytes"], {"kidney_stone_risk", "urinary_infection", "urine_abnormal"}),
+    ("gut", "Digestion", "Digests food and absorbs water. Space food, less movement and less fluid change bowel habits.",
+     ["stool_bristol", "stool_count", "stool_blood"], {"constipation", "diarrhea", "stool_blood"}),
 ]
-BODY_SIGNAL_SYSTEM = {"resting_hr": "heart", "sleep_minutes": "brain", "fatigue": "brain", "mood": "brain", "stress": "brain"}
+BODY_SIGNAL_SYSTEM = {"urine_sg": "kidneys", "resting_hr": "heart", "sleep_minutes": "brain", "fatigue": "brain", "mood": "brain", "stress": "brain"}
 
 
 def _worst(*levels):
@@ -115,6 +128,7 @@ class Prepared:
     rad_ratio: np.ndarray
     co2_7d: np.ndarray
     day_of_hour: np.ndarray           # index into `daily` available at each hour (-1 = none yet)
+    eye_exams: list | None = None     # fundus photos: {date, image, measurements, result}, oldest first
 
 
 class HealthEngine:
@@ -166,7 +180,21 @@ class HealthEngine:
         out["unusual"] = np.where(ok, 1.0 - rank, 0.0)          # 1 = more isolated than every real training day
         return out
 
-    def prepare(self, hourly: pd.DataFrame, profile: dict | None = None, daily: pd.DataFrame | None = None) -> Prepared:
+    @staticmethod
+    def grade_eye_exams(exams: list[dict]) -> list[dict]:
+        """Measure each photo (bytes under `png`, or measurements already given) and compare it with the first usable one."""
+        from . import fundus
+        graded, baseline = [], None
+        for e in sorted(exams, key=lambda x: x["date"]):
+            m = e.get("measurements") or fundus.measure(e["png"])
+            result = fundus.compare(m, baseline)
+            if baseline is None and m["usable"]:
+                baseline = m
+            graded.append({k: v for k, v in e.items() if k != "png"} | {"measurements": m, "result": result})
+        return graded
+
+    def prepare(self, hourly: pd.DataFrame, profile: dict | None = None, daily: pd.DataFrame | None = None,
+                eye_exams: list[dict] | None = None) -> Prepared:
         hourly = hourly.sort_values("timestamp").reset_index(drop=True)
         profile = profile or {}
         if profile.get("baseline") and all(v in profile["baseline"] for v in VITAL_SIGNALS):
@@ -186,7 +214,8 @@ class HealthEngine:
             ts = hourly["timestamp"]
             known = (ts - pd.Timedelta(hours=DAILY_AVAILABLE_HOUR)).dt.normalize()
             day_of_hour = np.searchsorted(pd.to_datetime(daily["date"]).to_numpy(), known.to_numpy(), side="right") - 1
-        return Prepared(hourly, daily, profile, baseline, body, rate, ratio, co2_7d, day_of_hour)
+        return Prepared(hourly, daily, profile, baseline, body, rate, ratio, co2_7d, day_of_hour,
+                        self.grade_eye_exams(eye_exams) if eye_exams else None)
 
     # ------------------------------------------------------------------ alert builders
     def _alert(self, source, level, condition, message, reason, kind, **extra) -> dict:
@@ -231,6 +260,7 @@ class HealthEngine:
                     alerts.append(self._alert("rule", level, cond, msg, f"{msg}: this morning's reading is {glucose:.0f} mg/dL.",
                                               "hard_limit", signal="blood_glucose_mg_dl", value=float(glucose), threshold=f"{op} {val:.0f}"))
                     break
+        alerts += self._urine_stool_alerts(daily, d)
         if "mood" in daily:
             low = (daily["mood"].to_numpy(float)[: d + 1] <= self.low_mood_score)
             days = _run_length(low, d)
@@ -240,6 +270,70 @@ class HealthEngine:
                                           "mood", signal="mood", value=float(daily['mood'].iloc[d]),
                                           threshold=f"<= {self.low_mood_score} for {self.low_mood_days} days"))
         return alerts
+
+    def _urine_stool_alerts(self, daily: pd.DataFrame, d: int) -> list[dict]:
+        """Rules for this morning's urine dipstick and stool log (clinical rules, no learned model)."""
+        if "urine_sg" not in daily:
+            return []
+        out, row = [], daily.iloc[d]
+        val = lambda k: row.get(k, np.nan)
+        if pd.notna(val("urine_sg")) and val("urine_sg") > URINE_SG_CONCENTRATED:
+            out.append(self._alert("rule", "YELLOW", "dehydration", "Concentrated urine",
+                                   f"Your urine specific gravity is {val('urine_sg'):.3f}, above {URINE_SG_CONCENTRATED:.3f}: you are probably not drinking enough.",
+                                   "urine", signal="urine_sg", value=float(val("urine_sg")), threshold=f"> {URINE_SG_CONCENTRATED:.3f}"))
+        if pd.notna(val("urine_blood")) and val("urine_blood") >= 2:
+            pain = val("flank_pain") == 1
+            out.append(self._alert("rule", "RED" if pain else "YELLOW", "kidney_stone_risk", "Blood in urine",
+                                   f"Your urine dipstick shows blood ({DIPSTICK_WORDS[int(val('urine_blood'))]})"
+                                   + (" and you reported pain in your side or back: possible kidney stone." if pain else ": with bone loss in space this can mean a kidney stone starting."),
+                                   "urine", signal="urine_blood", value=float(val("urine_blood")), threshold=">= +"))
+        if pd.notna(val("urine_leukocytes")) and val("urine_leukocytes") >= 2 and val("urine_nitrite") == 1:
+            out.append(self._alert("rule", "YELLOW", "urinary_infection", "Possible urinary infection",
+                                   f"Your urine dipstick shows white cells ({DIPSTICK_WORDS[int(val('urine_leukocytes'))]}) and nitrite: a sign of a urinary infection.",
+                                   "urine", signal="urine_leukocytes", value=float(val("urine_leukocytes")), threshold=">= + with nitrite"))
+        for pad, name in (("urine_protein", "protein"), ("urine_glucose", "sugar"), ("urine_ketones", "ketones")):
+            if pd.notna(val(pad)) and val(pad) >= 2:
+                out.append(self._alert("rule", "YELLOW", "urine_abnormal", f"{name.capitalize()} in urine",
+                                       f"Your urine dipstick shows {name} ({DIPSTICK_WORDS[int(val(pad))]}); it is normally negative.",
+                                       "urine", signal=pad, value=float(val(pad)), threshold=">= +"))
+        if "stool_bristol" in daily:
+            hard = daily["stool_bristol"].to_numpy(float)[: d + 1] <= 2
+            days = _run_length(hard, d)
+            if days >= CONSTIPATION_DAYS:
+                out.append(self._alert("rule", "YELLOW", "constipation", "Constipation",
+                                       f"Your stool has been hard (Bristol type 1-2) for {_plural(days, 'day')} in a row.",
+                                       "stool", signal="stool_bristol", value=float(val("stool_bristol")), threshold=f"type <= 2 for {CONSTIPATION_DAYS} days"))
+            if pd.notna(val("stool_bristol")) and val("stool_bristol") >= 6 and val("stool_count") >= DIARRHEA_MOTIONS:
+                out.append(self._alert("rule", "YELLOW", "diarrhea", "Diarrhoea",
+                                       f"You logged {int(val('stool_count'))} loose stools (Bristol type {int(val('stool_bristol'))}) today: watch your fluids.",
+                                       "stool", signal="stool_bristol", value=float(val("stool_bristol")), threshold=f"type >= 6, {DIARRHEA_MOTIONS}+ a day"))
+            if val("stool_blood") == 1:
+                out.append(self._alert("rule", "YELLOW", "stool_blood", "Blood in stool",
+                                       "You reported blood in your stool today; your flight surgeon sees this in today's report.",
+                                       "stool", signal="stool_blood", value=1.0, threshold="any visible blood"))
+        return out
+
+    def _eye_alert(self, prep: Prepared, i: int) -> dict | None:
+        """The latest fundus photo up to this hour, compared with the baseline photo (sol_ml.fundus)."""
+        exams = getattr(prep, "eye_exams", None) or []
+        now = prep.hourly["timestamp"].iloc[i]
+        done = [e for e in exams if pd.Timestamp(e["date"]) <= now]
+        if not done:
+            return None
+        last = done[-1]
+        result = last.get("result") or {}
+        if result.get("level", "GREEN") == "GREEN" or (now - pd.Timestamp(last["date"])).days > EYE_EXAM_VALID_DAYS:
+            return None
+        if result.get("kind") == "retake":
+            return None                       # a bad photo is a question (retake it), not a health alert
+        vision = prep.daily is not None and "vision_change" in prep.daily and int(prep.day_of_hour[i]) >= 0 \
+            and prep.daily["vision_change"].iloc[int(prep.day_of_hour[i])] == 1
+        level = "RED" if vision else result["level"]
+        reason = result["reason"] + (" You also reported a change in your vision." if vision else "")
+        return self._alert("model", level, "optic_disc_change", "Eye photo: optic disc changed", reason, "eye_exam",
+                           signal="fundus_photo", value=result.get("ratios", {}).get("margin_sharpness"),
+                           threshold="margin sharpness < 75 % of baseline (watch), < 55 % or disc +35 % (act now)",
+                           probability=0.5, model="fundus photo measurement against your baseline photo (no trained model)")
 
     def _body_alerts(self, prep: Prepared, d: int) -> list[dict]:
         body, daily, alerts = prep.body, prep.daily, []
@@ -350,6 +444,9 @@ class HealthEngine:
             for a in alerts:                 # a fatigue-driven body alert during high CO2 is probably the cabin
                 if a["kind"] in ("spike", "drift") and a.get("signal") == "fatigue":
                     a["reason"] += " Cabin CO2 is high: likely environmental."
+        eye = self._eye_alert(prep, i)
+        if eye:
+            alerts.append(eye)
         spe = self._spe(prep, i)
         spe_alert = self._spe_alert(spe)
         if spe_alert:

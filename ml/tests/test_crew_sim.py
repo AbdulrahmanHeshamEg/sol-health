@@ -86,7 +86,7 @@ def test_demo_is_reproducible_and_has_the_expected_shape():
     assert len(a["crew"]) == 1 and len(a["telemetry"]) == 75 * 24 and len(a["daily"]) == 75          # one astronaut
     for col in ("heart_rate", "spo2", "systolic_bp", "core_temp", "cabin_co2_mmhg", "radiation_msv", "radiation_ugy_per_day", "is_asleep"):
         assert col in a["telemetry"].columns
-    assert [c["id"] for c in a["planted_cases"]] == ["cabin_co2", "slow_drift", "solar_storm", "odd_combination"]
+    assert [c["id"] for c in a["planted_cases"]] == ["cabin_co2", "slow_drift", "solar_storm", "optic_disc", "odd_combination"]
     assert set(a["sources"][k]["kind"] for k in a["sources"]) == {"simulated", "real"}
 
 

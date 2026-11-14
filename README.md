@@ -12,9 +12,10 @@ who is minutes away, so you act first.
   - Solar-storm alarm: caught the real 20 May 2024 storm (Curiosity's RAD) in its first hour, with no unconfirmed alarm in 35 months
   - Cabin CO2 environmental gate from NASA limits, replayed on 468 days of real ISS data
   - Radiation dose counter, bone and muscle projection, fitness trend
-  - Hard clinical limits for SpO2, temperature, blood pressure, glucose
+  - Hard clinical limits for SpO2, temperature, blood pressure, glucose; urine dipstick and stool-log rules
+  - Eye exam: a fundus photo check by classical image measurement against your own baseline photo (no trained model), for SANS
 - **Action protocols:** prioritised checklists: what you do, and what goes to your flight surgeon (act-now alerts at once, watch alerts in the daily report)
-- **FastAPI** service with mission replay (`?at=`), a measurement check-in, indicator explainer cards and reminders
+- **FastAPI** service: today's questions (with follow-ups), saved answers, eye-photo upload, a daily brief (rules now, AI-ready), mission replay (`?at=`)
 - **Notebooks 00–09:** data exploration, model comparison with a shared protocol, and a Decision cell each (`notebooks/`, figures in `reports/figures/`)
 - **Demo mission:** one fictional astronaut alone on a Mars surface mission, 75 days, carrying all 4 planted test cases; statistics calibrated on real data
 - **Docs** for judges and for Claude Code (`CLAUDE.md`, `docs/`)

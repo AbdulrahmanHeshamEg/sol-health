@@ -14,10 +14,13 @@ const SPOT: Record<Id, { cx: number; cy: number; shape: React.ReactNode }> = {
   lungs: { cx: 100, cy: 128, shape: <><path d="M94 104c-12 2-20 14-20 34 0 8 3 12 8 12 8 0 12-8 12-18z" /><path d="M106 104c12 2 20 14 20 34 0 8-3 12-8 12-8 0-12-8-12-18z" /></> },
   heart: { cx: 104, cy: 136, shape: <path d="M106 150c-10-7-15-12-15-18 0-5 4-8 8-8 3 0 5 1 7 4 2-3 4-4 7-4 4 0 8 3 8 8 0 6-5 11-15 18z" /> },
   immune: { cx: 100, cy: 84, shape: <path d="M100 72l13 5v9c0 8-6 13-13 16-7-3-13-8-13-16v-9z" /> },
-  blood: { cx: 100, cy: 196, shape: <path d="M100 176c7 9 11 15 11 21a11 11 0 01-22 0c0-6 4-12 11-21z" /> },
+  blood: { cx: 58, cy: 168, shape: <path d="M58 150c6 8 9 13 9 18a9 9 0 01-18 0c0-5 3-10 9-18z" /> },
+  eyes: { cx: 100, cy: 34, shape: <><ellipse cx="91" cy="35" rx="6" ry="3.6" /><ellipse cx="109" cy="35" rx="6" ry="3.6" /></> },
+  kidneys: { cx: 100, cy: 196, shape: <><path d="M88 186c-6 0-9 6-8 12s5 10 9 9c3-1 2-5 1-8s1-6 1-9c0-2-1-4-3-4z" /><path d="M112 186c6 0 9 6 8 12s-5 10-9 9c-3-1-2-5-1-8s-1-6-1-9c0-2 1-4 3-4z" /></> },
+  gut: { cx: 100, cy: 232, shape: <path d="M84 220h32c4 0 6 3 6 6v12c0 3-2 6-6 6H84c-4 0-6-3-6-6v-4c0-2 2-3 4-3h30v-4H84c-3 0-6-2-6-5s3-2 6-2z" /> },
   bones_muscles: { cx: 80, cy: 318, shape: <><rect x="71" y="266" width="15" height="96" rx="7" /><rect x="114" y="266" width="15" height="96" rx="7" /></> },
 };
-const ORDER: Id[] = ["brain", "immune", "lungs", "heart", "blood", "bones_muscles"];
+const ORDER: Id[] = ["brain", "eyes", "immune", "lungs", "heart", "blood", "kidneys", "gut", "bones_muscles"];
 
 export function BodyFigure({ systems, cards }: { systems: BodySystem[]; cards?: IndicatorCard[] }) {
   const worst = [...systems].sort((a, b) => "GYR".indexOf(b.status[0]) - "GYR".indexOf(a.status[0]))[0];

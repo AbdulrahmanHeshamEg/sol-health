@@ -1,0 +1,90 @@
+[
+ {
+  "date": "2026-08-31 09:00:00",
+  "mission_day": 1,
+  "image": "eye_day01.png",
+  "uploaded": false,
+  "measurements": {
+   "usable": true,
+   "problems": [],
+   "quality": {
+    "field_coverage": 0.67,
+    "brightness": 0.349,
+    "contrast": 0.082,
+    "sharpness": 0.95,
+    "red_share": 0.597
+   },
+   "disc": {
+    "center": [
+     170,
+     260
+    ],
+    "radius_px": 28.0,
+    "area_px": 2463.0,
+    "margin_sharpness": 2.418,
+    "vessel_visibility": 0.19
+   },
+   "size_px": [
+    512,
+    512
+   ]
+  },
+  "result": {
+   "level": "GREEN",
+   "kind": "baseline",
+   "reason": "This photo is stored as your baseline; later photos are compared with it.",
+   "ratios": null
+  },
+  "url": "/api/eye-photos/eye_day01.png",
+  "source": {
+   "kind": "simulated",
+   "calibrated_on": "synthetic retina image"
+  }
+ },
+ {
+  "date": "2026-09-29 09:00:00",
+  "mission_day": 30,
+  "image": "eye_day30.png",
+  "uploaded": false,
+  "measurements": {
+   "usable": true,
+   "problems": [],
+   "quality": {
+    "field_coverage": 0.67,
+    "brightness": 0.348,
+    "contrast": 0.082,
+    "sharpness": 0.98,
+    "red_share": 0.597
+   },
+   "disc": {
+    "center": [
+     175,
+     253
+    ],
+    "radius_px": 28.0,
+    "area_px": 2463.0,
+    "margin_sharpness": 2.445,
+    "vessel_visibility": 0.216
+   },
+   "size_px": [
+    512,
+    512
+   ]
+  },
+  "result": {
+   "level": "GREEN",
+   "kind": "unchanged",
+   "ratios": {
+    "margin_sharpness": 1.011,
+    "disc_area": 1.0,
+    "vessel_visibility": 1.137
+   },
+   "reason": "Your optic disc looks the same as in your baseline photo."
+  },
+  "url": "/api/eye-photos/eye_day30.png",
+  "source": {
+   "kind": "simulated",
+   "calibrated_on": "synthetic retina image"
+  }
+ }
+]

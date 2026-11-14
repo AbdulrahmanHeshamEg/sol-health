@@ -1,0 +1,39 @@
+{
+ "date": "2026-10-16",
+ "greeting": "Good afternoon, Nadia.",
+ "headline": "One thing to watch today: slow drift in resting heart rate.",
+ "paragraphs": [
+  "Resting heart rate has been above your 28-day normal for 4 days (average 2.4 robust SD); the alert has been active for 1 day.",
+  "It goes to your flight surgeon in tonight's report; nothing else is needed from you for that."
+ ],
+ "changes": [
+  {
+   "label": "Resting heart rate",
+   "direction": "worse",
+   "text": "Resting heart rate is 79 bpm, higher than your last week (75)."
+  },
+  {
+   "label": "Sleep",
+   "direction": "worse",
+   "text": "Sleep is 5.5 h, lower than your last week (7.5 h)."
+  },
+  {
+   "label": "Stress score",
+   "direction": "worse",
+   "text": "Stress score is 3, lower than your last week (4)."
+  }
+ ],
+ "tips": [
+  "Treat today as a recovery day: easy exercise, extra fluids, early night.",
+  "Aim for 8 h sleep tonight (last 24 h: 5 h)."
+ ],
+ "ask_next": [
+  "15 of today's questions are still open: answering them sharpens tomorrow's read."
+ ],
+ "status": "YELLOW",
+ "generated_by": {
+  "kind": "rules",
+  "label": "Written from your data by fixed rules",
+  "note": "An AI version will write this card from the same data. It will explain and advise only; your status and alerts stay with the engine."
+ }
+}

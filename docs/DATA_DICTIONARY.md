@@ -18,6 +18,8 @@ series is a replay of real measurements. `data/demo/sources.json` records the or
 | `data/demo/daily.csv` | 75 daily rows |
 | `data/demo/planted_cases.json` | ground truth of the 4 planted cases (evaluation and replay only; the engine never reads it) |
 | `data/demo/sources.json` | origin of every signal |
+| `data/demo/eye_exams/*.png`, `eye_exams.json` | synthetic fundus photos on mission days 1, 30 and 60 (the day-60 one shows early swelling) |
+| `data/user/` (git-ignored) | the astronaut's own answers (`answers.json`) and uploaded eye photos |
 | `data/demo/api_snapshots/` | saved API responses for frontend mock mode (`at/<mark>/` for replay) |
 | `data/demo_v0/` | the earlier purely simulated four-person crew, kept for the baseline comparison |
 | `data/processed/*.parquet` | tidy tables from the real datasets (git-ignored; rebuilt by notebooks 01, 04, 06) |
@@ -45,6 +47,10 @@ series is a replay of real measurements. `data/demo/sources.json` records the or
 | `fatigue`, `mood`, `stress` | 1–5, **5 = best**, 3 = normal | Markov chain with a real PMData person's day-to-day transition matrix |
 | `headache` | 0/1 | scripted for the planted cabin case only |
 | `blood_glucose_mg_dl` | mg/dL, fasting | normal around a personal mean of about 90, SD 6 (published range 70–99) |
+| `urine_sg`, `urine_ph` | specific gravity, pH | normal(1.017, 0.004) clipped to 1.003–1.029; normal(6.2, 0.5) |
+| `urine_blood`, `urine_protein`, `urine_glucose`, `urine_ketones`, `urine_leukocytes` | dipstick pad 0–3 (negative, trace, +, ++) | mostly negative, rare trace |
+| `urine_nitrite`, `stool_blood`, `flank_pain`, `vision_change` | 0/1 | 0 unless answered by the user |
+| `stool_bristol`, `stool_count` | Bristol type 1–7, motions a day | published type distribution (mostly 3–5); Poisson(1.1) clipped to 0–3 |
 
 A day's row counts as known to the engine from 08:00 of that day.
 
@@ -61,6 +67,7 @@ One fictional astronaut, **UH-01 Nadia Farouk**, alone on the mission, carries a
 | Cabin CO2 with headache reports | 24–33, headaches from day 27 | the highest real 10-day CO2 stretch of ISS mission RR-1; headache reports, fatigue ≤ 2 |
 | Slow drift (illness onset) | 40–49 ramp, held to 54, then resolved | resting HR +6 bpm, sleep −60 min, fatigue one point worse |
 | Odd combination | 62–68 | mood −1, stress −1, sleep −55 min |
+| Eye exam: optic disc swelling | photo on day 60 | synthetic photo with an early swollen disc (days 1 and 30 normal) |
 | Solar storm | day 75 from 05:00 (under way "now") | the real 20 May 2024 storm, unscaled |
 
 ## Real-data tables (`data/processed/`)

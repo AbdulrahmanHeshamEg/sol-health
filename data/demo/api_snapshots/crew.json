@@ -4,22 +4,22 @@
   "name": "Nadia Farouk",
   "role": "Mission astronaut",
   "status": "RED",
-  "health_score": 64,
+  "health_score": 55,
   "condition": "radiation_event",
   "condition_label": "Solar particle event",
   "top_alert": "Solar storm in progress: go to the storm shelter now",
   "top_reason": "Radiation dose rate is 4.1 times the 7-day normal and has been elevated for 19 hours.",
   "vitals": {
-   "heart_rate": 71.9,
-   "hrv_rmssd": 59.43,
-   "spo2": 98.4,
-   "resp_rate": 12.76,
-   "systolic_bp": 111.24,
-   "diastolic_bp": 61.25,
-   "core_temp": 37.01,
-   "pvt_reaction_ms": 280.76
+   "heart_rate": 75.9,
+   "hrv_rmssd": 66.64,
+   "spo2": 98.33,
+   "resp_rate": 13.07,
+   "systolic_bp": 111.85,
+   "diastolic_bp": 68.43,
+   "core_temp": 36.7,
+   "pvt_reaction_ms": 274.73
   },
-  "cabin_co2_mmhg": 1.91,
+  "cabin_co2_mmhg": 1.95,
   "timestamp": "2026-11-13 23:00:00"
  }
 ]

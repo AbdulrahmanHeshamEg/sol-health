@@ -10,3 +10,4 @@ data/processed/*
 !data/processed/.gitkeep
 .ipynb_checkpoints/
 .pytest-tmp/
+data/user/

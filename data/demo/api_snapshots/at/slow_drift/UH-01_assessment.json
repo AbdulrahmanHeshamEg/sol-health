@@ -3,7 +3,7 @@
  "timestamp": "2026-10-16 12:00:00",
  "mission_day": 47,
  "status": "YELLOW",
- "health_score": 79,
+ "health_score": 80,
  "condition": "physiological_drift",
  "condition_label": "Slow drift from your normal",
  "probabilities": {
@@ -20,9 +20,16 @@
   "cardiovascular_strain": 0.0,
   "dehydration": 0.0,
   "low_blood_sugar": 0.0,
-  "high_blood_sugar": 0.0
+  "high_blood_sugar": 0.0,
+  "optic_disc_change": 0.0,
+  "kidney_stone_risk": 0.0,
+  "urinary_infection": 0.0,
+  "urine_abnormal": 0.0,
+  "constipation": 0.0,
+  "diarrhea": 0.0,
+  "stool_blood": 0.0
  },
- "anomaly_score": 0.81,
+ "anomaly_score": 0.761,
  "alerts": [
   {
    "source": "model",
@@ -55,16 +62,16 @@
   },
   {
    "signal": "fatigue",
-   "deviation": -1.0,
+   "deviation": 0.0,
    "unit": "points",
-   "z": 0.67
+   "z": 0.0
   }
  ],
  "vitals": {
   "heart_rate": {
-   "value": 110.0,
-   "baseline": 87.0,
-   "delta": 23.0,
+   "value": 95.9,
+   "baseline": 88.05,
+   "delta": 7.85,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -72,9 +79,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 47.77,
-   "baseline": 43.5,
-   "delta": 4.27,
+   "value": 51.6,
+   "baseline": 44.2,
+   "delta": 7.4,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -82,9 +89,9 @@
    }
   },
   "spo2": {
-   "value": 98.24,
-   "baseline": 98.2,
-   "delta": 0.04,
+   "value": 98.07,
+   "baseline": 97.97,
+   "delta": 0.1,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -92,9 +99,9 @@
    }
   },
   "resp_rate": {
-   "value": 16.24,
-   "baseline": 15.54,
-   "delta": 0.7,
+   "value": 17.6,
+   "baseline": 15.88,
+   "delta": 1.72,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -102,9 +109,9 @@
    }
   },
   "systolic_bp": {
-   "value": 119.72,
-   "baseline": 117.86,
-   "delta": 1.86,
+   "value": 128.76,
+   "baseline": 117.46,
+   "delta": 11.3,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -112,9 +119,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 80.48,
-   "baseline": 73.27,
-   "delta": 7.22,
+   "value": 79.0,
+   "baseline": 74.29,
+   "delta": 4.71,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -122,9 +129,9 @@
    }
   },
   "core_temp": {
-   "value": 37.06,
-   "baseline": 37.08,
-   "delta": -0.02,
+   "value": 37.39,
+   "baseline": 37.13,
+   "delta": 0.26,
    "unit": "C",
    "source": {
     "kind": "simulated",
@@ -132,9 +139,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 261.18,
-   "baseline": 262.04,
-   "delta": -0.86,
+   "value": 228.63,
+   "baseline": 265.54,
+   "delta": -36.91,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -171,11 +178,11 @@
   },
   "fatigue": {
    "label": "Fatigue score",
-   "value": 1.0,
+   "value": 2.0,
    "baseline": 2.0,
-   "delta": -1.0,
+   "delta": 0.0,
    "unit": "1-5, 5 = fresh",
-   "z": 0.67,
+   "z": 0.0,
    "date": "2026-10-16",
    "source": {
     "kind": "simulated",
@@ -304,16 +311,54 @@
     "radiation_dose_rate"
    ],
    "alerts": []
+  },
+  {
+   "id": "eyes",
+   "label": "Eyes",
+   "function": "In weightlessness fluid shifts toward the head; in some astronauts the optic disc swells and near vision changes (SANS).",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "fundus_photo",
+    "vision_change"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "kidneys",
+   "label": "Kidneys and urine",
+   "function": "Filter the blood. Bone loss in space puts extra calcium in the urine, which raises the risk of kidney stones.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "urine_sg",
+    "urine_blood",
+    "urine_leukocytes"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "gut",
+   "label": "Digestion",
+   "function": "Digests food and absorbs water. Space food, less movement and less fluid change bowel habits.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "stool_bristol",
+    "stool_count",
+    "stool_blood"
+   ],
+   "alerts": []
   }
  ],
  "context": {
-  "activity_level": 0.426,
+  "activity_level": 0.191,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 1.68,
+  "cabin_co2_mmhg": 1.61,
   "sleep_last_24h": 5.0,
-  "fluid_last_24h": 3393.0,
-  "ared_minutes_7d": 420.0,
-  "aerobic_minutes_7d": 300.0,
+  "fluid_last_24h": 3197.5,
+  "ared_minutes_7d": 360.0,
+  "aerobic_minutes_7d": 240.0,
   "cabin_co2_7d_mean_mmhg": 1.67,
   "cabin_co2_high": false,
   "radiation_ratio_to_7d": 0.99,
@@ -358,9 +403,9 @@
  ],
  "fitness_trend": {
   "alert": false,
-  "shift_bpm": 0.0,
-  "weeks_ago": 0,
-  "sessions": 75,
+  "shift_bpm": 5.6,
+  "weeks_ago": 2,
+  "sessions": 67,
   "reason": "Exercise heart rate is stable for the same exercise types."
  },
  "escalation": {

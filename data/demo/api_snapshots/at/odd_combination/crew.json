@@ -4,22 +4,22 @@
   "name": "Nadia Farouk",
   "role": "Mission astronaut",
   "status": "YELLOW",
-  "health_score": 67,
+  "health_score": 58,
   "condition": "acute_deviation",
   "condition_label": "Unusual reading for you",
   "top_alert": "Unusual mood score for you",
   "top_reason": "Mood score is 5.6 robust SD worse than your 14-day normal, for 1 day.",
   "vitals": {
-   "heart_rate": 101.6,
-   "hrv_rmssd": 38.73,
-   "spo2": 98.57,
-   "resp_rate": 15.88,
-   "systolic_bp": 120.47,
-   "diastolic_bp": 72.03,
-   "core_temp": 37.06,
-   "pvt_reaction_ms": 256.59
+   "heart_rate": 93.7,
+   "hrv_rmssd": 24.17,
+   "spo2": 97.61,
+   "resp_rate": 16.83,
+   "systolic_bp": 118.7,
+   "diastolic_bp": 75.21,
+   "core_temp": 37.04,
+   "pvt_reaction_ms": 290.07
   },
-  "cabin_co2_mmhg": 1.59,
+  "cabin_co2_mmhg": 1.65,
   "timestamp": "2026-10-31 12:00:00"
  }
 ]

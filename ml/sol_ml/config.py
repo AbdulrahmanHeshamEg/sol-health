@@ -73,6 +73,13 @@ ENGINE_CONDITION_LABELS = {
     "dehydration": "Dehydration",
     "low_blood_sugar": "Low blood sugar",
     "high_blood_sugar": "High blood sugar",
+    "optic_disc_change": "Possible optic disc swelling (eye)",
+    "kidney_stone_risk": "Blood in urine: kidney stone risk",
+    "urinary_infection": "Possible urinary infection",
+    "urine_abnormal": "Unusual urine test",
+    "constipation": "Constipation",
+    "diarrhea": "Diarrhoea",
+    "stool_blood": "Blood in stool",
 }
 ENGINE_CONDITIONS = list(ENGINE_CONDITION_LABELS)
 

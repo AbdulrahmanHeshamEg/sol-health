@@ -75,6 +75,18 @@ SOURCES = {
     "fluid_intake_ml": {"kind": "simulated", "calibrated_on": "published normal ranges"},
     "blood_glucose_mg_dl": {"kind": "simulated", "calibrated_on": "published normal ranges"},
     "headache": {"kind": "simulated", "calibrated_on": "scripted for the planted cabin case"},
+    "urine_sg": {"kind": "simulated", "calibrated_on": "published normal ranges (urine dipstick)"},
+    "urine_ph": {"kind": "simulated", "calibrated_on": "published normal ranges (urine dipstick)"},
+    "urine_blood": {"kind": "simulated", "calibrated_on": "published normal ranges (urine dipstick)"},
+    "urine_protein": {"kind": "simulated", "calibrated_on": "published normal ranges (urine dipstick)"},
+    "urine_glucose": {"kind": "simulated", "calibrated_on": "published normal ranges (urine dipstick)"},
+    "urine_ketones": {"kind": "simulated", "calibrated_on": "published normal ranges (urine dipstick)"},
+    "urine_leukocytes": {"kind": "simulated", "calibrated_on": "published normal ranges (urine dipstick)"},
+    "urine_nitrite": {"kind": "simulated", "calibrated_on": "published normal ranges (urine dipstick)"},
+    "stool_bristol": {"kind": "simulated", "calibrated_on": "published Bristol stool scale distribution"},
+    "stool_count": {"kind": "simulated", "calibrated_on": "published normal ranges"},
+    "stool_blood": {"kind": "simulated", "calibrated_on": "published normal ranges"},
+    "fundus_photo": {"kind": "simulated", "calibrated_on": "synthetic retina image (sol_ml.sim.fundus_image)"},
 }
 
 
@@ -156,6 +168,19 @@ def gen_daily(params: dict, days: int, rng: np.random.Generator) -> pd.DataFrame
         df[r] = gen_report(donors[rng.integers(len(donors))], days, rng)
     df["headache"] = 0
     df["blood_glucose_mg_dl"] = np.clip(rng.normal(rng.normal(90, 4), 6, days), 65, 125).round(0)      # fasting, published range
+    # urine dipstick (published normal ranges; pads read 0 = negative, 1 = trace, 2 = +, 3 = ++)
+    df["urine_sg"] = np.clip(rng.normal(1.017, 0.004, days), 1.003, 1.029).round(3)
+    df["urine_ph"] = np.clip(rng.normal(6.2, 0.5, days), 4.5, 8.0).round(1)
+    for pad, p_trace in (("urine_blood", 0.01), ("urine_protein", 0.03), ("urine_glucose", 0.0), ("urine_ketones", 0.03),
+                         ("urine_leukocytes", 0.02)):
+        df[pad] = (rng.random(days) < p_trace).astype(int)
+    df["urine_nitrite"] = 0
+    # stool: Bristol type 1-7 (3-5 = normal), motions per day, visible blood
+    df["stool_bristol"] = rng.choice(np.arange(1, 8), size=days, p=[0.01, 0.05, 0.24, 0.42, 0.19, 0.08, 0.01])
+    df["stool_count"] = np.clip(rng.poisson(1.1, days), 0, 3)
+    df["stool_blood"] = 0
+    df["flank_pain"] = 0
+    df["vision_change"] = 0
     return df
 
 
@@ -284,7 +309,8 @@ def build_demo(seed: int = 42, processed: Path = PROCESSED) -> dict:
     me = SOLO_ASTRONAUT["astronaut_id"]
     # all four cases on the one astronaut, never overlapping; the storm is under way "now"
     plan = {"co2": dict(start_day=24, days=10, who=me), "drift": dict(start_day=40, days=10, until=54, who=me),
-            "combo": dict(start_day=62, days=7, who=me), "storm": dict(day=days)}
+            "combo": dict(start_day=62, days=7, who=me), "storm": dict(day=days),
+            "eyes": dict(exams=[(1, 11, 0.0), (30, 12, 0.0), (60, 15, 0.25)], case_day=60, who=me)}   # (day, image seed, swelling)
 
     base_real = cabin.loc[cabin["mission"] == BASE_CO2_MISSION, "co2_mmhg"].to_numpy()
     high_real = cabin.loc[cabin["mission"] == HIGH_CO2_MISSION, "co2_mmhg"].to_numpy()
@@ -334,6 +360,10 @@ def build_demo(seed: int = 42, processed: Path = PROCESSED) -> dict:
          "start": ts(p["storm"]["day"], STORM_ONSET.hour), "end": ts(days, 23),
          "planted": "replay of the real 20 May 2024 storm measured by MSL RAD (nothing was scaled)",
          "expected": "SPE alarm in the first hour: radiation elevated (>= 1.3x) then go to the storm shelter (>= 2x); flight surgeon notified"},
+        {"id": "optic_disc", "title": "Eye exam: optic disc swelling (SANS)", "astronaut_id": me, "affects": "you",
+         "start": ts(p["eyes"]["case_day"], 9), "end": ts(days, 23),
+         "planted": "the day-60 fundus photo (synthetic) shows an early swollen optic disc: blurred margin, slightly larger disc; days 1 and 30 are normal",
+         "expected": "fundus photo check: margin less sharp than the baseline photo -> watch alert, photo sent to the flight surgeon"},
         {"id": "odd_combination", "title": "Odd combination (behavioural health)", "astronaut_id": p["combo"]["who"], "affects": "you",
          "start": ts(p["combo"]["start_day"]), "end": ts(p["combo"]["start_day"] + p["combo"]["days"]),
          "planted": "mood and stress one point worse and sleep 55 min shorter for 7 days; each within the normal range alone",
@@ -341,7 +371,10 @@ def build_demo(seed: int = 42, processed: Path = PROCESSED) -> dict:
     ]
     mission = dict(MISSION, radiation_replay={"dataset": "MSL RAD", "from": str(replay.index[0]), "to": str(replay.index[-1])},
                    cabin_co2_source={"base": BASE_CO2_MISSION + " (2020)", "planted_high": HIGH_CO2_MISSION + " (2014)"})
-    return {"mission": mission, "crew": crew, "telemetry": pd.concat(frames, ignore_index=True),
+    from . import fundus_image
+    eye_exams = [{"date": ts(day, 9), "mission_day": day, "image": f"eye_day{day:02d}.png",
+                  "png": fundus_image.render(seed=seed, swelling=swelling)} for day, seed, swelling in p["eyes"]["exams"]]
+    return {"mission": mission, "crew": crew, "eye_exams": eye_exams, "telemetry": pd.concat(frames, ignore_index=True),
             "daily": pd.concat(dailies, ignore_index=True), "planted_cases": cases, "sources": SOURCES, "params": params}
 
 
@@ -352,3 +385,8 @@ def write_demo(demo: dict, out_dir: Path = DEMO_DIR) -> None:
     (out_dir / "crew.json").write_text(json.dumps({"mission": demo["mission"], "crew": demo["crew"]}, indent=2))
     (out_dir / "planted_cases.json").write_text(json.dumps(demo["planted_cases"], indent=2))
     (out_dir / "sources.json").write_text(json.dumps(demo["sources"], indent=2))
+    eyes = out_dir / "eye_exams"
+    eyes.mkdir(exist_ok=True)
+    for exam in demo.get("eye_exams", []):
+        (eyes / exam["image"]).write_bytes(exam["png"])
+    (out_dir / "eye_exams.json").write_text(json.dumps([{k: v for k, v in e.items() if k != "png"} for e in demo.get("eye_exams", [])], indent=2))

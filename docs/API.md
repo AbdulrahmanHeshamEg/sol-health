@@ -26,6 +26,13 @@ Real example responses: `data/demo/api_snapshots/` (current moment) and `data/de
 | GET | `/api/crew/{id}/radiation` | Dose vs career limit, storm level |
 | GET | `/api/crew/{id}/reminders` *(new)* | Measurements due now, check-in streak |
 | GET | `/api/crew/{id}/reports` *(new)* | Everything sent to the flight surgeon so far, newest first |
+| GET | `/api/crew/{id}/questions` *(new)* | Today's questions (routine + follow-ups), each with why, type, options, answered |
+| POST | `/api/crew/{id}/answers` *(new)* | Save answers `{values: {field: value}, at?}`; returns the new assessment |
+| GET | `/api/crew/{id}/daily-brief` *(new)* | Your day: headline, changes vs last week, tips (rules now, AI later, same shape) |
+| GET | `/api/crew/{id}/eye-exams` *(new)* | Fundus photos with measurements and the comparison with the baseline photo |
+| POST | `/api/crew/{id}/eye-photo` *(new)* | Upload any image `{image_base64, filename, at?}`; returns `{exam, assessment}` |
+| GET | `/api/eye-photos/{name}` *(new)* | The photo file |
+| DELETE | `/api/me/entries` *(new)* | Forget every saved answer and uploaded photo |
 | POST | `/api/assess` | Assess a custom series, or apply a manual check-in |
 
 Errors: `404` unknown astronaut, `422` bad `at`, fewer than 24 h of history, or an out-of-range check-in value.
@@ -136,6 +143,21 @@ budget_status (Level), quality_factor (3.0), reason, action, source`.
 ## `GET /api/crew/{id}/reports` *(new)* → `Report[]`
 One entry per alert episode that went to Earth up to `at`, newest first. Watch-level episodes of the same day share one daily report.
 `{ started_at, level, condition_label, status: "sent"|"daily_report", sent_at, arrives_at, summary, items: string[] }`.
+
+## Questions, answers and the brief *(new)*
+`GET /questions` → `{ date, answered, total, groups: [{ id, title, optional?, questions: [{ field, text, why, type: "number"|"choice"|"photo",
+options?, unit?, min?, max?, step?, trigger?, answered, answer }] }] }`. The first group, "The app needs to know", holds the follow-ups.
+`POST /answers` saves to `data/user/answers.json` (git-ignored): daily fields replace that day's simulated values, vitals replace that hour's.
+Out-of-range values return `422`. Indicators the user entered carry `source.kind == "entered"`.
+
+`GET /daily-brief` → `{ date, greeting, headline, paragraphs[], changes: [{label, direction, text}], tips[], ask_next[], status,
+generated_by: {kind: "rules", label, note} }`. The AI version will return the same shape and may not change status, limits or escalation.
+
+## Eye photos *(new)*
+`GET /eye-exams` → `[{ date, mission_day, image, url, uploaded?, source, measurements: { usable, problems[], quality{...},
+disc{center, radius_px, area_px, margin_sharpness, vessel_visibility} }, result: { level, kind, reason, ratios{margin_sharpness, disc_area,
+vessel_visibility} | null } }]`. Classical image measurement against the first usable photo (baseline); no trained model. Limits are in
+`/api/meta → limits.eye_margin_watch / eye_margin_act / eye_disc_growth_act`.
 
 ## `POST /api/assess`
 Two uses. Nothing is stored.

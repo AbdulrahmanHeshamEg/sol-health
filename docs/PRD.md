@@ -30,42 +30,43 @@ action is either the astronaut's own or something that goes to the flight surgeo
 
 ## 4. Screens
 
-### 4.1 Me (`/`): the home page
-Data: `/api/me`, `/assessment`, `/vitals?hours=72`, `/timeline?hours=72`, `/daily?days=30`, `/reminders`.
-- **Status banner:** status (colour + word + icon), name, the top alert and its one-sentence reason, health score gauge, how unusual today is.
-- **Flight-surgeon card** (`escalation`): "Sent to your flight surgeon" (RED, with sent and arrival time), "In tonight's report" (YELLOW) or "Nothing needs your flight surgeon"; the message text on request.
-- **What to do now:** `actions[]` grouped by who (You / Your flight surgeon on Earth), most urgent first. Checkboxes are local only.
-- **Your body:** clickable figure from `body_systems[]` (heart, lungs, brain, bones and muscles, blood, immune), each coloured by status, with its function and summary.
-- **Why:** every alert with its reason, source (clinical limit or named statistical model) and NASA hazard.
-- **Every indicator against your own normal:** daily indicators and hourly vitals, each with value, baseline, delta and a real / simulated badge.
-- **Last 72 hours** and **last 30 sols** charts, with watch / act-now hours shaded and model-flagged days ringed.
-- **Daily plan**, **measurements due** (with the check-in streak), and **how the evidence splits**.
-- **Measurement check-in:** `POST /api/assess` with `checkin`; shows the engine's answer.
-- **Long-term risk** tab: radiation dose against the career limit, bone and muscle projection, fitness trend.
+The app talks to one person, in the second person ("your heart", "your flight surgeon"). Navigation: Today · My body · Eye exam · Cabin ·
+My doctor · Learn · Settings. The demo controls (which moment of the mission you see) live in Settings, not in the header.
 
-### 4.2 Cabin (`/cabin`)
-CO2 (1-hour and 7-day, against the limits from `/api/meta`), radiation against its 7-day normal, 72-hour charts of both, and the dose panel.
-It is the habitat, not the body: when CO2 is high, a headache is probably the cabin.
+### 4.1 Today (`/`)
+- **Status:** greeting, status (colour + word + icon), the top alert and its one-sentence reason, health score.
+- **Flight-surgeon card** (`escalation`): sent at once (RED, with arrival time), in tonight's report (YELLOW), or nothing to send.
+- **What to do now:** actions grouped by who (You / Your flight surgeon on Earth), most urgent first.
+- **Today's questions** (`/questions`): the engine's questions, grouped (the app needs to know · how you feel · morning tests · stool log ·
+  vitals), each with "why we ask". Follow-ups appear when the engine needs them (CO2 high: headache? blood in urine: side pain?).
+  Answers are saved on the device (`POST /answers`) and the engine re-assesses at once.
+- **Your day** (`/daily-brief`): headline, what changed against last week, today's tips. Written by rules today; an AI model fills the same card later.
+- **Your routine:** the daily plan and measurements due.
 
-### 4.3 Flight surgeon (`/reports`)
-The current escalation and the list from `/reports`: every alert episode that went to Earth, newest first, with when it was sent,
-when it arrived and what it said.
+### 4.2 My body (`/body`)
+Tabs: **Now** (clickable body figure with nine systems: heart, lungs, brain, eyes, immune, blood, kidneys, gut, bones and muscles; every alert
+with its reason; every indicator against your normal with a real / simulated / entered badge; how the evidence splits), **Trends** (72 hours,
+30 sols, including urine concentration and stool), **Long-term** (radiation dose, bone and muscle, fitness trend).
 
-### 4.4 Mission replay
-The sol strip in the header: one row, one column per sol, coloured by the worst status of that sol. A slider (live mode) or the
-jump-to buttons move `at`; every query re-runs with `at=<ISO timestamp>`. Play advances 1 hour per second.
+### 4.3 Eye exam (`/eyes`)
+Latest fundus photo next to the baseline photo, the three measurements against baseline (disc edge sharpness, disc size, vessels visible at the
+edge) with the limits from `/api/meta`, upload of any image (`POST /eye-photo`), and every photo of the mission.
+
+### 4.4 Cabin (`/cabin`), My doctor (`/doctor`), Learn (`/learn`), Data and sources (`/about`)
+Cabin CO2 and radiation; everything sent to the flight surgeon; explainer cards; data sources, citations and planted cases.
+
+### 4.5 Settings (`/settings`): demo controls
+The sol strip (one row, one column per sol), the jump-to buttons for each planted case, a sol slider and play (live mode); delete my entries;
+connection status. While you look at an earlier moment, a strip on every page says so and offers "Back to now".
 
 | Button | `at` | What judges see |
 |---|---|---|
-| A quiet day | `2026-09-15T12:00:00` | GREEN, nothing sent |
-| Cabin CO2 with headache reports | `2026-10-01T12:00:00` | YELLOW: "likely environmental", ventilate first; in the daily report |
-| Slow drift (illness onset) | `2026-10-16T12:00:00` | YELLOW: resting heart rate drifting above her own normal (CUSUM) |
-| Odd combination | `2026-10-31T12:00:00` | YELLOW: mood, stress and sleep worse together (Isolation Forest) |
-| Solar storm | `2026-11-13T08:00:00` | RED: go to the storm shelter now; sent to the flight surgeon at 05:00 |
-| Now | (no `at`) | Storm still under way, 19 hours in |
-
-### 4.5 What we measure (`/learn`) and Data and sources (`/about`)
-Explainer cards from `/api/indicators`; data sources, citations, the planted cases and how the engine was checked.
+| A quiet day | `2026-09-15T12:00:00` | Clear, nothing sent |
+| Cabin CO2 with headache reports | `2026-10-01T12:00:00` | Watch: likely environmental, ventilate first |
+| Slow drift (illness onset) | `2026-10-16T12:00:00` | Watch: resting heart rate drifting above your normal |
+| Eye exam: optic disc swelling | `2026-10-29T12:00:00` | Watch: eye photo changed; follow-up question about vision |
+| Odd combination | `2026-10-31T12:00:00` | Watch: mood, stress and sleep worse together |
+| Solar storm | `2026-11-13T08:00:00` | Act now: go to the storm shelter; sent to the flight surgeon at 05:00 |
 
 ## 5. Non-functional requirements
 - Works offline (mock mode from `data/demo/api_snapshots/`).

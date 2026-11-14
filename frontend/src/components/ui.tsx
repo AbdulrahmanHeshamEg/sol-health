@@ -31,6 +31,15 @@ export function StatusChip({ level, large = false }: { level: Level; large?: boo
 /** Where a value comes from: a real dataset, or simulated (and what the simulation was calibrated on). */
 export function SourceBadge({ source }: { source?: Source }) {
   if (!source) return null;
+  if (source.kind === "entered") {
+    return (
+      <span title="You entered this value" className="inline-flex items-center gap-1 rounded-sm px-1.5 text-xs leading-5"
+        style={{ border: "1px solid var(--color-dust)", color: "var(--color-dust)" }}>
+        <span aria-hidden="true" style={{ width: 7, height: 7, transform: "rotate(45deg)", background: "currentColor", display: "inline-block" }} />
+        You entered
+      </span>
+    );
+  }
   const real = source.kind === "real";
   const detail = real ? source.dataset : source.calibrated_on;
   return (

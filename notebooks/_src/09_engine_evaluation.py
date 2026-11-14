@@ -146,7 +146,9 @@ prepared, log = {}, []
 t0 = time.time()
 for c in crew["crew"]:
     aid = c["astronaut_id"]
-    prep = engine.prepare(tel[tel.astronaut_id == aid], c, day_table[day_table.astronaut_id == aid])
+    eyes = json.loads((DEMO_DIR / "eye_exams.json").read_text())
+    eyes = [e | {"png": (DEMO_DIR / "eye_exams" / e["image"]).read_bytes()} for e in eyes]
+    prep = engine.prepare(tel[tel.astronaut_id == aid], c, day_table[day_table.astronaut_id == aid], eyes)
     prepared[aid] = prep
     for i in range(14 * 24, len(prep.hourly)):
         alerts, _, _, _ = engine.collect_alerts(prep, i)
@@ -157,7 +159,8 @@ log = pd.DataFrame(log)
 n_assess = sum(len(p.hourly) - 14 * 24 for p in prepared.values())
 print("%d hourly assessments in %.1f s (%.1f ms each) -> %d alert-hours" % (n_assess, time.time() - t0, 1000 * (time.time() - t0) / n_assess, len(log)))
 
-EXPECTED = {"cabin_co2": ["environmental_gate"], "slow_drift": ["drift"], "solar_storm": ["spe"], "odd_combination": ["combination"]}
+EXPECTED = {"cabin_co2": ["environmental_gate"], "slow_drift": ["drift"], "solar_storm": ["spe"], "odd_combination": ["combination"],
+            "optic_disc": ["eye_exam"]}
 rows = []
 for case in cases:
     who = [c["astronaut_id"] for c in crew["crew"]] if case["astronaut_id"] == "ALL" else [case["astronaut_id"]]
@@ -344,6 +347,7 @@ print(json.dumps(config["engine"], indent=2))
 # | Cabin CO2 + headache | yes, environmental gate | 3 days 7 hours (once the headaches start on day 27, the gate fires the same night) | "You reported fatigue while cabin CO2 1-hour average is 3.17 mmHg, above the 3 mmHg limit: likely environmental, increase ventilation first." |
 # | Slow drift | yes, CUSUM | 7 days 8 hours | "Resting heart rate has been above your 28-day normal for 4 days (average 2.4 robust SD); the alert has been active for 1 day." |
 # | Solar storm | yes, storm alarm, sent to the flight surgeon at once | same hour | "Radiation dose rate is 20.4 times the 7-day normal and has been elevated for 1 hour." |
+# | Eye exam: optic disc swelling (SANS) | yes, fundus photo check (classical image measurement, no trained model) | the morning of the photo | "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report." |
 # | Odd combination | yes, Isolation Forest | 8 hours (the first morning check-in) | "Today's combination is unusual for you (mood score +5.6 SD, stress score +2.7 SD; positive = worse), for 1 day; no single signal is far out on its own." |
 #
 # **What changed from the notebooks, and why (this is the part the team should check)**

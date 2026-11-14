@@ -12,13 +12,13 @@
  "ared_minutes_week": 380,
  "aerobic_minutes_week": 260,
  "baseline": {
-  "heart_rate": 87.0,
-  "hrv_rmssd": 43.5,
-  "spo2": 98.2,
-  "resp_rate": 15.54,
-  "systolic_bp": 117.86,
-  "diastolic_bp": 73.27,
-  "core_temp": 37.08,
-  "pvt_reaction_ms": 262.04
+  "heart_rate": 88.05,
+  "hrv_rmssd": 44.2,
+  "spo2": 97.97,
+  "resp_rate": 15.88,
+  "systolic_bp": 117.46,
+  "diastolic_bp": 74.29,
+  "core_temp": 37.13,
+  "pvt_reaction_ms": 265.54
  }
 }

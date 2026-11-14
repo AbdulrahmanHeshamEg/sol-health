@@ -39,7 +39,7 @@ Success is measured by **false alarms per person per month on real PMData** and 
 | v0 baseline | `ml/sol_ml/engine_v0.py`, `data/demo_v0/` | Kept only for the comparison in notebook 09 |
 | Action protocols | `ml/sol_ml/protocols.py`, `indicators.py` | Extended (SPE shelter, likely environmental, drift, mood, glucose); indicator explainer catalogue |
 | Demo astronaut | `data/demo/` | One data-calibrated astronaut carrying all 4 planted cases (notebook 08) + `api_snapshots/` for mock mode |
-| Frontend | `frontend/` | **Done**: personal React + Vite app per `docs/PRD.md` (Me, Cabin, Flight surgeon, sol-strip replay, body figure, check-in, explainer cards, offline snapshot mode). Run with `npm --prefix frontend run dev` |
+| Frontend | `frontend/` | **Done**: personal React + Vite app per `docs/PRD.md` (Today with the engine's questions and daily brief, My body, Eye exam, Cabin, My doctor, Learn, Settings with the demo controls; offline snapshot mode). Run with `npm --prefix frontend run dev` |
 
 ## Work order
 1. **Get the data:** `python data/fetch/fetch_pmdata.py`, `python data/fetch/fetch_msl_rad.py 2024 2025 2026`, then the

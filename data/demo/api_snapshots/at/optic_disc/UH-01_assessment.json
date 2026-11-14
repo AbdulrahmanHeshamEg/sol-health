@@ -1,0 +1,415 @@
+{
+ "astronaut_id": "UH-01",
+ "timestamp": "2026-10-30 09:00:00",
+ "mission_day": 61,
+ "status": "YELLOW",
+ "health_score": 82,
+ "condition": "optic_disc_change",
+ "condition_label": "Possible optic disc swelling (eye)",
+ "probabilities": {
+  "nominal": 0.3333,
+  "acute_deviation": 0.0,
+  "physiological_drift": 0.0,
+  "unusual_combination": 0.0,
+  "low_mood": 0.0,
+  "deconditioning": 0.0,
+  "co2_exposure": 0.0,
+  "radiation_event": 0.0,
+  "hypoxia": 0.0,
+  "fever_infection": 0.0,
+  "cardiovascular_strain": 0.0,
+  "dehydration": 0.0,
+  "low_blood_sugar": 0.0,
+  "high_blood_sugar": 0.0,
+  "optic_disc_change": 0.6667,
+  "kidney_stone_risk": 0.0,
+  "urinary_infection": 0.0,
+  "urine_abnormal": 0.0,
+  "constipation": 0.0,
+  "diarrhea": 0.0,
+  "stool_blood": 0.0
+ },
+ "anomaly_score": 0.585,
+ "alerts": [
+  {
+   "source": "model",
+   "level": "YELLOW",
+   "condition": "optic_disc_change",
+   "message": "Eye photo: optic disc changed",
+   "reason": "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report.",
+   "kind": "eye_exam",
+   "hazard": "Altered gravity",
+   "signal": "fundus_photo",
+   "value": 0.725,
+   "threshold": "margin sharpness < 75 % of baseline (watch), < 55 % or disc +35 % (act now)",
+   "probability": 0.5,
+   "model": "fundus photo measurement against your baseline photo (no trained model)"
+  }
+ ],
+ "drivers": [
+  {
+   "signal": "stress",
+   "deviation": -1.0,
+   "unit": "points",
+   "z": 1.86
+  },
+  {
+   "signal": "fatigue",
+   "deviation": 0.0,
+   "unit": "points",
+   "z": 0.0
+  },
+  {
+   "signal": "mood",
+   "deviation": 0.0,
+   "unit": "points",
+   "z": 0.0
+  }
+ ],
+ "vitals": {
+  "heart_rate": {
+   "value": 141.6,
+   "baseline": 88.05,
+   "delta": 53.55,
+   "unit": "bpm",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "hrv_rmssd": {
+   "value": 33.78,
+   "baseline": 44.2,
+   "delta": -10.42,
+   "unit": "ms",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "spo2": {
+   "value": 97.75,
+   "baseline": 97.97,
+   "delta": -0.22,
+   "unit": "%",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "resp_rate": {
+   "value": 21.05,
+   "baseline": 15.88,
+   "delta": 5.17,
+   "unit": "br/min",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "systolic_bp": {
+   "value": 127.08,
+   "baseline": 117.46,
+   "delta": 9.62,
+   "unit": "mmHg",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "diastolic_bp": {
+   "value": 77.48,
+   "baseline": 74.29,
+   "delta": 3.19,
+   "unit": "mmHg",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "core_temp": {
+   "value": 37.29,
+   "baseline": 37.13,
+   "delta": 0.16,
+   "unit": "C",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  },
+  "pvt_reaction_ms": {
+   "value": 224.99,
+   "baseline": 265.54,
+   "delta": -40.55,
+   "unit": "ms",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  }
+ },
+ "indicators": {
+  "resting_hr": {
+   "label": "Resting heart rate",
+   "value": 73.7,
+   "baseline": 78.0,
+   "delta": -4.3,
+   "unit": "bpm",
+   "z": -1.61,
+   "date": "2026-10-30",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "sleep_hours": {
+   "label": "Sleep last night",
+   "value": 6.8,
+   "baseline": 5.88,
+   "delta": 0.92,
+   "unit": "h",
+   "z": -1.27,
+   "date": "2026-10-30",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "fatigue": {
+   "label": "Fatigue score",
+   "value": 2.0,
+   "baseline": 2.0,
+   "delta": 0.0,
+   "unit": "1-5, 5 = fresh",
+   "z": 0.0,
+   "date": "2026-10-30",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "mood": {
+   "label": "Mood score",
+   "value": 4.0,
+   "baseline": 4.0,
+   "delta": 0.0,
+   "unit": "1-5, 5 = best",
+   "z": 0.0,
+   "date": "2026-10-30",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "stress": {
+   "label": "Stress score",
+   "value": 2.0,
+   "baseline": 3.0,
+   "delta": -1.0,
+   "unit": "1-5, 5 = relaxed",
+   "z": 1.86,
+   "date": "2026-10-30",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "PMData"
+   }
+  },
+  "blood_glucose_mg_dl": {
+   "label": "Fasting blood glucose",
+   "value": 80.0,
+   "baseline": 84.5,
+   "delta": -4.5,
+   "unit": "mg/dL",
+   "z": null,
+   "date": "2026-10-30",
+   "source": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  }
+ },
+ "body_systems": [
+  {
+   "id": "heart",
+   "label": "Heart and circulation",
+   "function": "Pumps blood and oxygen to every organ. In weightlessness fluid shifts toward the head and the heart works differently.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "heart_rate",
+    "resting_hr",
+    "systolic_bp",
+    "diastolic_bp",
+    "hrv_rmssd"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "lungs",
+   "label": "Lungs and breathing",
+   "function": "Take in oxygen and remove CO2. In a closed cabin CO2 can build up around you in still air.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "spo2",
+    "resp_rate",
+    "cabin_co2_mmhg"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "brain",
+   "label": "Brain, sleep and mood",
+   "function": "Attention, mood and sleep. Isolation, confinement and a shifted day-night cycle wear them down.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "mood",
+    "stress",
+    "fatigue",
+    "sleep_hours",
+    "pvt_reaction_ms"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "bones_muscles",
+   "label": "Bones and muscles",
+   "function": "Carry and move the body. Without gravity they lose mass unless loaded by exercise.",
+   "status": "GREEN",
+   "summary": "Exercise heart rate is stable for the same exercise types.",
+   "indicators": [
+    "ared_minutes_7d",
+    "aerobic_minutes_7d",
+    "exercise_heart_rate"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "blood",
+   "label": "Blood and metabolism",
+   "function": "Carries sugar, fluid and salts. Fluid loss and irregular meals show up here first.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "blood_glucose_mg_dl",
+    "fluid_last_24h"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "immune",
+   "label": "Immune system and radiation",
+   "function": "Defends against infection. Radiation and stress weaken it, and a closed cabin spreads germs.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "core_temp",
+    "radiation_dose_rate"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "eyes",
+   "label": "Eyes",
+   "function": "In weightlessness fluid shifts toward the head; in some astronauts the optic disc swells and near vision changes (SANS).",
+   "status": "YELLOW",
+   "summary": "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report.",
+   "indicators": [
+    "fundus_photo",
+    "vision_change"
+   ],
+   "alerts": [
+    "Eye photo: optic disc changed"
+   ]
+  },
+  {
+   "id": "kidneys",
+   "label": "Kidneys and urine",
+   "function": "Filter the blood. Bone loss in space puts extra calcium in the urine, which raises the risk of kidney stones.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "urine_sg",
+    "urine_blood",
+    "urine_leukocytes"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "gut",
+   "label": "Digestion",
+   "function": "Digests food and absorbs water. Space food, less movement and less fluid change bowel habits.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "stool_bristol",
+    "stool_count",
+    "stool_blood"
+   ],
+   "alerts": []
+  }
+ ],
+ "context": {
+  "activity_level": 0.757,
+  "is_asleep": 0,
+  "cabin_co2_mmhg": 1.58,
+  "sleep_last_24h": 7.0,
+  "fluid_last_24h": 3454.4,
+  "ared_minutes_7d": 420.0,
+  "aerobic_minutes_7d": 360.0,
+  "cabin_co2_7d_mean_mmhg": 1.67,
+  "cabin_co2_high": false,
+  "radiation_ratio_to_7d": 0.96,
+  "radiation_level": "GREEN"
+ },
+ "actions": [
+  {
+   "who": "self",
+   "action": "Check your near vision with the eye chart in the medical kit and log any blurring or headache.",
+   "condition": "optic_disc_change",
+   "level": "YELLOW",
+   "priority": 1
+  },
+  {
+   "who": "self",
+   "action": "Retake the fundus photo in 7 days, same camera settings.",
+   "condition": "optic_disc_change",
+   "level": "YELLOW",
+   "priority": 2
+  },
+  {
+   "who": "ground",
+   "action": "Your eye photo and baseline photo go to your flight surgeon in today's report.",
+   "condition": "optic_disc_change",
+   "level": "YELLOW",
+   "priority": 3
+  }
+ ],
+ "daily_plan": [
+  {
+   "who": "self",
+   "category": "routine",
+   "action": "All routine targets met. Keep the current sleep, hydration and exercise schedule."
+  }
+ ],
+ "fitness_trend": {
+  "alert": false,
+  "shift_bpm": 3.7,
+  "weeks_ago": 4,
+  "sessions": 91,
+  "reason": "Exercise heart rate is stable for the same exercise types."
+ },
+ "escalation": {
+  "status": "daily_report",
+  "to": "Your flight surgeon",
+  "level": "YELLOW",
+  "sent_at": "2026-10-30 20:00:00",
+  "arrives_at": "2026-10-30 20:13:00",
+  "summary": "Included in your daily report to the flight surgeon at 20:00.",
+  "items": [
+   "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report."
+  ]
+ },
+ "disclaimer": "Decision support only. The astronaut is simulated; models are statistical and were tuned on real PMData, MSL RAD and ISS cabin data. Your flight surgeon makes all medical decisions."
+}

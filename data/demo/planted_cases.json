@@ -30,6 +30,16 @@
     "expected": "SPE alarm in the first hour: radiation elevated (>= 1.3x) then go to the storm shelter (>= 2x); flight surgeon notified"
   },
   {
+    "id": "optic_disc",
+    "title": "Eye exam: optic disc swelling (SANS)",
+    "astronaut_id": "UH-01",
+    "affects": "you",
+    "start": "2026-10-29 09:00:00",
+    "end": "2026-11-13 23:00:00",
+    "planted": "the day-60 fundus photo (synthetic) shows an early swollen optic disc: blurred margin, slightly larger disc; days 1 and 30 are normal",
+    "expected": "fundus photo check: margin less sharp than the baseline photo -> watch alert, photo sent to the flight surgeon"
+  },
+  {
     "id": "odd_combination",
     "title": "Odd combination (behavioural health)",
     "astronaut_id": "UH-01",

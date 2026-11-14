@@ -15,6 +15,11 @@
   "at": "2026-10-16 12:00:00"
  },
  {
+  "id": "optic_disc",
+  "label": "Eye exam: optic disc swelling (SANS)",
+  "at": "2026-10-30 09:00:00"
+ },
+ {
   "id": "odd_combination",
   "label": "Odd combination (behavioural health)",
   "at": "2026-10-31 12:00:00"

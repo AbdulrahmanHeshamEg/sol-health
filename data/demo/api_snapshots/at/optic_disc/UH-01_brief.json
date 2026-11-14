@@ -1,0 +1,43 @@
+{
+ "date": "2026-10-30",
+ "greeting": "Good morning, Nadia.",
+ "headline": "One thing to watch today: eye photo: optic disc changed.",
+ "paragraphs": [
+  "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report.",
+  "It goes to your flight surgeon in tonight's report; nothing else is needed from you for that."
+ ],
+ "changes": [
+  {
+   "label": "Sleep",
+   "direction": "better",
+   "text": "Sleep is 6.8 h, higher than your last week (6.0 h)."
+  },
+  {
+   "label": "Mood",
+   "direction": "better",
+   "text": "Mood is 4, higher than your last week (3)."
+  },
+  {
+   "label": "Stress score",
+   "direction": "worse",
+   "text": "Stress score is 2, lower than your last week (3)."
+  },
+  {
+   "label": "Energy",
+   "direction": "better",
+   "text": "Energy is 2, higher than your last week (1)."
+  }
+ ],
+ "tips": [
+  "Check your near vision with the chart and avoid heavy straining until your flight surgeon replies."
+ ],
+ "ask_next": [
+  "15 of today's questions are still open: answering them sharpens tomorrow's read."
+ ],
+ "status": "YELLOW",
+ "generated_by": {
+  "kind": "rules",
+  "label": "Written from your data by fixed rules",
+  "note": "An AI version will write this card from the same data. It will explain and advise only; your status and alerts stay with the engine."
+ }
+}

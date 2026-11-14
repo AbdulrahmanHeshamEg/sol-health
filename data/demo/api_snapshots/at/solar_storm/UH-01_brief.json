@@ -1,0 +1,35 @@
+{
+ "date": "2026-11-13",
+ "greeting": "Good morning, Nadia.",
+ "headline": "Act now: solar storm in progress: go to the storm shelter now.",
+ "paragraphs": [
+  "Radiation dose rate is 25.5 times the 7-day normal and has been elevated for 4 hours.",
+  "Also: The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report.",
+  "Your flight surgeon has already been sent this; keep following the steps while you wait for the reply."
+ ],
+ "changes": [
+  {
+   "label": "Stress score",
+   "direction": "better",
+   "text": "Stress score is 4, higher than your last week (2)."
+  },
+  {
+   "label": "Energy",
+   "direction": "better",
+   "text": "Energy is 4, higher than your last week (2)."
+  }
+ ],
+ "tips": [
+  "Stay in the storm shelter until the dose rate is back below the elevated level; the app tells you when.",
+  "Check your near vision with the chart and avoid heavy straining until your flight surgeon replies."
+ ],
+ "ask_next": [
+  "15 of today's questions are still open: answering them sharpens tomorrow's read."
+ ],
+ "status": "RED",
+ "generated_by": {
+  "kind": "rules",
+  "label": "Written from your data by fixed rules",
+  "note": "An AI version will write this card from the same data. It will explain and advise only; your status and alerts stay with the engine."
+ }
+}

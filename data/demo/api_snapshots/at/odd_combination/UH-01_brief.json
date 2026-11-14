@@ -1,0 +1,46 @@
+{
+ "date": "2026-10-31",
+ "greeting": "Good afternoon, Nadia.",
+ "headline": "One thing to watch today: unusual mood score for you.",
+ "paragraphs": [
+  "Mood score is 5.6 robust SD worse than your 14-day normal, for 1 day.",
+  "Also: Today's combination is unusual for you (mood score +5.6 SD, stress score +2.7 SD; positive = worse), for 1 day; no single signal is far out on its own. The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report.",
+  "It goes to your flight surgeon in tonight's report; nothing else is needed from you for that."
+ ],
+ "changes": [
+  {
+   "label": "Mood",
+   "direction": "worse",
+   "text": "Mood is 1, lower than your last week (3)."
+  },
+  {
+   "label": "Stress score",
+   "direction": "worse",
+   "text": "Stress score is 1, lower than your last week (3)."
+  },
+  {
+   "label": "Energy",
+   "direction": "better",
+   "text": "Energy is 3, higher than your last week (1)."
+  },
+  {
+   "label": "Urine concentration",
+   "direction": "worse",
+   "text": "Urine concentration is 1.022, higher than your last week (1.016)."
+  }
+ ],
+ "tips": [
+  "Repeat that measurement later today to rule out a sensor or logging error.",
+  "Keep a fixed rhythm today and book a call home at the next comm pass.",
+  "Check your near vision with the chart and avoid heavy straining until your flight surgeon replies."
+ ],
+ "ask_next": [
+  "16 of today's questions are still open: answering them sharpens tomorrow's read."
+ ],
+ "status": "YELLOW",
+ "generated_by": {
+  "kind": "rules",
+  "label": "Written from your data by fixed rules",
+  "note": "An AI version will write this card from the same data. It will explain and advise only; your status and alerts stay with the engine."
+ }
+}

@@ -30,7 +30,7 @@ export function EscalationCard({ escalation }: { escalation: Escalation }) {
           </details>
         )}
       </div>
-      <Link to={link("/reports")} className="self-center text-sm">Everything sent so far</Link>
+      <Link to={link("/doctor")} className="self-center text-sm">Everything sent so far</Link>
     </section>
   );
 }

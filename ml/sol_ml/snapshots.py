@@ -15,10 +15,12 @@ GLOBAL = {"mission": "/api/mission", "meta": "/api/meta", "crew": "/api/crew", "
 PER_CREW = {"profile": "/api/crew/{id}", "assessment": "/api/crew/{id}/assessment", "vitals_72h": "/api/crew/{id}/vitals?hours=72",
             "timeline_72h": "/api/crew/{id}/timeline?hours=72", "daily_30d": "/api/crew/{id}/daily?days=30",
             "forecast": "/api/crew/{id}/forecast?horizon_days=90", "radiation": "/api/crew/{id}/radiation",
-            "reminders": "/api/crew/{id}/reminders", "reports": "/api/crew/{id}/reports", "timeline_all": "/api/crew/{id}/timeline?hours=1800",
+            "reminders": "/api/crew/{id}/reminders", "reports": "/api/crew/{id}/reports",
+            "questions": "/api/crew/{id}/questions", "brief": "/api/crew/{id}/daily-brief", "eye_exams": "/api/crew/{id}/eye-exams", "timeline_all": "/api/crew/{id}/timeline?hours=1800",
             "daily_all": "/api/crew/{id}/daily?days=75"}
 TIMED = ("mission", "crew")
-TIMED_PER_CREW = ("assessment", "vitals_72h", "timeline_72h", "daily_30d", "forecast", "radiation", "reminders", "reports")
+TIMED_PER_CREW = ("assessment", "vitals_72h", "timeline_72h", "daily_30d", "forecast", "radiation", "reminders", "reports",
+                  "questions", "brief", "eye_exams")
 
 
 def main():
@@ -35,6 +37,10 @@ def main():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(r.json(), indent=1))
 
+    from api.main import USER
+    if USER.answers() or USER.photos():
+        raise SystemExit("Clear your own entries first (DELETE /api/me/entries): snapshots must show the demo data only.")
+    shutil.copytree(DEMO_DIR / "eye_exams", out / "eye-photos")          # the demo eye photos, for offline mode
     crew_ids = [c["astronaut_id"] for c in client.get("/api/crew").json()]
     for name, url in GLOBAL.items():
         save(out / f"{name}.json", url)

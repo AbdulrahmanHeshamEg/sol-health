@@ -20,7 +20,14 @@
   "cardiovascular_strain": 0.0,
   "dehydration": 0.0,
   "low_blood_sugar": 0.0,
-  "high_blood_sugar": 0.0
+  "high_blood_sugar": 0.0,
+  "optic_disc_change": 0.0,
+  "kidney_stone_risk": 0.0,
+  "urinary_infection": 0.0,
+  "urine_abnormal": 0.0,
+  "constipation": 0.0,
+  "diarrhea": 0.0,
+  "stool_blood": 0.0
  },
  "anomaly_score": 0.545,
  "alerts": [
@@ -33,7 +40,7 @@
    "kind": "environmental_gate",
    "hazard": "Hostile / closed environment",
    "signal": "cabin_co2_mmhg",
-   "value": 2.7,
+   "value": 2.67,
    "threshold": "1-h > 3 or 7-day > 2.5 mmHg, with symptoms"
   }
  ],
@@ -59,9 +66,9 @@
  ],
  "vitals": {
   "heart_rate": {
-   "value": 95.0,
-   "baseline": 87.0,
-   "delta": 8.0,
+   "value": 101.7,
+   "baseline": 88.05,
+   "delta": 13.65,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -69,9 +76,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 39.66,
-   "baseline": 43.5,
-   "delta": -3.84,
+   "value": 41.68,
+   "baseline": 44.2,
+   "delta": -2.52,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -79,9 +86,9 @@
    }
   },
   "spo2": {
-   "value": 97.57,
-   "baseline": 98.2,
-   "delta": -0.63,
+   "value": 98.08,
+   "baseline": 97.97,
+   "delta": 0.11,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -89,9 +96,9 @@
    }
   },
   "resp_rate": {
-   "value": 13.76,
-   "baseline": 15.54,
-   "delta": -1.78,
+   "value": 14.35,
+   "baseline": 15.88,
+   "delta": -1.53,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -99,9 +106,9 @@
    }
   },
   "systolic_bp": {
-   "value": 120.71,
-   "baseline": 117.86,
-   "delta": 2.85,
+   "value": 121.42,
+   "baseline": 117.46,
+   "delta": 3.96,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -109,9 +116,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 74.91,
-   "baseline": 73.27,
-   "delta": 1.64,
+   "value": 72.95,
+   "baseline": 74.29,
+   "delta": -1.34,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -119,9 +126,9 @@
    }
   },
   "core_temp": {
-   "value": 37.01,
-   "baseline": 37.08,
-   "delta": -0.07,
+   "value": 37.16,
+   "baseline": 37.13,
+   "delta": 0.03,
    "unit": "C",
    "source": {
     "kind": "simulated",
@@ -129,9 +136,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 266.27,
-   "baseline": 262.04,
-   "delta": 4.23,
+   "value": 240.58,
+   "baseline": 265.54,
+   "delta": -24.96,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -301,16 +308,54 @@
     "radiation_dose_rate"
    ],
    "alerts": []
+  },
+  {
+   "id": "eyes",
+   "label": "Eyes",
+   "function": "In weightlessness fluid shifts toward the head; in some astronauts the optic disc swells and near vision changes (SANS).",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "fundus_photo",
+    "vision_change"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "kidneys",
+   "label": "Kidneys and urine",
+   "function": "Filter the blood. Bone loss in space puts extra calcium in the urine, which raises the risk of kidney stones.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "urine_sg",
+    "urine_blood",
+    "urine_leukocytes"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "gut",
+   "label": "Digestion",
+   "function": "Digests food and absorbs water. Space food, less movement and less fluid change bowel habits.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "stool_bristol",
+    "stool_count",
+    "stool_blood"
+   ],
+   "alerts": []
   }
  ],
  "context": {
-  "activity_level": 0.266,
+  "activity_level": 0.378,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 2.7,
+  "cabin_co2_mmhg": 2.67,
   "sleep_last_24h": 7.0,
-  "fluid_last_24h": 3161.7,
+  "fluid_last_24h": 3305.8,
   "ared_minutes_7d": 360.0,
-  "aerobic_minutes_7d": 300.0,
+  "aerobic_minutes_7d": 180.0,
   "cabin_co2_7d_mean_mmhg": 2.83,
   "cabin_co2_high": true,
   "radiation_ratio_to_7d": 1.0,
@@ -342,15 +387,15 @@
  "daily_plan": [
   {
    "who": "self",
-   "category": "routine",
-   "action": "All routine targets met. Keep the current sleep, hydration and exercise schedule."
+   "category": "exercise",
+   "action": "Add 60 min of aerobic exercise (treadmill/cycle) this week."
   }
  ],
  "fitness_trend": {
   "alert": false,
   "shift_bpm": 0.0,
   "weeks_ago": 0,
-  "sessions": 51,
+  "sessions": 46,
   "reason": "Not enough exercise sessions yet to judge a fitness trend."
  },
  "escalation": {

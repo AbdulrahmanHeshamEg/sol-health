@@ -17,7 +17,7 @@ Reproduce everything: run notebooks `00` → `09` headless (`python notebooks/_s
 | **False alarms per person per month on real PMData** (body engine as shipped) | **1.00** (target ≤ 1), with 17 % of days spent in alert |
 | **Detection delay on planted cases** | HR drift: 74 % caught, median 6 days · multi-signal drift: 87 %, 5 days · odd combination: 53 %, 2 days · sleep step: 45 %, 2 days |
 | Solar storm of 20 May 2024 (real MSL RAD) | caught in its first hour; 0 unconfirmed alarms in 35 months |
-| Planted cases on the generated astronaut | 4 of 4 caught by the part built for each (one example of each, so this shows the wiring, not a hit rate) |
+| Planted cases on the generated astronaut | 5 of 5 caught by the part built for each, including the eye-photo case (one example of each, so this shows the wiring, not a hit rate) |
 
 ## 1. Body: "is today abnormal for *this* person?" (notebook 02, re-tuned in 09)
 
@@ -88,6 +88,21 @@ Notebook 09: on its own simulated crew it catches 92 % of scripted abnormal hour
 it flags **85 % of all hours as abnormal** outside the planted cases, almost always as "sleep deprivation", because real hour-to-hour
 heart-rate variation (SD 6.9 bpm) is far larger than its simulator assumed (3 bpm). It cannot run on PMData at all (it needs eight hourly vitals no real dataset has).
 What did transfer: its fixed radiation threshold and the shared hard limits.
+
+## 5b. Eye photo, urine and stool (rules on simulated values; no real dataset has them)
+
+**Fundus photo check** (`sol_ml/fundus.py`): classical image processing on **any** uploaded image, no trained or pretrained model.
+Quality (round field coverage, brightness, contrast, sharpness as variance of the Laplacian, red share) decides whether the photo can be read;
+otherwise the astronaut is asked to retake it. The optic disc is the brightest smooth blob; its edge sharpness is the brightness gradient on a
+ring at the disc margin divided by the disc contrast, and vessels at the margin come from a black top-hat on the green channel. Each photo is
+compared with the astronaut's **first usable photo**: edge sharpness below 75 % of baseline (or vessels below 70 %) is **watch**; below 55 %, or
+disc area above 135 %, or a reported vision change is **act now**. The demo photos are synthetic (`sol_ml/sim/fundus_image.py`, labelled
+simulated); on them a planted swelling of 0.25 reads as watch and 0.3 or more as act now. Not validated on real retina photos.
+
+**Urine dipstick:** specific gravity above 1.030 (concentrated: drink more); blood ≥ + (kidney-stone risk; with side pain, act now);
+white cells ≥ + with nitrite (possible infection); protein, sugar or ketones ≥ +. **Stool log:** Bristol type 1-2 for 3 days (constipation),
+type 6-7 three or more times a day (diarrhoea), any visible blood. Real NASA data on these (urine cytokines, Inspiration4 OSD-656; gut
+microbiome, MARS500 OSD-191) measure other things and are cited in the explainer cards, not used by the rules.
 
 ## Escalation to the flight surgeon
 The astronaut is alone, so the engine decides what reaches Earth (`assessment.escalation`): a **RED** alert is sent at once and arrives after the

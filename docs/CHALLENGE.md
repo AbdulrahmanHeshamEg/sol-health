@@ -46,7 +46,7 @@ released on Friday 13 Nov 2026**. See "Official resources" below.
 | Evaluate status | ✅ rules + 3 ML models, GREEN/YELLOW/RED | — |
 | Act: treatment / improvement guidance | ✅ action checklists + daily plan | — |
 | Keyboard / click input | ❌ data only comes from the simulator | Manual **check-in form** → `POST /api/assess` |
-| Camera input | ❌ | Stretch: photo of a meter or a skin issue, just stored and shown |
+| Camera input | ✅ | Eye exam: fundus photo upload, measured against the astronaut's baseline photo (classical image measurement) |
 | Per-indicator explanation (why, hazard effect, when to escalate, prevention) | ⚠️ in docs only | **Indicator explainer cards** in the UI, driven by an `indicators.json` |
 | Clickable human figure | ❌ | Body map: heart, lungs, brain, bones/muscles, blood, immune; color = status |
 | Settings: spacecraft / station / rover / base | ❌ | Mission-setting selector that changes radiation rate, comm delay, available equipment |

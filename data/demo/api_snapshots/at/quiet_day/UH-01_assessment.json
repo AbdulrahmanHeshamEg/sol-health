@@ -20,7 +20,14 @@
   "cardiovascular_strain": 0.0,
   "dehydration": 0.0,
   "low_blood_sugar": 0.0,
-  "high_blood_sugar": 0.0
+  "high_blood_sugar": 0.0,
+  "optic_disc_change": 0.0,
+  "kidney_stone_risk": 0.0,
+  "urinary_infection": 0.0,
+  "urine_abnormal": 0.0,
+  "constipation": 0.0,
+  "diarrhea": 0.0,
+  "stool_blood": 0.0
  },
  "anomaly_score": 0.354,
  "alerts": [],
@@ -46,9 +53,9 @@
  ],
  "vitals": {
   "heart_rate": {
-   "value": 88.2,
-   "baseline": 87.0,
-   "delta": 1.2,
+   "value": 96.5,
+   "baseline": 88.05,
+   "delta": 8.45,
    "unit": "bpm",
    "source": {
     "kind": "simulated",
@@ -56,9 +63,9 @@
    }
   },
   "hrv_rmssd": {
-   "value": 46.4,
-   "baseline": 43.5,
-   "delta": 2.9,
+   "value": 49.11,
+   "baseline": 44.2,
+   "delta": 4.91,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -66,9 +73,9 @@
    }
   },
   "spo2": {
-   "value": 97.43,
-   "baseline": 98.2,
-   "delta": -0.77,
+   "value": 97.47,
+   "baseline": 97.97,
+   "delta": -0.5,
    "unit": "%",
    "source": {
     "kind": "simulated",
@@ -76,9 +83,9 @@
    }
   },
   "resp_rate": {
-   "value": 17.13,
-   "baseline": 15.54,
-   "delta": 1.59,
+   "value": 16.36,
+   "baseline": 15.88,
+   "delta": 0.48,
    "unit": "br/min",
    "source": {
     "kind": "simulated",
@@ -86,9 +93,9 @@
    }
   },
   "systolic_bp": {
-   "value": 126.05,
-   "baseline": 117.86,
-   "delta": 8.19,
+   "value": 117.38,
+   "baseline": 117.46,
+   "delta": -0.08,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -96,9 +103,9 @@
    }
   },
   "diastolic_bp": {
-   "value": 73.63,
-   "baseline": 73.27,
-   "delta": 0.36,
+   "value": 72.5,
+   "baseline": 74.29,
+   "delta": -1.79,
    "unit": "mmHg",
    "source": {
     "kind": "simulated",
@@ -106,9 +113,9 @@
    }
   },
   "core_temp": {
-   "value": 37.28,
-   "baseline": 37.08,
-   "delta": 0.2,
+   "value": 37.27,
+   "baseline": 37.13,
+   "delta": 0.14,
    "unit": "C",
    "source": {
     "kind": "simulated",
@@ -116,9 +123,9 @@
    }
   },
   "pvt_reaction_ms": {
-   "value": 258.88,
-   "baseline": 262.04,
-   "delta": -3.16,
+   "value": 311.54,
+   "baseline": 265.54,
+   "delta": 46.0,
    "unit": "ms",
    "source": {
     "kind": "simulated",
@@ -286,16 +293,54 @@
     "radiation_dose_rate"
    ],
    "alerts": []
+  },
+  {
+   "id": "eyes",
+   "label": "Eyes",
+   "function": "In weightlessness fluid shifts toward the head; in some astronauts the optic disc swells and near vision changes (SANS).",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "fundus_photo",
+    "vision_change"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "kidneys",
+   "label": "Kidneys and urine",
+   "function": "Filter the blood. Bone loss in space puts extra calcium in the urine, which raises the risk of kidney stones.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "urine_sg",
+    "urine_blood",
+    "urine_leukocytes"
+   ],
+   "alerts": []
+  },
+  {
+   "id": "gut",
+   "label": "Digestion",
+   "function": "Digests food and absorbs water. Space food, less movement and less fluid change bowel habits.",
+   "status": "GREEN",
+   "summary": "Within your normal range.",
+   "indicators": [
+    "stool_bristol",
+    "stool_count",
+    "stool_blood"
+   ],
+   "alerts": []
   }
  ],
  "context": {
-  "activity_level": 0.125,
+  "activity_level": 0.263,
   "is_asleep": 0,
-  "cabin_co2_mmhg": 1.53,
+  "cabin_co2_mmhg": 1.49,
   "sleep_last_24h": 7.0,
-  "fluid_last_24h": 3475.3,
-  "ared_minutes_7d": 300.0,
-  "aerobic_minutes_7d": 300.0,
+  "fluid_last_24h": 3162.3,
+  "ared_minutes_7d": 180.0,
+  "aerobic_minutes_7d": 240.0,
   "cabin_co2_7d_mean_mmhg": 1.69,
   "cabin_co2_high": false,
   "radiation_ratio_to_7d": 1.0,
@@ -306,14 +351,14 @@
   {
    "who": "self",
    "category": "exercise",
-   "action": "Add 60 min of resistive (ARED) exercise this week to protect bone and muscle."
+   "action": "Add 180 min of resistive (ARED) exercise this week to protect bone and muscle."
   }
  ],
  "fitness_trend": {
   "alert": false,
   "shift_bpm": 0.0,
   "weeks_ago": 0,
-  "sessions": 23,
+  "sessions": 22,
   "reason": "Not enough exercise sessions yet to judge a fitness trend."
  },
  "escalation": {

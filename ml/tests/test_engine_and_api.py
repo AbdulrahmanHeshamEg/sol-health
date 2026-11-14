@@ -53,7 +53,7 @@ def test_one_astronaut_and_the_v0_response_shape(engine, data, prep):
     assert V0_KEYS <= set(a) and set(a["probabilities"]) == set(ENGINE_CONDITIONS)
     assert all(v["source"]["kind"] in ("real", "simulated") for v in a["vitals"].values())
     assert {"blood_glucose_mg_dl", "mood", "sleep_hours"} <= set(a["indicators"])
-    assert [s["id"] for s in a["body_systems"]] == ["heart", "lungs", "brain", "bones_muscles", "blood", "immune"]
+    assert [s["id"] for s in a["body_systems"]] == ["heart", "lungs", "brain", "bones_muscles", "blood", "immune", "eyes", "kidneys", "gut"]
 
 
 def test_actions_are_yours_or_your_flight_surgeons(engine, prep):
@@ -132,7 +132,7 @@ def test_api_personal_endpoints():
     assert {r["status"] for r in reports} <= {"sent", "daily_report"}
     assert len(client.get(f"/api/crew/{ME}/timeline?hours=24").json()) == 24
     assert client.get("/api/crew/NOPE/assessment").status_code == 404
-    assert len(client.get("/api/mission").json()["replay_marks"]) == 5
+    assert len(client.get("/api/mission").json()["replay_marks"]) == 6
     assert client.get("/api/meta").json()["limits"]["radiation_ratio_shelter"] == 2.0
 
 

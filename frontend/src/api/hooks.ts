@@ -57,6 +57,18 @@ export function useReports(id: string | undefined) {
   const { at } = useReplay();
   return useQuery({ queryKey: ["reports", id, at], queryFn: () => api.reports(id!, at), enabled: !!id, ...timed });
 }
+export function useQuestions(id: string | undefined) {
+  const { at } = useReplay();
+  return useQuery({ queryKey: ["questions", id, at], queryFn: () => api.questions(id!, at), enabled: !!id, ...timed });
+}
+export function useBrief(id: string | undefined) {
+  const { at } = useReplay();
+  return useQuery({ queryKey: ["brief", id, at], queryFn: () => api.brief(id!, at), enabled: !!id, ...timed });
+}
+export function useEyeExams(id: string | undefined) {
+  const { at } = useReplay();
+  return useQuery({ queryKey: ["eye-exams", id, at], queryFn: () => api.eyeExams(id!, at), enabled: !!id, ...timed });
+}
 export function useReminders(id: string) {
   const { at } = useReplay();
   return useQuery({ queryKey: ["reminders", id, at], queryFn: () => api.reminders(id, at), ...timed });

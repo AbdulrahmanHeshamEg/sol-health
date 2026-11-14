@@ -1,0 +1,25 @@
+[
+ {
+  "astronaut_id": "UH-01",
+  "name": "Nadia Farouk",
+  "role": "Mission astronaut",
+  "status": "YELLOW",
+  "health_score": 82,
+  "condition": "optic_disc_change",
+  "condition_label": "Possible optic disc swelling (eye)",
+  "top_alert": "Eye photo: optic disc changed",
+  "top_reason": "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report.",
+  "vitals": {
+   "heart_rate": 141.6,
+   "hrv_rmssd": 33.78,
+   "spo2": 97.75,
+   "resp_rate": 21.05,
+   "systolic_bp": 127.08,
+   "diastolic_bp": 77.48,
+   "core_temp": 37.29,
+   "pvt_reaction_ms": 224.99
+  },
+  "cabin_co2_mmhg": 1.58,
+  "timestamp": "2026-10-30 09:00:00"
+ }
+]

@@ -344,5 +344,127 @@
     "calibrated_on": "published normal ranges"
    }
   }
+ },
+ {
+  "id": "fundus",
+  "label": "Eye exam (fundus photo)",
+  "unit": "photo",
+  "body_system": "eyes",
+  "hazards": [
+   "G"
+  ],
+  "data_keys": [
+   "fundus_photo"
+  ],
+  "measured_in_space": "Yes. A fundus camera photographs the back of the eye; the ISS also has OCT. The demo photos are synthetic images.",
+  "why": "Shows the optic disc, where the nerve leaves the eye. A swollen disc is the main sign of SANS, which can change vision for good.",
+  "hazard_effect": "Without gravity, fluid shifts toward the head and pressure around the eye and nerve changes. Long missions raise the risk.",
+  "escalate": "The app compares each photo with your pre-flight photo: a blurrier disc margin goes to your flight surgeon, with the photo. Blurred vision: tell your flight surgeon at once.",
+  "prevention": "Monthly photos to catch it early, avoiding straining, and research countermeasures such as lower-body negative pressure.",
+  "hazard_names": [
+   "Altered gravity fields"
+  ],
+  "sources": {
+   "fundus_photo": {
+    "kind": "simulated",
+    "calibrated_on": "synthetic retina image (sol_ml.sim.fundus_image)"
+   }
+  }
+ },
+ {
+  "id": "urinalysis",
+  "label": "Urine test (dipstick)",
+  "unit": "specific gravity and pads",
+  "body_system": "kidneys",
+  "hazards": [
+   "G",
+   "E"
+  ],
+  "data_keys": [
+   "urine_sg",
+   "urine_blood",
+   "urine_protein",
+   "urine_glucose",
+   "urine_ketones",
+   "urine_leukocytes",
+   "urine_nitrite"
+  ],
+  "measured_in_space": "Yes. Dipstick strips are in the medical kit; the demo values are simulated from normal ranges.",
+  "why": "One strip checks hydration (specific gravity), kidney stones (blood), infection (white cells, nitrite) and metabolism (sugar, ketones).",
+  "hazard_effect": "Bone loss puts extra calcium in the urine, raising the kidney-stone risk; spaceflight also shifts inflammation markers in urine (Inspiration4, NASA OSDR study OSD-656).",
+  "escalate": "Blood with pain in your side: flight surgeon now. White cells with nitrite, or protein or sugar on two mornings: it goes in the daily report.",
+  "prevention": "Drink 2.5-3 L a day, keep resistive exercise to protect bone, limit salt.",
+  "hazard_names": [
+   "Altered gravity fields",
+   "Hostile / closed environments"
+  ],
+  "sources": {
+   "urine_sg": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+   },
+   "urine_blood": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+   },
+   "urine_protein": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+   },
+   "urine_glucose": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+   },
+   "urine_ketones": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+   },
+   "urine_leukocytes": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+   },
+   "urine_nitrite": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges (urine dipstick)"
+   }
+  }
+ },
+ {
+  "id": "stool",
+  "label": "Stool log (Bristol scale)",
+  "unit": "type 1-7, motions a day",
+  "body_system": "gut",
+  "hazards": [
+   "I",
+   "E"
+  ],
+  "data_keys": [
+   "stool_bristol",
+   "stool_count",
+   "stool_blood"
+  ],
+  "measured_in_space": "Yes. A daily self-report against the Bristol chart: type 1-2 is hard, 3-5 normal, 6-7 loose. The demo values are simulated.",
+  "why": "Bowel habits change quickly with fluid, fibre, stress and infection, and diarrhoea dehydrates fast in a closed habitat.",
+  "hazard_effect": "The gut microbiome shifts over months of isolation (MARS500, NASA OSDR study OSD-191), and space food is low in fibre.",
+  "escalate": "Hard stool for 3 days, or 3 or more loose stools in a day: watch alert. Any blood: it goes to your flight surgeon.",
+  "prevention": "Fluids, fibre, regular meals and daily exercise.",
+  "hazard_names": [
+   "Isolation and confinement",
+   "Hostile / closed environments"
+  ],
+  "sources": {
+   "stool_bristol": {
+    "kind": "simulated",
+    "calibrated_on": "published Bristol stool scale distribution"
+   },
+   "stool_count": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   },
+   "stool_blood": {
+    "kind": "simulated",
+    "calibrated_on": "published normal ranges"
+   }
+  }
  }
 ]
