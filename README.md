@@ -67,7 +67,7 @@ Then open Claude Code in the repo root and follow `docs/BUILD_PLAN.md` to build 
 | [docs/BUILD_PLAN.md](docs/BUILD_PLAN.md) | Ready-to-paste prompts for Claude Code |
 
 ## Team
-Abdulrahman Hesham (lead), Adhm Ehab, Ahmed Galala, Ammar Yasser, Moamen Abdelrazek, Mohammed Elhendawy.
+Abdulrahman Hesham, Adham Ehab, Ahmed Galala, Ammar Yasser, Moamen Abdelrazek, Mohammed Elhendawy.
 
 ## Data credits
 - **PMData:** Thambawita et al., *PMData: A Sports Logging Dataset*, MMSys 2020, doi:10.1145/3339825.3394926.
