@@ -11,3 +11,5 @@ data/processed/*
 .ipynb_checkpoints/
 .pytest-tmp/
 data/user/
+
+.vercel
