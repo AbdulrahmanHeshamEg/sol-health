@@ -1,0 +1,9 @@
+# Vercel only needs the frontend and the saved demo snapshots it is built with.
+/*
+!/frontend
+!/data
+!/vercel.json
+/data/*
+!/data/demo
+/frontend/node_modules
+/frontend/dist
