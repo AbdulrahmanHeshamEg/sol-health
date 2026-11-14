@@ -1,6 +1,6 @@
 # Sol Health
 
-**Onboard AI medical copilot for astronauts.** NASA Space Apps 2026 — *Create Health Monitoring Software for Astronauts* — Cairo.
+**Onboard AI medical copilot for astronauts.** NASA Space Apps 2026  *Create Health Monitoring Software for Astronauts on Space Missions*  Cairo.
 
 A personal health app for an astronaut alone on a deep-space mission. It shows **every indicator against your own baseline**,
 says **whether something is wrong and why**, tells you **what to do now**, and sends what matters to **your flight surgeon** on Earth,
