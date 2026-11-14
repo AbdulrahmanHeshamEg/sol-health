@@ -6,6 +6,8 @@ A personal health app for an astronaut alone on a deep-space mission. It shows *
 says **whether something is wrong and why**, tells you **what to do now**, and sends what matters to **your flight surgeon** on Earth,
 who is minutes away, so you act first.
 
+**Live demo: [sol-health.vercel.app](https://sol-health.vercel.app)** (runs on the saved demo snapshots; check-ins and eye photos need the API running locally)
+
 ## What's inside
 - **Explainable engine**, tuned on real data (no deep learning; every alert gives a one-sentence reason):
   - Body: personal robust baseline + bounded CUSUM (slow drifts) + Isolation Forest (odd combinations), **1.00 false alarm per person-month on real PMData**
@@ -18,7 +20,7 @@ who is minutes away, so you act first.
 - **FastAPI** service: today's questions (with follow-ups), saved answers, eye-photo upload, a daily brief (rules now, AI-ready), mission replay (`?at=`)
 - **Notebooks 00–09:** data exploration, model comparison with a shared protocol, and a Decision cell each (`notebooks/`, figures in `reports/figures/`)
 - **Demo mission:** one fictional astronaut alone on a Mars surface mission, 75 days, carrying all 4 planted test cases; statistics calibrated on real data
-- **Docs** for judges and for Claude Code (`CLAUDE.md`, `docs/`)
+- **Docs** for judges (`docs/`)
 
 ## Data (real + simulated)
 | Data | What it gives us |
@@ -53,7 +55,6 @@ Then open Claude Code in the repo root and follow `docs/BUILD_PLAN.md` to build 
 ## Docs
 | Doc | For |
 |---|---|
-| [CLAUDE.md](CLAUDE.md) | Claude Code context: what exists, what to build, rules |
 | [docs/CHALLENGE.md](docs/CHALLENGE.md) | The NASA brief and our coverage |
 | [docs/DATASETS.md](docs/DATASETS.md) | Real data sources |
 | [docs/NOTEBOOKS.md](docs/NOTEBOOKS.md) | Analysis + model comparison plan |
@@ -72,7 +73,3 @@ Abdulrahman Hesham (lead), Adhm Ehab, Ahmed Galala, Ammar Yasser, Moamen Abdelra
 - **PMData:** Thambawita et al., *PMData: A Sports Logging Dataset*, MMSys 2020, doi:10.1145/3339825.3394926.
 - **NASA OSDR EDA:** Data and visualizations are courtesy of the Environmental Data Application (EDA) (https://visualization.osdr.nasa.gov/eda/).
 - **MSL RAD:** NASA/JPL, Hassler et al. (Curiosity Radiation Assessment Detector), level-2 data from NASA CDAWeb.
-
-## Disclaimer
-The astronauts are **fictional and simulated**; real datasets set their statistics, and each value in the app is tagged as real or simulated.
-Sol Health is a decision-support prototype, not a medical device.
