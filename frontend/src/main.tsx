@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./styles.css";
 import { Layout } from "./components/Layout";
 import { ReplayProvider } from "./state/replay";
+import { CheckInProvider } from "./state/checkin";
 import { Skeleton } from "./components/ui";
 
 // Pages (and the charting library most of them use) load when opened.
@@ -25,6 +26,7 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ReplayProvider>
+          <CheckInProvider>
           <Routes>
             <Route element={<Layout />}>
               <Route index element={page(<Today />)} />
@@ -35,9 +37,10 @@ createRoot(document.getElementById("root")!).render(
               <Route path="settings" element={page(<Settings />)} />
               <Route path="learn" element={page(<Learn />)} />
               <Route path="about" element={page(<About />)} />
-              <Route path="*" element={<p>That page does not exist. Go back to Today.</p>} />
+              <Route path="*" element={<p className="text-ink-2">That page does not exist. Go back to Today.</p>} />
             </Route>
           </Routes>
+          </CheckInProvider>
         </ReplayProvider>
       </BrowserRouter>
     </QueryClientProvider>

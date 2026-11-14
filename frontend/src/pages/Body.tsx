@@ -1,14 +1,19 @@
 // My body: every system and indicator against your own normal, the trends, and the long-term view.
 import { useSearchParams } from "react-router-dom";
+import { PersonStanding, Scale } from "lucide-react";
 import { useAssessment, useDaily, useIndicators, useMe, useMeta, useTimeline, useVitals } from "../api/hooks";
 import { BodyFigure } from "../components/BodyFigure";
 import { DailyCharts, HourlyCharts } from "../components/Charts";
-import { AlertItem, DAILY, Evidence, Readings, hourlySeries } from "../components/HealthParts";
+import { DAILY, Evidence, hourlySeries } from "../components/HealthParts";
+import { CategoryLabel, HighlightCard, MetricCard } from "../components/Metric";
+import { CATEGORY, METRICS, type CatId } from "../lib/health";
 import { LongTerm } from "../components/LongTerm";
-import { ErrorNote, Panel, Skeleton, signed } from "../components/ui";
+import { Eyes } from "./Eyes";
+import { Card, ErrorNote, PageHeader, Skeleton, Tabs, signed } from "../components/ui";
 
-const TABS = [["now", "Now"], ["trends", "Trends"], ["long", "Long-term"]] as const;
+const TABS = [["now", "Now"], ["trends", "Trends"], ["long", "Long-term"], ["eyes", "Eye exam"]] as const;
 type Tab = (typeof TABS)[number][0];
+const GROUPS: CatId[] = ["heart", "respiratory", "body", "sleep", "mind", "labs"];
 
 export function Body() {
   const me = useMe();
@@ -37,52 +42,61 @@ function BodyFor({ id }: { id: string }) {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <h1 className="text-2xl">My body</h1>
-        <div className="flex gap-2" role="tablist" aria-label="View">
-          {TABS.map(([k, label]) => (
-            <button key={k} role="tab" aria-selected={tab === k} aria-pressed={tab === k} className="btn-quiet" onClick={() => setTab(k)}>{label}</button>
-          ))}
-        </div>
-      </div>
+      <PageHeader title="My body" subtitle="Each reading next to your own normal, how it has moved lately, and where it is heading." />
+      <Tabs tabs={TABS} value={tab} onChange={setTab} label="View" />
 
       {tab === "now" && (
-        <>
-          <div className="grid gap-6 lg:grid-cols-2">
-            <Panel title="Your body systems"><BodyFigure systems={d.body_systems} cards={cards.data} /></Panel>
-            <Panel title={d.alerts.length ? `Why: ${d.alerts.length} alert${d.alerts.length > 1 ? "s" : ""}` : "Why"}>
-              {d.alerts.length === 0
-                ? <p className="text-base">No alerts. Your clinical limits, your own baselines, the cabin air and radiation are checked every hour.</p>
-                : <ul className="m-0 list-none space-y-4 p-0">{d.alerts.map((x, i) => <AlertItem key={i} alert={x} />)}</ul>}
+        <div className="space-y-8">
+          {d.alerts.length > 0 && (
+            <section aria-labelledby="body-hl">
+              <h2 id="body-hl" className="section-title px-1">Highlights</h2>
+              <div className="mt-2 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {d.alerts.map((x, i) => <HighlightCard key={i} alert={x} hourly={vitals.data} daily={daily.data} stamp="Today" />)}
+              </div>
               {d.drivers.length > 0 && (
-                <p className="mt-5 text-sm text-dust-dim">
-                  Furthest from your normal today: {d.drivers.map((x) => `${x.signal.replace("_", " ")} (${signed(x.z)} SD)`).join(", ")}. Positive means worse.
+                <p className="mt-3 px-1 text-xs text-ink-3">
+                  Furthest from your normal today: {d.drivers.map((x) => `${x.signal.replace(/_/g, " ")} (${signed(x.z)} SD)`).join(", ")}. Positive means worse.
                 </p>
               )}
-            </Panel>
+            </section>
+          )}
+          {GROUPS.map((cat) => {
+            const list = METRICS.filter((m) => m.cat === cat);
+            return (
+              <section key={cat} aria-label={CATEGORY[cat].label}>
+                <div className="px-1"><CategoryLabel cat={cat} /></div>
+                <div className="mt-2 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                  {list.map((m) => <MetricCard key={m.key} m={m} a={d} hourly={vitals.data} daily={daily.data} />)}
+                </div>
+              </section>
+            );
+          })}
+          <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+            <Card title="Body systems" icon={<PersonStanding size={18} />}><BodyFigure systems={d.body_systems} cards={cards.data} /></Card>
+            <Card title="How the evidence splits" icon={<Scale size={18} />} aside="Relative weight per condition, not a probability"><Evidence a={d} /></Card>
           </div>
-          <Panel title="Every indicator against your own normal"><Readings a={d} /></Panel>
-          <Panel title="How the evidence splits" aside="Relative weight per condition, not a probability"><Evidence a={d} /></Panel>
-        </>
+        </div>
       )}
 
       {tab === "trends" && (
-        <>
-          <Panel title="Last 72 hours">
+        <div className="space-y-6">
+          <Card title="Last 72 hours">
             {vitals.isError ? <ErrorNote error={vitals.error} retry={() => vitals.refetch()} />
               : vitals.data && timeline.data ? <HourlyCharts rows={vitals.data} timeline={timeline.data} series={hourlySeries(meta.data?.limits.cabin_co2_1h_mmhg)} />
               : <Skeleton lines={5} height={24} />}
-          </Panel>
-          <Panel title="Last 30 sols">
+          </Card>
+          <Card title="Last 30 sols">
             {daily.isError ? <ErrorNote error={daily.error} retry={() => daily.refetch()} />
               : !daily.data ? <Skeleton lines={5} height={24} />
-              : daily.data.length === 0 ? <p>No daily entries yet. They start after your first night.</p>
+              : daily.data.length === 0 ? <p className="text-sm text-ink-2">No daily entries yet. They start after your first night.</p>
               : <DailyCharts rows={daily.data} series={DAILY} />}
-          </Panel>
-        </>
+          </Card>
+        </div>
       )}
 
       {tab === "long" && <LongTerm astronautId={id} />}
+
+      {tab === "eyes" && <Eyes embedded />}
     </div>
   );
 }

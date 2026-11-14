@@ -1,5 +1,6 @@
+import { BookMarked, CheckCheck, Database, FlaskConical, Target } from "lucide-react";
 import { useCases, useMeta, useMission } from "../api/hooks";
-import { ErrorNote, Panel, Skeleton, SourceBadge, when } from "../components/ui";
+import { Card, ErrorNote, PageHeader, Skeleton, SourceBadge, when } from "../components/ui";
 
 // Display names for the source keys the API reports (data/demo/sources.json).
 const NAMES: Record<string, string> = {
@@ -25,71 +26,80 @@ export function About() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl">Data and sources</h1>
-        <p className="mt-1 max-w-[72ch] text-base text-dust-dim">
-          NASA publishes no daily vitals for astronauts. So real data sets the statistics, a generator builds a fictional astronaut with those statistics, and the engine runs on that astronaut.
-          Nothing simulated is shown as real: every value carries one of these two badges.
-        </p>
+      <PageHeader title="Data and sources"
+        subtitle="NASA publishes no daily vitals for astronauts. So real data sets the statistics, a generator builds a fictional astronaut with those statistics, and the engine runs on that astronaut. Nothing simulated is shown as real: every value carries one of these two badges." />
+
+      <div className="grid items-start gap-6 lg:grid-cols-2">
+        <Card title="Real measurements" icon={<Database size={18} />} aside={<SourceBadge source={{ kind: "real" }} />}>
+          <ul className="m-0 list-none space-y-2 p-0 text-sm">
+            {real.map(([key, s]) => (
+              <li key={key} className="flex justify-between gap-4 border-b border-line pb-2 last:border-0 last:pb-0">
+                <span className="font-medium">{nameOf(key)}</span><span className="text-right text-ink-3">{s.dataset}</span>
+              </li>
+            ))}
+          </ul>
+          {mission.data?.radiation_replay && (
+            <p className="mt-4 text-sm text-ink-3">
+              The radiation series is Curiosity's RAD instrument on the Mars surface, {when(mission.data.radiation_replay.from)} to {when(mission.data.radiation_replay.to)} 2024, replayed hour for hour.
+              It includes the solar storm of 20 May 2024. It is a real measurement, but not a dosimeter worn by a person.
+            </p>
+          )}
+        </Card>
+
+        <Card title="Simulated, calibrated on real data" icon={<FlaskConical size={18} />} aside={<SourceBadge source={{ kind: "simulated" }} />}>
+          <dl className="m-0 space-y-3">
+            {[...byCalibration.entries()].map(([on, keys]) => (
+              <div key={on} className="rounded-xl bg-surface-2 p-3">
+                <dt className="text-sm font-semibold">{on}</dt>
+                <dd className="m-0 mt-1 text-sm text-ink-3">{keys.join(", ")}</dd>
+              </div>
+            ))}
+          </dl>
+          {mission.data?.cabin_co2_source && (
+            <p className="mt-4 text-sm text-ink-3">
+              Cabin CO2 resamples real ISS mission {mission.data.cabin_co2_source.base}; the planted high-CO2 stretch comes from {mission.data.cabin_co2_source.planted_high}.
+            </p>
+          )}
+        </Card>
       </div>
 
-      <Panel title="Real measurements" aside={<SourceBadge source={{ kind: "real" }} />}>
-        <ul className="m-0 list-disc space-y-1 pl-5 text-base">
-          {real.map(([key, s]) => <li key={key}>{nameOf(key)}: {s.dataset}</li>)}
-        </ul>
-        {mission.data?.radiation_replay && (
-          <p className="mt-3 max-w-[72ch] text-sm text-dust-dim">
-            The radiation series is Curiosity's RAD instrument on the Mars surface, {when(mission.data.radiation_replay.from)} to {when(mission.data.radiation_replay.to)} 2024, replayed hour for hour.
-            It includes the solar storm of 20 May 2024. It is a real measurement, but not a dosimeter worn by a person.
-          </p>
-        )}
-      </Panel>
-
-      <Panel title="Simulated, calibrated on real data" aside={<SourceBadge source={{ kind: "simulated" }} />}>
-        <dl className="grid gap-x-8 gap-y-4 md:grid-cols-2">
-          {[...byCalibration.entries()].map(([on, keys]) => (
-            <div key={on}>
-              <dt className="display text-base">{on}</dt>
-              <dd className="m-0 text-base text-dust-dim">{keys.join(", ")}</dd>
-            </div>
+      <Card title="How the engine was checked" icon={<CheckCheck size={18} />}>
+        <ul className="m-0 grid list-none gap-3 p-0 md:grid-cols-2">
+          {[
+            ["1.00 false alarm per person-month", "On 14 real people (PMData). Slow heart-rate drifts planted into those real series are caught in 74% of cases within about 6 days; subtle combinations in about half."],
+            ["Storm caught in its first hour", "On 35 months of real Mars radiation data the storm alarm caught the 20 May 2024 storm in its first hour and raised no unconfirmed alarm."],
+            ["468 days of real ISS air", "The cabin CO2 rule was replayed on 468 days of real ISS measurements."],
+            ["Clinical limits, not tested on data", "Blood pressure, blood oxygen, temperature and blood sugar exist in none of these datasets. They are simulated, and their limits are standard clinical thresholds."],
+          ].map(([title, text]) => (
+            <li key={title} className="rounded-xl border border-line p-4">
+              <p className="font-semibold">{title}</p>
+              <p className="mt-1 text-sm text-ink-2">{text}</p>
+            </li>
           ))}
-        </dl>
-        {mission.data?.cabin_co2_source && (
-          <p className="mt-3 max-w-[72ch] text-sm text-dust-dim">
-            Cabin CO2 resamples real ISS mission {mission.data.cabin_co2_source.base}; the planted high-CO2 stretch comes from {mission.data.cabin_co2_source.planted_high}.
-          </p>
-        )}
-      </Panel>
-
-      <Panel title="Citations">
-        <ul className="m-0 list-disc space-y-2 pl-5 text-base">
-          {meta.data.citations.map((c) => <li key={c} className="max-w-[78ch]">{c}</li>)}
         </ul>
-      </Panel>
+        <p className="mt-4 text-xs text-ink-3">Full numbers and the notebooks behind them: docs/MODELS.md and notebooks/ in the repository.</p>
+      </Card>
 
-      <Panel title="The planted test cases" aside="Ground truth, used only to check the engine">
+      <Card title="The planted test cases" icon={<Target size={18} />} aside="Ground truth, used only to check the engine">
         {cases.data ? (
-          <ul className="m-0 list-none space-y-4 p-0">
+          <ul className="m-0 grid list-none gap-3 p-0 md:grid-cols-2">
             {cases.data.map((c) => (
-              <li key={c.id}>
-                <h3 className="text-base">{c.title} <span className="text-sm font-normal text-dust-dim">from {when(c.start)}, {c.affects}</span></h3>
-                <p className="max-w-[78ch] text-sm">Planted: {c.planted}.</p>
-                <p className="max-w-[78ch] text-sm text-dust-dim">Expected: {c.expected}.</p>
+              <li key={c.id} className="rounded-xl border border-line p-4">
+                <p className="font-semibold">{c.title}</p>
+                <p className="mt-0.5 text-xs text-ink-3">From {when(c.start)} · {c.affects}</p>
+                <p className="mt-2 text-sm"><span className="font-medium">Planted:</span> {c.planted}.</p>
+                <p className="mt-1 text-sm text-ink-3"><span className="font-medium">Expected:</span> {c.expected}.</p>
               </li>
             ))}
           </ul>
         ) : <Skeleton lines={4} />}
-      </Panel>
+      </Card>
 
-      <Panel title="How the engine was checked">
-        <ul className="m-0 list-disc space-y-2 pl-5 text-base">
-          <li className="max-w-[78ch]">On 14 real people (PMData) the body models raise 1.00 false alarm per person per month. Detection was measured on changes planted into those real series: slow heart-rate drifts are caught in 74% of cases within about 6 days; subtle combinations in about half.</li>
-          <li className="max-w-[78ch]">On 35 months of real Mars radiation data the storm alarm caught the 20 May 2024 storm in its first hour and raised no unconfirmed alarm.</li>
-          <li className="max-w-[78ch]">The cabin rule was replayed on 468 days of real ISS CO2.</li>
-          <li className="max-w-[78ch]">Blood pressure, blood oxygen, temperature and blood sugar exist in none of these datasets. They are simulated, and their limits are standard clinical thresholds that were not tested on data.</li>
-        </ul>
-        <p className="mt-3 text-sm text-dust-dim">Full numbers and the notebooks behind them: docs/MODELS.md and notebooks/ in the repository.</p>
-      </Panel>
+      <Card title="Citations" icon={<BookMarked size={18} />}>
+        <ol className="m-0 list-decimal space-y-2 pl-5 text-sm text-ink-2">
+          {meta.data.citations.map((c) => <li key={c}>{c}</li>)}
+        </ol>
+      </Card>
     </div>
   );
 }

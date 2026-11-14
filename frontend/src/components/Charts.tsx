@@ -1,11 +1,19 @@
 import { useMemo } from "react";
-import { CartesianGrid, Line, LineChart, ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, Line, LineChart, ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import type { DailyRow, Level, TelemetryRow, TimelinePoint } from "../api/types";
-import { parseTs } from "../state/replay";
-import { LEVEL_COLOR } from "./ui";
+import { displayDate } from "../state/replay";
+import { LEVEL_COLOR, when } from "./ui";
+import { CATEGORY, metric } from "../lib/health";
 
-const AXIS = { stroke: "var(--color-line)", tick: { fill: "var(--color-dust-dim)", fontSize: 12 } };
-const TIP = { contentStyle: { background: "var(--color-basalt)", border: "1px solid var(--color-line)", borderRadius: 4, color: "var(--color-dust)" }, labelStyle: { color: "var(--color-dust-dim)" } };
+/** The colour of a reading: its category colour, grey for the cabin, blue otherwise. */
+const colorOf = (key: string) => { const m = metric(key); return m ? CATEGORY[m.cat].color : key === "cabin_co2_mmhg" ? CATEGORY.cabin.color : key.startsWith("radiation") ? CATEGORY.radiation.color : "var(--color-brand)"; };
+
+export const AXIS = { stroke: "var(--color-line)", tickLine: false, tick: { fill: "var(--color-ink-3)", fontSize: 11 } };
+export const TIP = {
+  contentStyle: { background: "var(--color-surface)", border: "1px solid var(--color-line)", borderRadius: 10, color: "var(--color-ink)", boxShadow: "var(--shadow-pop)", fontSize: 13 },
+  labelStyle: { color: "var(--color-ink-3)", marginBottom: 2 },
+  cursor: { stroke: "var(--color-line-strong)" },
+};
 
 interface Band { from: number; to: number; level: Level }
 
@@ -31,57 +39,91 @@ function runs(rows: TelemetryRow[], test: (r: TelemetryRow) => boolean): Array<[
   return out;
 }
 
-export interface Series { key: keyof TelemetryRow; label: string; unit: string; second?: keyof TelemetryRow; limit?: number; limitLabel?: string }
+export interface Series { key: keyof TelemetryRow; label: string; unit: string; second?: keyof TelemetryRow; limit?: number; limitLabel?: string; digits?: number }
 
-export function HourlyCharts({ rows, timeline, series }: { rows: TelemetryRow[]; timeline: TimelinePoint[]; series: Series[] }) {
+export function Legend({ items }: { items: Array<{ color: string; label: string; opacity?: number; line?: boolean }> }) {
+  return (
+    <ul className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-xs text-ink-3">
+      {items.map((it) => (
+        <li key={it.label} className="inline-flex items-center gap-1.5">
+          <span aria-hidden="true" style={{ width: it.line ? 14 : 10, height: it.line ? 2.5 : 10, borderRadius: it.line ? 2 : 3, background: it.color, opacity: it.opacity ?? 1, display: "inline-block" }} />
+          {it.label}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export const STATUS_LEGEND = [
+  { color: LEVEL_COLOR.YELLOW, opacity: 0.35, label: "Watch hours" },
+  { color: LEVEL_COLOR.RED, opacity: 0.35, label: "Act-now hours" },
+  { color: "var(--color-brand)", opacity: 0.14, label: "Asleep" },
+];
+
+/** One hourly signal with the engine's status shaded behind it. */
+export function TrendChart({ rows, timeline, series, height = 220, compact = false }: {
+  rows: TelemetryRow[]; timeline: TimelinePoint[]; series: Series; height?: number; compact?: boolean;
+}) {
   const data = useMemo(() => rows.map((r, i) => ({ ...r, i })), [rows]);
   const index = useMemo(() => new Map(rows.map((r, i) => [r.timestamp, i])), [rows]);
   const shaded = useMemo(() => bands(timeline, index), [timeline, index]);
   const asleep = useMemo(() => runs(rows, (r) => r.is_asleep === 1), [rows]);
-  const exercise = useMemo(() => runs(rows, (r) => r.exercise_type !== "none"), [rows]);
+  const step = rows.length > 48 ? 12 : rows.length > 24 ? 6 : 3;
+  const ticks = data.filter((d) => d.hour % step === 0).map((d) => d.i);
   const tick = (i: number) => {
     const r = rows[i];
     if (!r) return "";
-    const d = parseTs(r.timestamp);
-    return d.getUTCHours() === 0 ? d.toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" }) : `${String(d.getUTCHours()).padStart(2, "0")}h`;
+    const d = displayDate(r.timestamp);
+    return d.getUTCHours() === 0 ? d.toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" }) : `${String(d.getUTCHours()).padStart(2, "0")}:00`;
   };
-  const ticks = data.filter((d) => d.hour % 12 === 0).map((d) => d.i);
+  const gid = `g-${String(series.key)}-${compact ? "c" : "f"}`;
+  const color = colorOf(String(series.key));
+  const digits = series.digits ?? 1;
 
   return (
-    <div>
-      <p className="mb-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-dust-dim">
-        <span><Swatch color={LEVEL_COLOR.YELLOW} opacity={0.3} /> watch hours</span>
-        <span><Swatch color={LEVEL_COLOR.RED} opacity={0.35} /> act-now hours</span>
-        <span><Swatch color="var(--color-dusk)" opacity={0.14} /> asleep</span>
-        <span><Swatch color="var(--color-dust)" opacity={0.2} /> exercise</span>
-      </p>
-      <div className="grid gap-x-6 gap-y-4 lg:grid-cols-2">
-        {series.map((s) => (
-          <figure key={String(s.key)} className="m-0">
-            <figcaption className="text-sm"><span className="display">{s.label}</span> <span className="text-dust-dim">{s.unit}</span></figcaption>
-            <ResponsiveContainer width="100%" height={130}>
-              <LineChart data={data} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
-                <CartesianGrid stroke="var(--color-line)" strokeOpacity={0.35} vertical={false} />
-                {asleep.map(([a, b]) => <ReferenceArea key={`s${a}`} x1={a} x2={b} fill="var(--color-dusk)" fillOpacity={0.1} strokeOpacity={0} ifOverflow="hidden" />)}
-                {exercise.map(([a, b]) => <ReferenceArea key={`e${a}`} x1={a - 0.4} x2={b + 0.4} fill="var(--color-dust)" fillOpacity={0.16} strokeOpacity={0} ifOverflow="hidden" />)}
-                {shaded.map((b) => <ReferenceArea key={`b${b.from}`} x1={b.from - 0.5} x2={b.to + 0.5} fill={LEVEL_COLOR[b.level]} fillOpacity={b.level === "RED" ? 0.3 : 0.24} strokeOpacity={0} ifOverflow="hidden" />)}
-                {s.limit !== undefined && <ReferenceLine y={s.limit} stroke="var(--color-dust-dim)" strokeDasharray="5 4" label={{ value: s.limitLabel, fill: "var(--color-dust-dim)", fontSize: 11, position: "insideTopRight" }} />}
-                <XAxis dataKey="i" type="number" domain={[0, Math.max(1, data.length - 1)]} ticks={ticks} tickFormatter={tick} {...AXIS} />
-                <YAxis domain={["auto", "auto"]} width={52} {...AXIS} />
-                <Tooltip {...TIP} labelFormatter={(i) => rows[Number(i)]?.timestamp.slice(0, 16) ?? ""} formatter={(v) => [`${Number(v).toFixed(1)} ${s.unit}`, s.label]} />
-                <Line dataKey={s.key as string} stroke="var(--color-dust)" strokeWidth={1.6} dot={false} isAnimationActive={false} />
-                {s.second && <Line dataKey={s.second as string} stroke="var(--color-dusk)" strokeWidth={1.4} dot={false} isAnimationActive={false} />}
-              </LineChart>
-            </ResponsiveContainer>
-          </figure>
-        ))}
-      </div>
-    </div>
+    <ResponsiveContainer width="100%" height={height}>
+      <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: compact ? -22 : -12 }}>
+        <defs>
+          <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity={0.22} />
+            <stop offset="100%" stopColor={color} stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <CartesianGrid stroke="var(--color-line)" strokeDasharray="3 4" vertical={false} />
+        {asleep.map(([a, b]) => <ReferenceArea key={`s${a}`} x1={a - 0.5} x2={b + 0.5} fill="var(--color-brand)" fillOpacity={0.06} strokeOpacity={0} ifOverflow="hidden" />)}
+        {shaded.map((b) => <ReferenceArea key={`b${b.from}`} x1={b.from - 0.5} x2={b.to + 0.5} fill={LEVEL_COLOR[b.level]} fillOpacity={0.14} strokeOpacity={0} ifOverflow="hidden" />)}
+        {series.limit !== undefined && <ReferenceLine y={series.limit} stroke="var(--color-ink-3)" strokeDasharray="5 4" label={{ value: series.limitLabel, fill: "var(--color-ink-3)", fontSize: 10, position: "insideTopRight" }} />}
+        <XAxis dataKey="i" type="number" domain={[0, Math.max(1, data.length - 1)]} ticks={ticks} tickFormatter={tick} {...AXIS} />
+        <YAxis domain={["auto", "auto"]} width={52} {...AXIS} axisLine={false} tickFormatter={(v) => Number(v).toFixed(digits > 1 ? 1 : 0)} />
+        <Tooltip {...TIP} labelFormatter={(i) => { const r = rows[Number(i)]; return r ? `${when(r.timestamp)} UTC` : ""; }}
+          formatter={(v, name) => [`${Number(v).toFixed(digits)} ${series.unit}`, name === series.second ? "Lower" : series.second ? "Upper" : series.label]} />
+        <Area dataKey={series.key as string} stroke={color} strokeWidth={2} fill={`url(#${gid})`} dot={false} isAnimationActive={false} />
+        {series.second && <Area dataKey={series.second as string} stroke="#8b5cf6" strokeWidth={1.8} fill="transparent" dot={false} isAnimationActive={false} />}
+      </AreaChart>
+    </ResponsiveContainer>
   );
 }
 
-function Swatch({ color, opacity }: { color: string; opacity: number }) {
-  return <span aria-hidden="true" style={{ display: "inline-block", width: 14, height: 10, background: color, opacity, marginRight: 5, verticalAlign: "baseline" }} />;
+export function HourlyCharts({ rows, timeline, series }: { rows: TelemetryRow[]; timeline: TimelinePoint[]; series: Series[] }) {
+  return (
+    <div>
+      <Legend items={STATUS_LEGEND} />
+      <div className="mt-4 grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+        {series.map((s) => {
+          const last = rows[rows.length - 1]?.[s.key] as number | undefined;
+          return (
+            <figure key={String(s.key)} className="m-0 rounded-xl border border-line p-4">
+              <figcaption className="flex items-baseline justify-between gap-2">
+                <span className="text-sm font-semibold">{s.label}</span>
+                <span className="text-xs text-ink-3"><span className="tnum text-sm font-semibold text-ink">{last !== undefined ? last.toFixed(s.digits ?? 1) : "–"}</span> {s.unit}</span>
+              </figcaption>
+              <TrendChart rows={rows} timeline={timeline} series={s} height={140} compact />
+            </figure>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export interface DailySeries { key: keyof DailyRow; label: string; unit: string; domain?: [number, number] }
@@ -91,25 +133,28 @@ export function DailyCharts({ rows, series }: { rows: DailyRow[]; series: DailyS
   const flagged = (r: DailyRow) => r.flag_spike || r.flag_drift || r.flag_combo;
   return (
     <div>
-      <p className="mb-3 text-sm text-dust-dim">
-        <span aria-hidden="true" style={{ display: "inline-block", width: 10, height: 10, borderRadius: 99, border: `2px solid ${LEVEL_COLOR.YELLOW}`, marginRight: 6 }} />
-        a day one of the body models flagged (unusual reading, slow drift or unusual combination)
+      <p className="flex items-center gap-2 text-xs text-ink-3">
+        <span aria-hidden="true" style={{ display: "inline-block", width: 10, height: 10, borderRadius: 99, border: `2px solid ${LEVEL_COLOR.YELLOW}` }} />
+        A day one of the body models flagged (unusual reading, slow drift or unusual combination)
       </p>
-      <div className="grid gap-x-6 gap-y-4 lg:grid-cols-2">
+      <div className="mt-4 grid gap-4 lg:grid-cols-2 2xl:grid-cols-3">
         {series.map((s) => (
-          <figure key={String(s.key)} className="m-0">
-            <figcaption className="text-sm"><span className="display">{s.label}</span> <span className="text-dust-dim">{s.unit}</span></figcaption>
-            <ResponsiveContainer width="100%" height={130}>
-              <LineChart data={rows} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
-                <CartesianGrid stroke="var(--color-line)" strokeOpacity={0.35} vertical={false} />
-                <XAxis dataKey="mission_day" tickFormatter={(d) => `sol ${d}`} interval={6} {...AXIS} />
-                <YAxis domain={s.domain ?? ["auto", "auto"]} width={52} allowDecimals={!s.domain} {...AXIS} />
+          <figure key={String(s.key)} className="m-0 rounded-xl border border-line p-4">
+            <figcaption className="flex items-baseline justify-between gap-2">
+              <span className="text-sm font-semibold">{s.label}</span>
+              <span className="text-xs text-ink-3">{s.unit}</span>
+            </figcaption>
+            <ResponsiveContainer width="100%" height={140}>
+              <LineChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: -22 }}>
+                <CartesianGrid stroke="var(--color-line)" strokeDasharray="3 4" vertical={false} />
+                <XAxis dataKey="mission_day" tickFormatter={(d) => `Sol ${d}`} interval={6} {...AXIS} />
+                <YAxis domain={s.domain ?? ["auto", "auto"]} width={52} allowDecimals={!s.domain} {...AXIS} axisLine={false} />
                 <Tooltip {...TIP} labelFormatter={(d) => `Sol ${d}`} formatter={(v) => [`${Number(v).toFixed(1)} ${s.unit}`, s.label]} />
-                <Line dataKey={s.key as string} stroke="var(--color-dust)" strokeWidth={1.6} isAnimationActive={false}
+                <Line dataKey={s.key as string} stroke={colorOf(String(s.key))} strokeWidth={2} isAnimationActive={false}
                   dot={(p: { cx?: number; cy?: number; index?: number }) => {
                     const r = rows[p.index ?? -1];
                     return r && flagged(r) && p.cx !== undefined && p.cy !== undefined
-                      ? <circle key={p.index} cx={p.cx} cy={p.cy} r={5} fill="var(--color-hab)" stroke={LEVEL_COLOR.YELLOW} strokeWidth={2} />
+                      ? <circle key={p.index} cx={p.cx} cy={p.cy} r={4.5} fill="var(--color-surface)" stroke={LEVEL_COLOR.YELLOW} strokeWidth={2.2} />
                       : <g key={p.index} />;
                   }} />
               </LineChart>

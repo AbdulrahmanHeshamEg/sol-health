@@ -14,6 +14,8 @@ export interface Mission {
   planned_duration_days: number; current_day: number; radiation_msv_per_day_assumed: number;
   earth_comm_delay_s: number; note: string; now: string;
   time_range: { start: string; end: string };
+  /** The moment the app opens on when none is picked (a typical day). */
+  default_at?: string;
   replay_marks: ReplayMark[];
   radiation_replay?: { dataset: string; from: string; to: string };
   cabin_co2_source?: { base: string; planted_high: string };
@@ -48,7 +50,7 @@ export interface Profile {
 
 export interface Alert {
   source: "rule" | "model"; level: Level; condition: string; message: string; reason: string;
-  kind: "hard_limit" | "spike" | "drift" | "combination" | "environmental_gate" | "spe" | "mood" | "fitness_trend";
+  kind: "hard_limit" | "spike" | "drift" | "combination" | "environmental_gate" | "spe" | "mood" | "fitness_trend" | "eye_exam";
   hazard: string; signal?: string; value?: number; threshold?: string; probability?: number; model?: string; z?: number;
 }
 

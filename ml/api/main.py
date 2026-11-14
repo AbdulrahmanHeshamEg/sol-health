@@ -39,6 +39,9 @@ EYE_EXAM_EVERY_DAYS = 30
 # Replay buttons: the moment at which each planted case is worth looking at (the engine has had time to react).
 SHOW_AFTER_HOURS = {"cabin_co2": 8 * 24 + 12, "slow_drift": 7 * 24 + 12, "odd_combination": 12, "solar_storm": 3}
 QUIET_DAY = "2026-09-15 12:00:00"
+# What the app opens on: an ordinary working day with the common, well-known problems of a long mission
+# (a mood and stress dip, an unusual mix of signals, an early optic-disc change), all at watch level, no emergency.
+TYPICAL_DAY = "2026-10-31 12:00:00"
 CITATIONS = [
     "PMData: Thambawita et al., PMData: A Sports Logging Dataset, MMSys 2020, doi:10.1145/3339825.3394926",
     "Data and visualizations are courtesy of the Environmental Data Application (EDA) (https://visualization.osdr.nasa.gov/eda/).",
@@ -180,7 +183,9 @@ def mission(at: str | None = None):
     end = pd.Timestamp(at) if at else tel["timestamp"].max()
     return {**meta["mission"], "now": str(end),
             "time_range": {"start": str(tel["timestamp"].min()), "end": str(tel["timestamp"].max())},
-            "replay_marks": [{"id": "quiet_day", "label": "A quiet day", "at": QUIET_DAY, "show_at": QUIET_DAY, "astronaut_id": me()["astronaut_id"]}] + [
+            "default_at": TYPICAL_DAY,
+            "replay_marks": [{"id": "typical_day", "label": "A typical day", "at": TYPICAL_DAY, "show_at": TYPICAL_DAY, "astronaut_id": me()["astronaut_id"]},
+                             {"id": "quiet_day", "label": "A quiet day", "at": QUIET_DAY, "show_at": QUIET_DAY, "astronaut_id": me()["astronaut_id"]}] + [
                 {"id": c["id"], "label": c["title"], "at": c["start"], "astronaut_id": c["astronaut_id"],
                  "show_at": str(pd.Timestamp(c["start"]) + pd.Timedelta(hours=SHOW_AFTER_HOURS.get(c["id"], 24)))}
                 for c in sorted(cases, key=lambda c: c["start"])]}

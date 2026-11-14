@@ -1,75 +1,98 @@
 import type { ReactNode } from "react";
+import { AlertOctagon, AlertTriangle, CheckCircle2, Database, FlaskConical, Info, PenLine, RefreshCw } from "lucide-react";
 import type { Level, Source } from "../api/types";
 import { NotInSnapshot } from "../api/client";
-import { parseTs, useReplay } from "../state/replay";
+import { displayDate, parseTs, useReplay } from "../state/replay";
+import { HelmetAvatar } from "./art";
 
-export const LEVEL_WORD: Record<Level, string> = { GREEN: "Clear", YELLOW: "Watch", RED: "Act now" };
-export const LEVEL_COLOR: Record<Level, string> = { GREEN: "var(--color-clear)", YELLOW: "var(--color-watch)", RED: "var(--color-act)" };
+export const LEVEL_WORD: Record<Level, string> = { GREEN: "Clear", YELLOW: "Heads-up", RED: "Act now" };
+export const LEVEL_COLOR: Record<Level, string> = { GREEN: "var(--color-ok)", YELLOW: "var(--color-warn)", RED: "var(--color-bad)" };
+export const LEVEL_SOFT: Record<Level, string> = { GREEN: "var(--color-ok-soft)", YELLOW: "var(--color-warn-soft)", RED: "var(--color-bad-soft)" };
+export const LEVEL_INK: Record<Level, string> = { GREEN: "var(--color-ok-ink)", YELLOW: "var(--color-warn-ink)", RED: "var(--color-bad-ink)" };
 export const WHO_LABEL = { self: "You", ground: "Your flight surgeon on Earth" } as const;
 
 /** Status is never colour alone: each level has its own shape and word. */
-export function StatusIcon({ level, size = 20 }: { level: Level; size?: number }) {
-  const c = LEVEL_COLOR[level];
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" style={{ flex: "none" }}>
-      {level === "GREEN" && (<><circle cx="12" cy="12" r="10" fill={c} /><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#12251b" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /></>)}
-      {level === "YELLOW" && (<><path d="M12 2.5L22.5 21h-21z" fill={c} /><path d="M12 9v6" stroke="#2c2208" strokeWidth="2.6" strokeLinecap="round" /><circle cx="12" cy="18" r="1.4" fill="#2c2208" /></>)}
-      {level === "RED" && (<><path d="M7.5 2h9L22 7.5v9L16.5 22h-9L2 16.5v-9z" fill={c} /><path d="M8 8l8 8M16 8l-8 8" stroke="#2b0f0a" strokeWidth="2.6" strokeLinecap="round" /></>)}
-    </svg>
-  );
+export function StatusIcon({ level, size = 18 }: { level: Level; size?: number }) {
+  const Icon = level === "GREEN" ? CheckCircle2 : level === "YELLOW" ? Info : AlertOctagon;
+  return <Icon size={size} color={LEVEL_COLOR[level]} strokeWidth={2.3} aria-hidden="true" style={{ flex: "none" }} />;
 }
 
-export function StatusChip({ level, large = false }: { level: Level; large?: boolean }) {
+export function StatusBadge({ level, size = "md", label }: { level: Level; size?: "sm" | "md" | "lg"; label?: string }) {
+  const pad = size === "lg" ? "px-3 py-1.5 text-sm" : size === "sm" ? "px-2 py-0.5 text-xs" : "px-2.5 py-1 text-[0.8rem]";
   return (
-    <span className={`inline-flex items-center gap-2 font-bold ${large ? "text-xl" : "text-sm"}`} style={{ color: LEVEL_COLOR[level] }}>
-      <StatusIcon level={level} size={large ? 30 : 20} />
-      <span className="display">{LEVEL_WORD[level]}</span>
+    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full font-semibold ${pad}`}
+      style={{ background: LEVEL_SOFT[level], color: LEVEL_INK[level] }}>
+      <StatusIcon level={level} size={size === "lg" ? 16 : 14} />
+      {label ?? LEVEL_WORD[level]}
     </span>
   );
 }
 
-/** Where a value comes from: a real dataset, or simulated (and what the simulation was calibrated on). */
+/** Where a value comes from: a real dataset, simulated (and what it was calibrated on), or entered by you. */
 export function SourceBadge({ source }: { source?: Source }) {
   if (!source) return null;
-  if (source.kind === "entered") {
-    return (
-      <span title="You entered this value" className="inline-flex items-center gap-1 rounded-sm px-1.5 text-xs leading-5"
-        style={{ border: "1px solid var(--color-dust)", color: "var(--color-dust)" }}>
-        <span aria-hidden="true" style={{ width: 7, height: 7, transform: "rotate(45deg)", background: "currentColor", display: "inline-block" }} />
-        You entered
-      </span>
-    );
-  }
-  const real = source.kind === "real";
-  const detail = real ? source.dataset : source.calibrated_on;
+  const kind = source.kind;
+  const detail = kind === "real" ? source.dataset : kind === "simulated" ? source.calibrated_on : undefined;
+  const Icon = kind === "real" ? Database : kind === "entered" ? PenLine : FlaskConical;
+  const style = kind === "real" ? { background: "var(--color-brand-soft)", color: "var(--color-brand-ink)" }
+    : kind === "entered" ? { background: "var(--color-ink)", color: "var(--color-surface)" }
+    : { background: "var(--color-surface-3)", color: "var(--color-ink-3)" };
+  const word = kind === "real" ? "Real" : kind === "entered" ? "You" : "Sim";
+  const title = kind === "real" ? "Real measurement" : kind === "entered" ? "You entered this value" : "Simulated";
   return (
-    <span title={`${real ? "Real measurement" : "Simulated"}${detail ? `: ${detail}` : ""}`}
-      className="inline-flex items-center gap-1 rounded-sm px-1.5 text-xs leading-5"
-      style={{ border: `1px solid ${real ? "var(--color-dusk)" : "var(--color-line)"}`, color: real ? "var(--color-dusk)" : "var(--color-dust-dim)" }}>
-      <span aria-hidden="true" style={{ width: 7, height: 7, borderRadius: real ? 0 : 99, background: "currentColor", display: "inline-block" }} />
-      {real ? "Real" : "Simulated"}
+    <span title={`${title}${detail ? `: ${detail}` : ""}`} style={style}
+      className="inline-flex items-center gap-1 whitespace-nowrap rounded-md px-1.5 py-px text-[0.68rem] font-semibold uppercase tracking-wide">
+      <Icon size={11} aria-hidden="true" />{word}
     </span>
   );
 }
 
-export function Panel({ title, aside, children, className = "" }: { title?: string; aside?: ReactNode; children: ReactNode; className?: string }) {
+export function Card({ title, icon, aside, children, className = "", bodyClass = "card-body" }: {
+  title?: ReactNode; icon?: ReactNode; aside?: ReactNode; children: ReactNode; className?: string; bodyClass?: string;
+}) {
   return (
-    <section className={`panel p-5 ${className}`}>
+    <section className={`card ${className}`}>
       {(title || aside) && (
-        <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          {title && <h2 className="text-lg">{title}</h2>}
-          {aside && <div className="text-sm text-dust-dim">{aside}</div>}
+        <div className="card-head flex-wrap">
+          {title && <h2 className="card-title">{icon && <span className="text-ink-3" aria-hidden="true">{icon}</span>}{title}</h2>}
+          {aside && <div className="text-sm text-ink-3">{aside}</div>}
         </div>
       )}
-      {children}
+      <div className={bodyClass}>{children}</div>
     </section>
   );
 }
 
-export function Skeleton({ lines = 3, height = 18 }: { lines?: number; height?: number }) {
+// Avatar colours avoid green, amber and red: those mean health status here.
+const PALETTE = ["#2563eb", "#64748b", "#0891b2", "#4f46e5", "#7c3aed", "#0e7490", "#db2777"];
+export function Avatar({ name, size = 40, ring }: { name: string; size?: number; ring?: Level }) {
+  let h = 0;
+  for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
   return (
-    <div className="space-y-2" aria-busy="true" aria-label="Loading">
-      {Array.from({ length: lines }, (_, i) => <div key={i} className="skeleton" style={{ height, width: `${92 - i * 14}%` }} />)}
+    <span className="relative inline-block shrink-0 rounded-full" style={{ width: size, height: size }} aria-hidden="true">
+      <HelmetAvatar name={name} size={size} color={PALETTE[h % PALETTE.length]} />
+      {ring && <span className="absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-surface" style={{ width: size * 0.32, height: size * 0.32, background: LEVEL_COLOR[ring] }} />}
+    </span>
+  );
+}
+
+/** A ring gauge for the health score; the colour is the API's status. */
+export function ScoreRing({ score, level, size = 88 }: { score: number; level: Level; size?: number }) {
+  const stroke = size * 0.1, r = (size - stroke) / 2, c = 2 * Math.PI * r;
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={`Health score ${score} out of 100`} style={{ flex: "none" }}>
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--color-surface-3)" strokeWidth={stroke} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={LEVEL_COLOR[level]} strokeWidth={stroke} strokeLinecap="round"
+        strokeDasharray={`${(score / 100) * c} ${c}`} transform={`rotate(-90 ${size / 2} ${size / 2})`} />
+      <text x="50%" y="50%" dominantBaseline="central" textAnchor="middle" fontSize={size * 0.3} fontWeight={700} fill="var(--color-ink)" className="tnum">{score}</text>
+    </svg>
+  );
+}
+
+export function Skeleton({ lines = 3, height = 16 }: { lines?: number; height?: number }) {
+  return (
+    <div className="space-y-2.5" aria-busy="true" aria-label="Loading">
+      {Array.from({ length: lines }, (_, i) => <div key={i} className="skeleton" style={{ height, width: `${94 - i * 12}%` }} />)}
     </div>
   );
 }
@@ -79,10 +102,32 @@ export function ErrorNote({ error, retry }: { error: unknown; retry?: () => void
   const text = error instanceof Error ? error.message : "Something went wrong while loading this.";
   const unsaved = error instanceof NotInSnapshot;      // retrying cannot help: offer the way out instead
   return (
-    <div role="alert" className="rounded-sm border border-line p-4 text-sm">
-      <p>{text}</p>
-      {unsaved ? <button className="btn-quiet mt-3" onClick={() => setAt(null)}>Show now</button>
-        : retry && <button className="btn-quiet mt-3" onClick={retry}>Try again</button>}
+    <div role="alert" className="flex flex-wrap items-center gap-3 rounded-xl border border-line bg-surface-2 p-4 text-sm">
+      <AlertTriangle size={18} className="text-warn" aria-hidden="true" />
+      <p className="flex-1">{text}</p>
+      {unsaved ? <button className="btn-ghost" onClick={() => setAt(null)}>Show now</button>
+        : retry && <button className="btn-ghost" onClick={retry}><RefreshCw size={14} />Try again</button>}
+    </div>
+  );
+}
+
+export function PageHeader({ title, subtitle, aside }: { title: string; subtitle?: ReactNode; aside?: ReactNode }) {
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 className="text-[1.75rem] font-bold tracking-tight sm:text-[2rem]">{title}</h1>
+        {subtitle && <p className="mt-1 max-w-[72ch] text-[0.95rem] text-ink-2">{subtitle}</p>}
+      </div>
+      {aside && <div className="flex flex-wrap items-center gap-2">{aside}</div>}
+    </div>
+  );
+}
+
+/** Tabs kept in the URL (?tab=), so a link reproduces the view. */
+export function Tabs<T extends string>({ tabs, value, onChange, label }: { tabs: ReadonlyArray<readonly [T, string]>; value: T; onChange: (t: T) => void; label: string }) {
+  return (
+    <div className="tabs" role="tablist" aria-label={label}>
+      {tabs.map(([k, text]) => <button key={k} role="tab" aria-selected={value === k} onClick={() => onChange(k)}>{text}</button>)}
     </div>
   );
 }
@@ -94,5 +139,8 @@ export const signed = (v: number | null | undefined, digits = 1) =>
   v === null || v === undefined ? "" : `${v > 0 ? "+" : v < 0 ? "−" : "±"}${Math.abs(v).toFixed(digits)}`;
 
 export function when(ts: string) {
-  return parseTs(ts).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+  return displayDate(ts).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
+}
+export function clock(ts: string) {
+  return parseTs(ts).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
 }

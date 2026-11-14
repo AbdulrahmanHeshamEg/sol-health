@@ -132,7 +132,9 @@ def test_api_personal_endpoints():
     assert {r["status"] for r in reports} <= {"sent", "daily_report"}
     assert len(client.get(f"/api/crew/{ME}/timeline?hours=24").json()) == 24
     assert client.get("/api/crew/NOPE/assessment").status_code == 404
-    assert len(client.get("/api/mission").json()["replay_marks"]) == 6
+    mission = client.get("/api/mission").json()
+    assert len(mission["replay_marks"]) == 7 and mission["default_at"] == mission["replay_marks"][0]["at"]
+    assert client.get(f"/api/crew/{ME}/assessment", params={"at": mission["default_at"]}).json()["status"] == "YELLOW"   # typical day: watch, no emergency
     assert client.get("/api/meta").json()["limits"]["radiation_ratio_shelter"] == 2.0
 
 
