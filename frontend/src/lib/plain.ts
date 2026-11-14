@@ -28,6 +28,14 @@ export function plainAlert(a: Alert): { title: string; body: string } {
   const days = daysIn(a.reason);
   switch (a.kind) {
     case "combination": {
+      if (a.far_out) {
+        // One reading is far off on its own and others moved with it (one alert from both detectors).
+        const others = (a.with_signals ?? []).map((x) => (NAME[x.signal] ?? x.signal).replace(/^Your /, ""));
+        return {
+          title: `${who} is unusual for you`,
+          body: `${who} is well away from your usual level${forDays(days)}${others.length ? `, and your ${list(others)} moved with it` : ""}.`,
+        };
+      }
       const names = readingsIn(a.reason);
       return {
         title: "A few things shifted together",

@@ -338,10 +338,12 @@ class HealthEngine:
     def _body_alerts(self, prep: Prepared, d: int) -> list[dict]:
         body, daily, alerts = prep.body, prep.daily, []
         row = body.iloc[d]
+        spike = None                     # (signal, robust z, days) of today's spike, if any
         if row["spike"]:
             z = {s: row[f"z_{s}"] for s in BODY_SIGNALS}
             s = max(z, key=lambda k: -np.inf if np.isnan(z[k]) else z[k])
             days = _run_length(body["spike"].to_numpy(bool), d)
+            spike = (s, float(z[s]), days)
             alerts.append(self._alert(
                 "model", "YELLOW", "acute_deviation", f"Unusual {SIGNAL_LABEL[s]} for you",
                 f"{SIGNAL_LABEL[s].capitalize()} is {z[s]:.1f} robust SD {WORSE_WORD[s]} your {self.spike['window']}-day normal, "
@@ -363,13 +365,32 @@ class HealthEngine:
         if row["combo"]:
             z = {s: row[f"zc_{s}"] for s in BODY_SIGNALS if not np.isnan(row[f"zc_{s}"])}
             top = sorted(z, key=lambda k: -z[k])[:3]
-            parts = ", ".join(f"{SIGNAL_LABEL[s]} {z[s]:+.1f} SD" for s in top if z[s] > 0)
             days = _run_length(body["combo"].to_numpy(bool), d)
-            alerts.append(self._alert(
-                "model", "YELLOW", "unusual_combination", "Unusual combination of signals",
-                f"Today's combination is unusual for you ({parts}; positive = worse), for {_plural(days, 'day')}; "
-                f"no single signal is far out on its own.", "combination", signal=top[0], z=round(float(z[top[0]]), 2),
-                probability=round(float(row['unusual']), 3), model="Isolation Forest on the daily z-vector"))
+            if spike and spike[0] in top:
+                # Both detectors point at the same signal today: one alert, not two, naming the far-out signal
+                # and the ones that moved with it.
+                s, zs, sdays = spike
+                others = [o for o in top if o != s and z[o] > 0]
+                with_it = (f", and {', '.join(f'{SIGNAL_LABEL[o]} ({z[o]:+.1f} SD)' for o in others)} moved with it"
+                           if others else "")
+                alerts = [a for a in alerts if a["kind"] != "spike"]   # the spike alert added above
+                alerts.append(self._alert(
+                    "model", "YELLOW", "unusual_combination", f"Unusual {SIGNAL_LABEL[s]} for you",
+                    f"{SIGNAL_LABEL[s].capitalize()} is {zs:.1f} robust SD {WORSE_WORD[s]} your {self.spike['window']}-day normal"
+                    f"{with_it}, for {_plural(max(sdays, days), 'day')}.", "combination",
+                    signal=s, z=round(zs, 2), value=float(daily[s].iloc[d]), far_out=True,
+                    with_signals=[{"signal": o, "z": round(float(z[o]), 2)} for o in others],
+                    probability=round(float(max(row["unusual"], min(zs / (2 * self.spike["thr"]), 1.0))), 3),
+                    model="personal robust z + Isolation Forest on the daily z-vector"))
+            else:
+                parts = ", ".join(f"{SIGNAL_LABEL[s]} {z[s]:+.1f} SD" for s in top if z[s] > 0)
+                tail = "" if spike else "; no single signal is far out on its own"
+                alerts.append(self._alert(
+                    "model", "YELLOW", "unusual_combination", "Unusual combination of signals",
+                    f"Today's combination is unusual for you ({parts}; positive = worse), for {_plural(days, 'day')}{tail}.",
+                    "combination", signal=top[0], z=round(float(z[top[0]]), 2), far_out=bool(spike),
+                    with_signals=[{"signal": o, "z": round(float(z[o]), 2)} for o in top[1:] if z[o] > 0],
+                    probability=round(float(row['unusual']), 3), model="Isolation Forest on the daily z-vector"))
         return alerts
 
     def _cabin_alert(self, prep: Prepared, i: int, d: int) -> tuple[dict | None, dict]:

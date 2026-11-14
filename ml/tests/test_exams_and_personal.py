@@ -81,3 +81,12 @@ def test_daily_brief_has_the_ai_ready_shape():
     b = client.get(f"/api/crew/{ME}/daily-brief").json()
     assert {"greeting", "headline", "paragraphs", "changes", "tips", "ask_next", "generated_by"} <= set(b)
     assert b["generated_by"]["kind"] == "rules" and b["tips"]
+
+
+def test_spike_and_combination_on_the_same_signal_are_one_alert(no_user_entries):
+    aid = client.get("/api/me").json()["astronaut_id"]
+    alerts = client.get(f"/api/crew/{aid}/assessment", params={"at": "2026-10-31T12:00:00"}).json()["alerts"]
+    body = [a for a in alerts if a["kind"] in ("spike", "combination")]
+    assert len(body) == 1 and body[0]["kind"] == "combination" and body[0]["far_out"]
+    assert body[0]["signal"] == "mood" and "far out on its own" not in body[0]["reason"]
+    assert "moved with it" in body[0]["reason"]

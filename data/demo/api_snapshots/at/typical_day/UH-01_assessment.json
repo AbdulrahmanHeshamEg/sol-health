@@ -3,14 +3,14 @@
  "timestamp": "2026-10-31 12:00:00",
  "mission_day": 62,
  "status": "YELLOW",
- "health_score": 58,
- "condition": "acute_deviation",
- "condition_label": "Unusual reading for you",
+ "health_score": 67,
+ "condition": "unusual_combination",
+ "condition_label": "Unusual combination of signals",
  "probabilities": {
-  "nominal": 0.1429,
-  "acute_deviation": 0.2857,
+  "nominal": 0.2,
+  "acute_deviation": 0.0,
   "physiological_drift": 0.0,
-  "unusual_combination": 0.2857,
+  "unusual_combination": 0.4,
   "low_mood": 0.0,
   "deconditioning": 0.0,
   "co2_exposure": 0.0,
@@ -21,7 +21,7 @@
   "dehydration": 0.0,
   "low_blood_sugar": 0.0,
   "high_blood_sugar": 0.0,
-  "optic_disc_change": 0.2857,
+  "optic_disc_change": 0.4,
   "kidney_stone_risk": 0.0,
   "urinary_infection": 0.0,
   "urine_abnormal": 0.0,
@@ -34,29 +34,23 @@
   {
    "source": "model",
    "level": "YELLOW",
-   "condition": "acute_deviation",
-   "message": "Unusual mood score for you",
-   "reason": "Mood score is 5.6 robust SD worse than your 14-day normal, for 1 day.",
-   "kind": "spike",
-   "hazard": "Distance from Earth",
-   "signal": "mood",
-   "z": 5.59,
-   "value": 1.0,
-   "probability": 0.559,
-   "model": "personal robust z"
-  },
-  {
-   "source": "model",
-   "level": "YELLOW",
    "condition": "unusual_combination",
-   "message": "Unusual combination of signals",
-   "reason": "Today's combination is unusual for you (mood score +5.6 SD, stress score +2.7 SD; positive = worse), for 1 day; no single signal is far out on its own.",
+   "message": "Unusual mood score for you",
+   "reason": "Mood score is 5.6 robust SD worse than your 14-day normal, and stress score (+2.7 SD) moved with it, for 1 day.",
    "kind": "combination",
    "hazard": "Isolation and confinement",
    "signal": "mood",
    "z": 5.59,
+   "value": 1.0,
+   "far_out": true,
+   "with_signals": [
+    {
+     "signal": "stress",
+     "z": 2.7
+    }
+   ],
    "probability": 0.985,
-   "model": "Isolation Forest on the daily z-vector"
+   "model": "personal robust z + Isolation Forest on the daily z-vector"
   },
   {
    "source": "model",
@@ -289,7 +283,7 @@
    "label": "Brain, sleep and mood",
    "function": "Attention, mood and sleep. Isolation, confinement and a shifted day-night cycle wear them down.",
    "status": "YELLOW",
-   "summary": "Mood score is 5.6 robust SD worse than your 14-day normal, for 1 day.",
+   "summary": "Mood score is 5.6 robust SD worse than your 14-day normal, and stress score (+2.7 SD) moved with it, for 1 day.",
    "indicators": [
     "mood",
     "stress",
@@ -298,8 +292,7 @@
     "pvt_reaction_ms"
    ],
    "alerts": [
-    "Unusual mood score for you",
-    "Unusual combination of signals"
+    "Unusual mood score for you"
    ]
   },
   {
@@ -396,73 +389,52 @@
  "actions": [
   {
    "who": "self",
-   "action": "Repeat the measurement to rule out a sensor or logging error.",
-   "condition": "acute_deviation",
-   "level": "YELLOW",
-   "priority": 1
-  },
-  {
-   "who": "self",
    "action": "Check in with yourself: mood, stress and sleep have shifted together, each only a little.",
    "condition": "unusual_combination",
    "level": "YELLOW",
-   "priority": 2
+   "priority": 1
   },
   {
    "who": "self",
    "action": "Check your near vision with the eye chart in the medical kit and log any blurring or headache.",
    "condition": "optic_disc_change",
    "level": "YELLOW",
-   "priority": 3
-  },
-  {
-   "who": "self",
-   "action": "Note anything unusual in the last 24 h (workload, sleep, meals, medication).",
-   "condition": "acute_deviation",
-   "level": "YELLOW",
-   "priority": 4
+   "priority": 2
   },
   {
    "who": "self",
    "action": "Use tonight's wind-down routine and schedule a family or friend call at the next comm pass.",
    "condition": "unusual_combination",
    "level": "YELLOW",
-   "priority": 5
+   "priority": 3
   },
   {
    "who": "self",
    "action": "Retake the fundus photo in 7 days, same camera settings.",
    "condition": "optic_disc_change",
    "level": "YELLOW",
-   "priority": 6
-  },
-  {
-   "who": "ground",
-   "action": "If it is still far from your normal tomorrow, it goes to your flight surgeon in the daily report.",
-   "condition": "acute_deviation",
-   "level": "YELLOW",
-   "priority": 7
+   "priority": 4
   },
   {
    "who": "self",
    "action": "Keep a fixed day: meals, exercise and work blocks at the same times.",
    "condition": "unusual_combination",
    "level": "YELLOW",
-   "priority": 8
+   "priority": 5
   },
   {
    "who": "ground",
    "action": "Your eye photo and baseline photo go to your flight surgeon in today's report.",
    "condition": "optic_disc_change",
    "level": "YELLOW",
-   "priority": 9
+   "priority": 6
   },
   {
    "who": "ground",
    "action": "Your flight surgeon sees this in today's report and can offer a private conference.",
    "condition": "unusual_combination",
    "level": "YELLOW",
-   "priority": 10
+   "priority": 7
   }
  ],
  "daily_plan": [
@@ -487,8 +459,7 @@
   "arrives_at": "2026-10-31 20:13:00",
   "summary": "Included in your daily report to the flight surgeon at 20:00.",
   "items": [
-   "Mood score is 5.6 robust SD worse than your 14-day normal, for 1 day.",
-   "Today's combination is unusual for you (mood score +5.6 SD, stress score +2.7 SD; positive = worse), for 1 day; no single signal is far out on its own.",
+   "Mood score is 5.6 robust SD worse than your 14-day normal, and stress score (+2.7 SD) moved with it, for 1 day.",
    "The optic disc margin is 28% less sharp than in your baseline photo: an early sign to watch. The photo goes to your flight surgeon in today's report."
   ]
  },

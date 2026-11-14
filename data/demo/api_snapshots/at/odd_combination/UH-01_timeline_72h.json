@@ -471,36 +471,36 @@
  {
   "timestamp": "2026-10-31 08:00:00",
   "status": "YELLOW",
-  "condition": "acute_deviation",
-  "p_abnormal": 0.857,
+  "condition": "unusual_combination",
+  "p_abnormal": 0.8,
   "anomaly_score": 0.985
  },
  {
   "timestamp": "2026-10-31 09:00:00",
   "status": "YELLOW",
-  "condition": "acute_deviation",
-  "p_abnormal": 0.857,
+  "condition": "unusual_combination",
+  "p_abnormal": 0.8,
   "anomaly_score": 0.985
  },
  {
   "timestamp": "2026-10-31 10:00:00",
   "status": "YELLOW",
-  "condition": "acute_deviation",
-  "p_abnormal": 0.857,
+  "condition": "unusual_combination",
+  "p_abnormal": 0.8,
   "anomaly_score": 0.985
  },
  {
   "timestamp": "2026-10-31 11:00:00",
   "status": "YELLOW",
-  "condition": "acute_deviation",
-  "p_abnormal": 0.857,
+  "condition": "unusual_combination",
+  "p_abnormal": 0.8,
   "anomaly_score": 0.985
  },
  {
   "timestamp": "2026-10-31 12:00:00",
   "status": "YELLOW",
-  "condition": "acute_deviation",
-  "p_abnormal": 0.857,
+  "condition": "unusual_combination",
+  "p_abnormal": 0.8,
   "anomaly_score": 0.985
  }
 ]

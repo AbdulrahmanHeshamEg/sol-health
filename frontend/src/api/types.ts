@@ -52,6 +52,10 @@ export interface Alert {
   source: "rule" | "model"; level: Level; condition: string; message: string; reason: string;
   kind: "hard_limit" | "spike" | "drift" | "combination" | "environmental_gate" | "spe" | "mood" | "fitness_trend" | "eye_exam";
   hazard: string; signal?: string; value?: number; threshold?: string; probability?: number; model?: string; z?: number;
+  /** combination only: true when the main signal is also far from normal on its own */
+  far_out?: boolean;
+  /** combination only: the other signals that moved with the main one */
+  with_signals?: { signal: string; z: number }[];
 }
 
 export interface VitalReading { value: number; baseline: number; delta: number; unit: string; source: Source }
